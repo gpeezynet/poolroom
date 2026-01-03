@@ -46,10 +46,10 @@ facility:
   hvac:
     cooling_tons_per_sf: 0.0025
     example_10000_sf_tons: 25
-    service_contract_per_year: PLACEHOLDER # DR-17_utilities_hvac
-    filter_replacement_per_month: PLACEHOLDER # DR-17_utilities_hvac
-    hvac_maintenance_reserve_per_year: PLACEHOLDER # DR-17_utilities_hvac
-  utility_deposit_months: PLACEHOLDER # DR-17_utilities_hvac
+    service_contract_per_year: 1200 # DR-17_utilities_hvac
+    filter_replacement_per_month: 100 # DR-17_utilities_hvac
+    hvac_maintenance_reserve_per_year: 2000 # DR-17_utilities_hvac
+  utility_deposit_months: 2 # DR-17_utilities_hvac
 
 legal_hours:
   alcohol_sales_prohibited:
@@ -166,10 +166,10 @@ labor:
     bartender_effective_hourly: 15
     barback_hourly_low: 8
     barback_hourly_high: 12
-    manager_hourly: PLACEHOLDER # DR-12_labor_wages
-    cook_hourly: PLACEHOLDER # DR-12_labor_wages
-    server_hourly: PLACEHOLDER # DR-12_labor_wages
-    cleaner_hourly: PLACEHOLDER # DR-12_labor_wages
+    manager_hourly: 30 # DR-12_labor_wages
+    cook_hourly: 14.5 # DR-12_labor_wages
+    server_hourly: 10 # DR-12_labor_wages
+    cleaner_hourly: 13 # DR-12_labor_wages
   staffing_roles_by_time_block:
     day: ["bartender"]
     evening: ["bartender", "bartender", "barback", "security", "manager"]
@@ -260,18 +260,19 @@ licenses_and_fees:
     high: 60
 
 music_licensing:
-  ascap_per_year: PLACEHOLDER # DR-08_music_licensing
-  bmi_per_year: PLACEHOLDER # DR-08_music_licensing
-  sesac_per_year: PLACEHOLDER # DR-08_music_licensing
-  gmr_per_year: PLACEHOLDER # DR-08_music_licensing
-  total_music_licenses_per_year: PLACEHOLDER # DR-08_music_licensing
+  ascap_per_year: 350 # DR-08_music_licensing
+  bmi_per_year: 400 # DR-08_music_licensing
+  sesac_per_year: 700 # DR-08_music_licensing
+  gmr_per_year: 1000 # DR-08_music_licensing
+  total_music_licenses_per_year: 2450 # DR-08_music_licensing
 
 pos_stack:
-  terminals: PLACEHOLDER # DR-09_pos_stack
-  hardware_per_terminal: PLACEHOLDER # DR-09_pos_stack
-  monthly_software_fee: PLACEHOLDER # DR-09_pos_stack
-  payment_processing_pct: PLACEHOLDER # DR-09_pos_stack
-  onboarding_fee: PLACEHOLDER # DR-09_pos_stack
+  terminals: 4 # DR-09_pos_stack
+  hardware_per_terminal: 800 # DR-09_pos_stack
+  monthly_software_fee: 180 # DR-09_pos_stack
+  payment_processing_pct: 0.028 # DR-09_pos_stack
+  onboarding_fee: 500 # DR-09_pos_stack
+  card_mix_pct: 0.9
 
 kitchen_lite:
   equipment_budget: PLACEHOLDER # DR-11_kitchen_lite
@@ -281,10 +282,10 @@ kitchen_lite:
   menu_scope_notes: PLACEHOLDER # DR-11_kitchen_lite
 
 marketing:
-  launch_budget: PLACEHOLDER # DR-13_marketing_launch
-  monthly_budget: PLACEHOLDER # DR-13_marketing_launch
-  channel_split_pct: PLACEHOLDER # DR-13_marketing_launch
-  cost_per_acquisition: PLACEHOLDER # DR-13_marketing_launch
+  launch_budget: 12000 # DR-13_marketing_launch
+  monthly_budget: 750 # DR-13_marketing_launch
+  channel_split_pct: { digital_ads: 0.7, community_events: 0.2, pr_influencer: 0.1 } # DR-13_marketing_launch
+  cost_per_acquisition: 25 # DR-13_marketing_launch
 
 leagues_tournaments:
   league_night_fee_per_player: PLACEHOLDER # DR-14_leagues_tournaments
@@ -330,6 +331,6 @@ modeling:
   weekdays_per_week: 4
   weekend_days_per_week: 3
   food_revenue_pct_of_bar_placeholder: 0.15
-  other_opex_per_month_placeholder: 2000
+  other_opex_per_month_placeholder: 1200
   table_pricing_style_default: "hourly"
   wristband_count_method: "core_only"

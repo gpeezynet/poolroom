@@ -133,11 +133,87 @@ def compute_scenario(
     security_weekly = float(assumptions["security"]["weekly_cost_range"]["default"])
     security = security_weekly * weeks_per_month
 
+    def _num(value: Any, path: str) -> float:
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            if value.strip().upper() == "PLACEHOLDER":
+                raise ValueError(f"Assumption {path} is PLACEHOLDER")
+            try:
+                return float(value)
+            except ValueError:
+                pass
+        raise ValueError(f"Assumption {path} must be numeric, got {value!r}")
+
+    # POS & payment processing
+    pos = assumptions.get("pos_stack", {})
+    pos_software = _num(pos.get("monthly_software_fee", 0), "pos_stack.monthly_software_fee")
+    card_mix_pct = float(pos.get("card_mix_pct", 0.9))
+    processing_pct = _num(pos.get("payment_processing_pct", 0), "pos_stack.payment_processing_pct")
+    processing_fees = total_revenue * card_mix_pct * processing_pct
+
+    # Music licensing
+    music_annual = _num(
+        assumptions.get("music_licensing", {}).get("total_music_licenses_per_year", 0),
+        "music_licensing.total_music_licenses_per_year",
+    )
+    music_licensing = music_annual / 12
+
+    # Marketing
+    marketing = _num(assumptions.get("marketing", {}).get("monthly_budget", 0), "marketing.monthly_budget")
+
+    # HVAC maintenance (contract + filters + reserve)
+    hvac = assumptions.get("facility", {}).get("hvac", {})
+    hvac_service = _num(hvac.get("service_contract_per_year", 0), "facility.hvac.service_contract_per_year") / 12
+    hvac_filters = _num(hvac.get("filter_replacement_per_month", 0), "facility.hvac.filter_replacement_per_month")
+    hvac_reserve = _num(hvac.get("hvac_maintenance_reserve_per_year", 0), "facility.hvac.hvac_maintenance_reserve_per_year") / 12
+
+    # Pool table + equipment maintenance reserve (scales between 12-table and 24-table budgets)
+    maint = assumptions.get("maintenance", {})
+    maint12 = _num(maint.get("annual_budget_12_tables", {}).get("total_high", 0), "maintenance.annual_budget_12_tables.total_high")
+    maint24 = _num(maint.get("annual_budget_24_tables", {}).get("total_high", 0), "maintenance.annual_budget_24_tables.total_high")
+    if tables <= 12:
+        maintenance_reserve = maint12 / 12
+    elif tables >= 24:
+        maintenance_reserve = maint24 / 12
+    else:
+        t = (tables - 12) / (24 - 12)
+        maintenance_reserve = (maint12 + (maint24 - maint12) * t) / 12
+
+    # Annual licenses & fees (monthly equivalent)
+    fees = assumptions.get("licenses_and_fees", {})
+    annual_fees = 0.0
+    annual_fees += _num(fees.get("abc_state_fee_per_year", 0), "licenses_and_fees.abc_state_fee_per_year")
+    annual_fees += _num(fees.get("beer_license_per_year", 0), "licenses_and_fees.beer_license_per_year")
+    annual_fees += _num(fees.get("wine_license_per_year", 0), "licenses_and_fees.wine_license_per_year")
+    annual_fees += _num(fees.get("tobacco_license_per_year", 0), "licenses_and_fees.tobacco_license_per_year")
+    annual_fees += _num(fees.get("soft_drink_license_fountain_per_year", 0), "licenses_and_fees.soft_drink_license_fountain_per_year")
+    annual_fees += _num(fees.get("soft_drink_license_bottled_per_year", 0), "licenses_and_fees.soft_drink_license_bottled_per_year")
+    annual_fees += _num(fees.get("pool_hall_bond_cost_per_year", 0), "licenses_and_fees.pool_hall_bond_cost_per_year")
+    annual_fees += _num(fees.get("pool_table_license_per_table_per_year", 0), "licenses_and_fees.pool_table_license_per_table_per_year") * tables
+    licenses_fees = annual_fees / 12
+
     other_opex = float(modeling["other_opex_per_month_placeholder"])
 
     total_cogs = bar_cogs + food_cogs
-    fixed_costs = rent + cam + utilities + insurance + security + other_opex
-    total_expenses = total_cogs + labor + fixed_costs
+    fixed_costs = (
+        rent
+        + cam
+        + utilities
+        + insurance
+        + security
+        + pos_software
+        + music_licensing
+        + marketing
+        + hvac_service
+        + hvac_filters
+        + hvac_reserve
+        + maintenance_reserve
+        + licenses_fees
+        + other_opex
+    )
+    total_expenses = total_cogs + labor + processing_fees + fixed_costs
+
 
     monthly_net = total_revenue - total_expenses
     annual_net = monthly_net * 12
@@ -149,7 +225,7 @@ def compute_scenario(
         payback_years = startup_cost / annual_net
         payback_months = startup_cost / monthly_net if monthly_net > 0 else None
 
-    variable_costs = total_cogs + labor
+    variable_costs = total_cogs + labor + processing_fees
     breakeven_revenue = None
     if total_revenue > 0:
         variable_ratio = variable_costs / total_revenue
@@ -195,6 +271,15 @@ def compute_scenario(
             "utilities": utilities,
             "insurance": insurance,
             "security": security,
+            "pos_software": pos_software,
+            "processing_fees": processing_fees,
+            "music_licensing": music_licensing,
+            "marketing": marketing,
+            "hvac_service": hvac_service,
+            "hvac_filters": hvac_filters,
+            "hvac_reserve": hvac_reserve,
+            "maintenance_reserve": maintenance_reserve,
+            "licenses_fees": licenses_fees,
             "other_opex": other_opex,
             "total_expenses": total_expenses,
             "monthly_net": monthly_net,

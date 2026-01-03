@@ -21,16 +21,25 @@
 - Utilities: $2,500
 - Insurance: $500
 - Security: $1,732
-- Other opex (placeholder): $2,000
-- Total expenses: $35,458
+- POS software: $180
+- Payment processing: $965
+- Music licensing: $204
+- Marketing: $750
+- HVAC service: $100
+- HVAC filters: $100
+- HVAC reserve: $167
+- Maintenance reserve: $708
+- Licenses & fees: $96
+- Other opex (misc): $1,200
+- Total expenses: $37,928
 
-- Monthly net: $2,836
-- Annual net: $34,035
+- Monthly net: $366
+- Annual net: $4,390
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 18.22 years
-- Break-even revenue (monthly): $33,812
+- Payback period: 141.23 years
+- Break-even revenue (monthly): $37,692
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.
