@@ -1,0 +1,97 @@
+{
+  "assumptions_used": {
+    "bar_cogs_pct": 0.2,
+    "food_cogs_pct_placeholder": 0.3,
+    "food_revenue_pct_placeholder": 0.15,
+    "labor_pct": 0.22,
+    "utilities_per_month": 2500.0
+  },
+  "cam_per_sf": 3.5,
+  "payback_months": 83.5799316842417,
+  "payback_years": 6.964994307020142,
+  "periods": [
+    {
+      "bar_revenue": 600.0,
+      "day_type": "weekday",
+      "days_per_month": 17.32,
+      "metrics": {
+        "active_tables": 12.0,
+        "guests": 24.0,
+        "table_hours": 48.0
+      },
+      "period": "core",
+      "table_revenue": 480.0
+    },
+    {
+      "bar_revenue": 129.60000000000002,
+      "day_type": "weekday",
+      "days_per_month": 17.32,
+      "metrics": {
+        "active_tables": 4.800000000000001,
+        "guests": 7.200000000000001,
+        "table_hours": 9.600000000000001
+      },
+      "period": "late",
+      "table_revenue": 96.00000000000001
+    },
+    {
+      "bar_revenue": 1920.0000000000002,
+      "day_type": "weekend",
+      "days_per_month": 12.99,
+      "metrics": {
+        "active_tables": 19.200000000000003,
+        "guests": 76.80000000000001,
+        "table_hours": 76.80000000000001
+      },
+      "period": "core",
+      "table_revenue": 768.0000000000001
+    },
+    {
+      "bar_revenue": 648.0,
+      "day_type": "weekend",
+      "days_per_month": 12.99,
+      "metrics": {
+        "active_tables": 14.399999999999999,
+        "guests": 36.0,
+        "table_hours": 28.799999999999997
+      },
+      "period": "late",
+      "table_revenue": 288.0
+    }
+  ],
+  "pricing_style": "hourly",
+  "rent_per_sf": 18.5,
+  "scenario_id": "S24",
+  "scenario_name": "24-table phase-2 model",
+  "size_sf": 15000.0,
+  "startup_cost": 1190000.0,
+  "tables": 24,
+  "total_guests": 2005.6560000000002,
+  "totals": {
+    "annual_net": 170854.41100800008,
+    "bar_cogs": 9198.998400000002,
+    "bar_revenue": 45994.992000000006,
+    "breakeven_revenue": 54090.52209276198,
+    "cam": 4375.0,
+    "food_cogs": 2069.77464,
+    "food_revenue": 6899.2488,
+    "insurance": 500.0,
+    "labor": 16849.360176000002,
+    "monthly_net": 14237.867584000007,
+    "other_opex": 2000.0,
+    "rent": 23125.0,
+    "security": 1732.0,
+    "table_revenue": 23693.760000000002,
+    "total_cogs": 11268.773040000002,
+    "total_expenses": 62350.133216,
+    "total_revenue": 76588.00080000001,
+    "utilities": 2500.0
+  },
+  "warnings": [
+    "Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.",
+    "Late-night mode may require a special exception for midnight-2am alcohol service.",
+    "Last call should be 01:30-01:45 to clear drinks by 02:00.",
+    "Operating after 2am without alcohol is high risk; docs say 24-hour operation is not feasible."
+  ],
+  "wristband_count_method": "core_only"
+}

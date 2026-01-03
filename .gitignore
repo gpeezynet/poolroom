@@ -5,3 +5,8 @@
 *.p12
 *.pfx
 **/secrets.*
+
+__pycache__/
+*.pyc
+.venv/
+
