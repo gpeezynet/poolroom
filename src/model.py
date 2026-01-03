@@ -63,6 +63,7 @@ def compute_scenario(
     weeks_per_month = float(modeling["weeks_per_month"])
     weekdays_per_week = float(modeling["weekdays_per_week"])
     weekend_days_per_week = float(modeling["weekend_days_per_week"])
+    labor_weeks_per_month = 4.333
 
     revenue = assumptions["revenue"]
     pricing_windows = revenue["pricing_windows"]
@@ -145,6 +146,47 @@ def compute_scenario(
     food_revenue = sum(p["food_revenue"] for p in periods)
     total_guests = sum(p["metrics"]["guests"] for p in periods)
 
+    late_night = bool(scenario.get("late_night", False))
+    late_settings = assumptions.get("late_night", {})
+    late_incremental_table_revenue = 0.0
+    late_incremental_bar_revenue = 0.0
+    late_incremental_food_revenue = 0.0
+    late_incremental_sales_monthly = 0.0
+    late_incremental_guests = 0.0
+    if late_night:
+        extra_hours_per_week = _num(
+            late_settings.get("extra_hours_per_week", 0),
+            "late_night.extra_hours_per_week",
+        )
+        utilization_multiplier_late = _num(
+            late_settings.get("utilization_multiplier_late", 1),
+            "late_night.utilization_multiplier_late",
+        )
+        spend_multiplier_late = _num(
+            late_settings.get("spend_multiplier_late", 1),
+            "late_night.spend_multiplier_late",
+        )
+        late_incremental_table_hours = (
+            tables * extra_hours_per_week * weeks_per_month * utilization_multiplier_late
+        )
+        late_incremental_guests = late_incremental_table_hours * avg_guests_per_table_hour
+        late_incremental_table_revenue = late_incremental_table_hours * table_rate_late
+        late_incremental_bar_revenue = (
+            late_incremental_guests * bar_attach_rate * avg_bar_spend * spend_multiplier_late
+        )
+        late_incremental_food_revenue = (
+            late_incremental_guests * food_attach_rate * avg_food_spend * spend_multiplier_late
+        )
+        late_incremental_sales_monthly = (
+            late_incremental_table_revenue
+            + late_incremental_bar_revenue
+            + late_incremental_food_revenue
+        )
+        table_revenue += late_incremental_table_revenue
+        bar_revenue += late_incremental_bar_revenue
+        food_revenue += late_incremental_food_revenue
+        total_guests += late_incremental_guests
+
     total_revenue = table_revenue + bar_revenue + food_revenue
 
     cogs = assumptions["cogs"]
@@ -153,6 +195,55 @@ def compute_scenario(
 
     labor_pct = float(assumptions["labor"]["target_pct_of_sales"]["default"])
     labor = total_revenue * labor_pct
+    labor_assumptions = assumptions.get("labor", {})
+    burden_pct = float(labor_assumptions.get("burden_pct", 0))
+    rates = labor_assumptions.get("rates", {})
+    s12_schedule = labor_assumptions.get("s12_schedule", {})
+    s24_schedule = labor_assumptions.get("s24_schedule", {})
+
+    def _schedule_hours(key: str) -> float:
+        return _select_by_tables(
+            tables,
+            _num(s12_schedule.get(key, 0), f"labor.s12_schedule.{key}"),
+            _num(s24_schedule.get(key, 0), f"labor.s24_schedule.{key}"),
+        )
+
+    def _rate(role: str) -> float:
+        return _num(rates.get(role, 0), f"labor.rates.{role}")
+
+    weekly_labor_cost = (
+        _schedule_hours("manager_hours_per_week") * _rate("manager")
+        + _schedule_hours("bartender_hours_per_week") * _rate("bartender")
+        + _schedule_hours("barback_hours_per_week") * _rate("barback")
+        + _schedule_hours("floor_hours_per_week") * _rate("floor")
+        + _schedule_hours("kitchen_hours_per_week") * _rate("kitchen")
+        + _schedule_hours("security_hours_per_week") * _rate("security")
+        + _schedule_hours("cleaner_hours_per_week") * _rate("cleaner")
+    )
+    semi_fixed_labor_monthly = weekly_labor_cost * labor_weeks_per_month * (1 + burden_pct)
+    late_incremental_labor_cost_monthly = 0.0
+    if late_night:
+        extra_security_hours = _num(
+            late_settings.get("extra_security_hours_per_week", 0),
+            "late_night.extra_security_hours_per_week",
+        )
+        extra_floor_hours = _num(
+            late_settings.get("extra_floor_hours_per_week", 0),
+            "late_night.extra_floor_hours_per_week",
+        )
+        extra_bartender_hours = _num(
+            late_settings.get("extra_bartender_hours_per_week", 0),
+            "late_night.extra_bartender_hours_per_week",
+        )
+        late_weekly_labor_cost = (
+            extra_security_hours * _rate("security")
+            + extra_floor_hours * _rate("floor")
+            + extra_bartender_hours * _rate("bartender")
+        )
+        late_incremental_labor_cost_monthly = (
+            late_weekly_labor_cost * labor_weeks_per_month * (1 + burden_pct)
+        )
+        semi_fixed_labor_monthly += late_incremental_labor_cost_monthly
 
     site = assumptions.get("site", {})
     s12_sqft = _num(site.get("s12_sqft", size_sf), "site.s12_sqft")
@@ -273,6 +364,7 @@ def compute_scenario(
         + pos_software
         + music_licensing
         + marketing
+        + semi_fixed_labor_monthly
         + hvac_service
         + hvac_filters
         + hvac_reserve
@@ -341,7 +433,7 @@ def compute_scenario(
     noi = contribution_margin - monthly_fixed_costs
     dscr = None
     if annual_debt_service > 0:
-        dscr = (noi * 12) / annual_debt_service
+        dscr = max((noi * 12) / annual_debt_service, 0)
     cash_flow_after_debt = noi - monthly_debt_service
 
     breakeven_revenue = None
@@ -354,6 +446,18 @@ def compute_scenario(
             breakeven_revenue = monthly_fixed_costs / (1 - variable_ratio)
             if monthly_debt_service > 0:
                 breakeven_revenue_after_debt = (monthly_fixed_costs + monthly_debt_service) / (1 - variable_ratio)
+
+    late_incremental_costs_monthly = late_incremental_labor_cost_monthly
+    late_incremental_noi_monthly = None
+    late_incremental_cashflow_after_debt_monthly = None
+    late_break_even_incremental_sales_per_day = None
+    if late_night and gross_margin_pct and gross_margin_pct > 0:
+        late_incremental_contribution = late_incremental_sales_monthly * gross_margin_pct
+        late_incremental_noi_monthly = late_incremental_contribution - late_incremental_costs_monthly
+        late_incremental_cashflow_after_debt_monthly = late_incremental_noi_monthly
+        late_break_even_incremental_sales_per_day = (
+            late_incremental_costs_monthly / gross_margin_pct / 30
+        )
 
     warnings = []
     legal = assumptions["legal_hours"]
@@ -389,6 +493,7 @@ def compute_scenario(
             "food_cogs": food_cogs,
             "total_cogs": total_cogs,
             "labor": labor,
+            "semi_fixed_labor_monthly": semi_fixed_labor_monthly,
             "rent": rent,
             "cam": cam,
             "property_tax_insurance": property_tax_insurance,
@@ -420,11 +525,17 @@ def compute_scenario(
             "noi": noi,
             "cash_flow_after_debt": cash_flow_after_debt,
             "dscr": dscr,
+            "late_incremental_sales_monthly": late_incremental_sales_monthly,
+            "late_incremental_costs_monthly": late_incremental_costs_monthly,
+            "late_incremental_noi_monthly": late_incremental_noi_monthly,
+            "late_incremental_cashflow_after_debt_monthly": late_incremental_cashflow_after_debt_monthly,
+            "late_break_even_incremental_sales_per_day": late_break_even_incremental_sales_per_day,
         },
         "total_capex": total_capex,
         "down_payment_amount": down_payment_amount,
         "loan_principal": loan_principal,
         "implied_equity": implied_equity,
+        "late_night": late_night,
         "startup_cost": startup_cost,
         "payback_years": payback_years,
         "payback_months": payback_months,

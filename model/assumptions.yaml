@@ -38,6 +38,14 @@ capex:
   s24_soft_cost_pct: 0.10
   opening_working_capital: 60000
 
+late_night:
+  extra_hours_per_week: 30
+  utilization_multiplier_late: 0.70
+  spend_multiplier_late: 1.10
+  extra_security_hours_per_week: 30
+  extra_floor_hours_per_week: 20
+  extra_bartender_hours_per_week: 20
+
 facility:
   rent_per_sf_yr:
     low: 12
@@ -216,6 +224,31 @@ labor:
     cook_hourly: 14.5 # DR-12_labor_wages
     server_hourly: 10 # DR-12_labor_wages
     cleaner_hourly: 13 # DR-12_labor_wages
+  burden_pct: 0.12
+  rates:
+    manager: 25
+    bartender: 18
+    barback: 14
+    floor: 14
+    kitchen: 16
+    security: 18
+    cleaner: 13
+  s12_schedule:
+    manager_hours_per_week: 45
+    bartender_hours_per_week: 160
+    barback_hours_per_week: 80
+    floor_hours_per_week: 160
+    kitchen_hours_per_week: 80
+    security_hours_per_week: 120
+    cleaner_hours_per_week: 20
+  s24_schedule:
+    manager_hours_per_week: 55
+    bartender_hours_per_week: 260
+    barback_hours_per_week: 140
+    floor_hours_per_week: 260
+    kitchen_hours_per_week: 140
+    security_hours_per_week: 200
+    cleaner_hours_per_week: 30
   staffing_roles_by_time_block:
     day: ["bartender"]
     evening: ["bartender", "bartender", "barback", "security", "manager"]

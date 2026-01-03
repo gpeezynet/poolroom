@@ -40,16 +40,17 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $64,333
+- Total expenses: $118,031
 
-- Monthly net: $26,083
-- Annual net: $312,996
+- Monthly net: $-27,615
+- Annual net: $-331,380
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
 - Utilities total: $3,400
 - Insurance: $500
-- Labor: variable (not included in fixed costs)
+- Baseline labor (schedule): $53,698
+- Variable labor: percent of sales (not in fixed costs)
 - Marketing: $750
 - Music licensing: $204
 - Security monitoring: $1,732
@@ -60,7 +61,7 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Fixed costs total: $27,137
+- Fixed costs total: $80,835
 
 ## CAPEX & Financing
 - Total capex: $522,000
@@ -70,20 +71,20 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $26,083
-- Cash flow after debt: $16,757
-- DSCR: 279.7%
+- NOI (monthly): $-27,615
+- Cash flow after debt: $-36,941
+- DSCR: 0.00x (0.0%)
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 1.98 years
+- Payback period: n/a
 
 ## Break-even Snapshots
-- Monthly fixed costs: $27,137
+- Monthly fixed costs: $80,835
 - Gross margin (after variable costs): 58.9%
-- Break-even sales (monthly): $46,104
-- Break-even sales (per day, operating): $1,537
-- Break-even sales (per day, after debt): $2,065
+- Break-even sales (monthly): $137,330
+- Break-even sales (per day, operating): $4,578
+- Break-even sales (per day, after debt): $5,106
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

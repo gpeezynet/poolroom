@@ -15,6 +15,11 @@ def _pct(value: float | None) -> str:
     return f"{value * 100:.1f}%"
 
 
+def _dscr(value: float | None) -> str:
+    if value is None:
+        return "n/a"
+    return f"{value:.2f}x ({_pct(value)})"
+
 def render_report(result: Dict[str, Any]) -> str:
     totals = result["totals"]
     lines = []
@@ -100,7 +105,8 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Occupancy (rent/CAM/NNN): {_money(totals.get('occupancy_cost_monthly'))}")
     lines.append(f"- Utilities total: {_money(totals.get('utilities_cost_monthly'))}")
     lines.append(f"- Insurance: {_money(totals.get('insurance'))}")
-    lines.append("- Labor: variable (not included in fixed costs)")
+    lines.append(f"- Baseline labor (schedule): {_money(totals.get('semi_fixed_labor_monthly'))}")
+    lines.append("- Variable labor: percent of sales (not in fixed costs)")
     lines.append(f"- Marketing: {_money(totals.get('marketing'))}")
     lines.append(f"- Music licensing: {_money(totals.get('music_licensing'))}")
     lines.append(f"- Security monitoring: {_money(totals.get('security'))}")
@@ -125,8 +131,31 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Monthly debt service: {_money(totals.get('monthly_debt_service'))}")
     lines.append(f"- NOI (monthly): {_money(totals.get('noi'))}")
     lines.append(f"- Cash flow after debt: {_money(totals.get('cash_flow_after_debt'))}")
-    lines.append(f"- DSCR: {_pct(totals.get('dscr'))}")
+    lines.append(f"- DSCR: {_dscr(totals.get('dscr'))}")
     lines.append("")
+
+    if result.get("late_night"):
+        lines.append("## Late-Night Incremental")
+        lines.append(
+            f"- Incremental sales (monthly): {_money(totals.get('late_incremental_sales_monthly'))}"
+        )
+        lines.append(
+            f"- Incremental costs (monthly): {_money(totals.get('late_incremental_costs_monthly'))}"
+        )
+        lines.append(
+            f"- Incremental NOI (monthly): {_money(totals.get('late_incremental_noi_monthly'))}"
+        )
+        lines.append(
+            f"- Incremental cash flow after debt (monthly): "
+            f"{_money(totals.get('late_incremental_cashflow_after_debt_monthly'))}"
+        )
+        worth_it = totals.get("late_incremental_cashflow_after_debt_monthly")
+        lines.append(f"- Late-night worth it?: {worth_it is not None and worth_it > 0}")
+        lines.append(
+            "- Break-even incremental sales (per day): "
+            f"{_money(totals.get('late_break_even_incremental_sales_per_day'))}"
+        )
+        lines.append("")
 
     lines.append("## ROI Metrics")
     lines.append(f"- Startup cost (likely): {_money(result['startup_cost'])}")

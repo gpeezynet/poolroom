@@ -53,11 +53,22 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "monthly_fixed_costs",
                 "occupancy_cost_monthly",
                 "utilities_cost_monthly",
+                "semi_fixed_labor_monthly",
                 "monthly_debt_service",
                 "dscr",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
+            dscr = totals.get("dscr")
+            self.assertIsInstance(dscr, (int, float), f"DSCR is not numeric for {scenario_id}")
+            self.assertGreaterEqual(dscr, 0, f"DSCR is negative for {scenario_id}")
+            self.assertLessEqual(dscr, 20, f"DSCR is unusually high for {scenario_id}")
+            if "LATE" in scenario_id:
+                for key in (
+                    "late_incremental_noi_monthly",
+                    "late_incremental_cashflow_after_debt_monthly",
+                ):
+                    self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
 
     def test_required_assumptions_are_not_placeholders(self):
         a = load_assumptions()
