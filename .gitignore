@@ -10,3 +10,6 @@ __pycache__/
 *.pyc
 .venv/
 
+# local archives
+poolroom_model_*.zip
+poolroom_bundle_*.zip
