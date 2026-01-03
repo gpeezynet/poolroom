@@ -153,6 +153,21 @@ revenue:
     bar_spend_per_guest: 18
     food_attach_rate: 0.25
     food_spend_per_guest: 10
+  programs:
+    memberships:
+      active_members: 150
+      monthly_fee: 25
+      discount_leakage_pct: 0.40
+      net_margin_pct: 0.85
+    leagues:
+      active_league_players_per_month: 120
+      league_fee_per_player: 2
+      net_margin_pct: 0.80
+    events:
+      events_per_month: 4
+      avg_event_revenue: 900
+      variable_cost_pct: 0.15
+      net_margin_pct: 0.85
   ramp_months:
     - { month: 1, factor: 0.35 }
     - { month: 3, factor: 0.60 }

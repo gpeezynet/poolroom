@@ -76,10 +76,10 @@ def compute_scenario(
     weeks_per_month = float(modeling["weeks_per_month"])
     weekdays_per_week = float(modeling["weekdays_per_week"])
     weekend_days_per_week = float(modeling["weekend_days_per_week"])
-    weekdays_per_month = float(
+    bar_only_weekdays_per_month = float(
         modeling.get("weekdays_per_month", weeks_per_month * weekdays_per_week)
     )
-    weekend_days_per_month = float(
+    bar_only_weekend_days_per_month = float(
         modeling.get("weekend_days_per_month", weeks_per_month * weekend_days_per_week)
     )
     labor_weeks_per_month = 4.333
@@ -231,8 +231,8 @@ def compute_scenario(
     food_revenue = sum(p["food_revenue"] for p in periods)
     total_guests = sum(p["metrics"]["guests"] for p in periods)
     bar_only_guest_count = (
-        bar_only_weekday_guests * weekdays_per_month
-        + bar_only_weekend_guests * weekend_days_per_month
+        bar_only_weekday_guests * bar_only_weekdays_per_month
+        + bar_only_weekend_guests * bar_only_weekend_days_per_month
     )
     bar_only_bar_sales_monthly = bar_only_guest_count * bar_only_bar_spend
     bar_only_food_sales_monthly = (
@@ -897,8 +897,8 @@ def compute_scenario(
             "bar_only_bar_spend_per_guest": bar_only_bar_spend,
             "bar_only_food_attach_rate": bar_only_food_attach,
             "bar_only_food_spend_per_guest": bar_only_food_spend,
-            "bar_only_weekdays_per_month": weekdays_per_month,
-            "bar_only_weekend_days_per_month": weekend_days_per_month,
+            "bar_only_weekdays_per_month": bar_only_weekdays_per_month,
+            "bar_only_weekend_days_per_month": bar_only_weekend_days_per_month,
             "open_hours_per_day_modeled": open_hours_per_day,
             "legal_max_open_hours_per_day": legal_max_open_hours_per_day,
             "standard_open_hours_per_day": standard_open_hours_per_day,
