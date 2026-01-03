@@ -5,10 +5,17 @@
 - Size: 8000 sf
 - Pricing style: hourly
 - Rent/CAM: $18.00/sf/yr, $4.00/sf/yr
-- Estimated guests per month: 7482
+- Estimated guests per month: 5736
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 - Late bar/food fractions: 1.00 / 1.00
+
+## Legal Hours Constraint
+- Legal max open hours/day: 16.0
+- Modeled open hours/day (capped): 16.0
+- Capped late extra hours/day: 2.0
+- Capped late extra hours/week: 14.0
+- NOTE: All-night operation is not modeled for alcohol venues; this model enforces legal max hours.
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
@@ -19,16 +26,16 @@
 - Multipliers (utilization/spend): 1.00 / 1.00
 
 ## Monthly P&L
-- Table revenue: $44,478
-- Bar revenue (table-driven): $98,401
-- Food revenue (table-driven): $27,334
+- Table revenue: $32,839
+- Bar revenue (table-driven): $74,203
+- Food revenue (table-driven): $20,612
 - Bar-only bar revenue: $23,929
 - Bar-only food revenue: $3,324
-- Total monthly sales: $197,465
+- Total monthly sales: $154,907
 
-- Bar COGS: $24,466
-- Food COGS: $9,197
-- Labor: $43,442
+- Bar COGS: $19,626
+- Food COGS: $7,181
+- Labor: $34,079
 - Rent: $13,500
 - CAM: $3,000
 - Property tax/insurance (NNN): $1,500
@@ -36,7 +43,7 @@
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
-- Payment processing: $4,976
+- Payment processing: $3,904
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -45,10 +52,10 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $168,643
+- Total expenses: $151,352
 
-- Monthly net: $28,821
-- Annual net: $345,857
+- Monthly net: $3,554
+- Annual net: $42,654
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
@@ -76,46 +83,46 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $28,821
-- Cash flow after debt: $19,496
-- DSCR: 3.09x (309.1%)
+- NOI (monthly): $3,554
+- Cash flow after debt: $-5,771
+- DSCR: 0.38x (38.1%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $19,496 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 0.83x
-- Required additional sales (per day): $0
+- Cash gap (monthly): $-5,771 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.06x
+- Required additional sales (per day): $331
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $31,034 |
-| Utilization -10% | $7,957 |
-| Spend +10% | $26,843 |
-| Spend -10% | $12,149 |
-| Fixed costs +10% | $10,840 |
-| Fixed costs -10% | $28,152 |
+| Utilization +10% | $3,241 |
+| Utilization -10% | $-14,783 |
+| Spend +10% | $-255 |
+| Spend -10% | $-11,287 |
+| Fixed costs +10% | $-14,427 |
+| Fixed costs -10% | $2,885 |
 
 ## Late-Night Incremental (Bridge)
-- Incremental sales (monthly): $79,797
-- Incremental variable costs (monthly): $32,421
-- Incremental gross profit (monthly): $47,375
+- Incremental sales (monthly): $37,238
+- Incremental variable costs (monthly): $15,130
+- Incremental gross profit (monthly): $22,109
 - Incremental fixed costs (monthly): $5,726
-- Incremental NOI (monthly): $41,649
-- Incremental cash flow after debt (monthly): $41,649
+- Incremental NOI (monthly): $16,382
+- Incremental cash flow after debt (monthly): $16,382
 - Break-even incremental sales (per day): $322
 - Late-night worth it?: True
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 1.79 years
+- Payback period: 14.54 years
 
 ## Break-even Snapshots
 - Monthly fixed costs: $86,562
-- Gross margin (after variable costs): 58.4%
-- Break-even sales (monthly): $148,140
-- Break-even sales (per day, operating): $4,938
-- Break-even sales (per day, after debt): $5,470
+- Gross margin (after variable costs): 58.2%
+- Break-even sales (monthly): $148,797
+- Break-even sales (per day, operating): $4,960
+- Break-even sales (per day, after debt): $5,494
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

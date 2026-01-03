@@ -54,6 +54,29 @@ def render_report(result: Dict[str, Any]) -> str:
         )
     lines.append("")
 
+    legal_max_hours = drivers.get("legal_max_open_hours_per_day")
+    modeled_open_hours = drivers.get("open_hours_per_day_modeled")
+    lines.append("## Legal Hours Constraint")
+    lines.append(
+        f"- Legal max open hours/day: {legal_max_hours:.1f}" if legal_max_hours is not None else "- Legal max open hours/day: n/a"
+    )
+    lines.append(
+        f"- Modeled open hours/day (capped): {modeled_open_hours:.1f}" if modeled_open_hours is not None else "- Modeled open hours/day (capped): n/a"
+    )
+    if result.get("late_night"):
+        lines.append(
+            "- Capped late extra hours/day: "
+            f"{drivers.get('late_extra_hours_per_day_capped', 0):.1f}"
+        )
+        lines.append(
+            "- Capped late extra hours/week: "
+            f"{drivers.get('late_extra_hours_per_week_capped', 0):.1f}"
+        )
+    lines.append(
+        "- NOTE: All-night operation is not modeled for alcohol venues; this model enforces legal max hours."
+    )
+    lines.append("")
+
     lines.append("## Revenue Drivers")
     lines.append(
         "- Table rates (offpeak/prime/late): "

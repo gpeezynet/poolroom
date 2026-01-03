@@ -5,10 +5,17 @@
 - Size: 15000 sf
 - Pricing style: hourly
 - Rent/CAM: $18.00/sf/yr, $4.00/sf/yr
-- Estimated guests per month: 14964
+- Estimated guests per month: 11473
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 - Late bar/food fractions: 1.00 / 1.00
+
+## Legal Hours Constraint
+- Legal max open hours/day: 16.0
+- Modeled open hours/day (capped): 16.0
+- Capped late extra hours/day: 2.0
+- Capped late extra hours/week: 14.0
+- NOTE: All-night operation is not modeled for alcohol venues; this model enforces legal max hours.
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
@@ -19,16 +26,16 @@
 - Multipliers (utilization/spend): 1.00 / 1.00
 
 ## Monthly P&L
-- Table revenue: $88,956
-- Bar revenue (table-driven): $196,802
-- Food revenue (table-driven): $54,667
+- Table revenue: $65,677
+- Bar revenue (table-driven): $148,406
+- Food revenue (table-driven): $41,224
 - Bar-only bar revenue: $23,929
 - Bar-only food revenue: $3,324
-- Total monthly sales: $367,677
+- Total monthly sales: $282,561
 
-- Bar COGS: $44,146
-- Food COGS: $17,397
-- Labor: $80,889
+- Bar COGS: $34,467
+- Food COGS: $13,364
+- Labor: $62,163
 - Rent: $24,000
 - CAM: $5,333
 - Property tax/insurance (NNN): $2,667
@@ -36,7 +43,7 @@
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
-- Payment processing: $9,265
+- Payment processing: $7,121
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -45,10 +52,10 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $288,404
+- Total expenses: $253,821
 
-- Monthly net: $79,273
-- Annual net: $951,279
+- Monthly net: $28,739
+- Annual net: $344,873
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $32,000
@@ -76,46 +83,46 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $79,273
-- Cash flow after debt: $69,948
-- DSCR: 8.50x (850.1%)
+- NOI (monthly): $28,739
+- Cash flow after debt: $19,414
+- DSCR: 3.08x (308.2%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $69,948 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 0.68x
+- Cash gap (monthly): $19,414 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.88x
 - Required additional sales (per day): $0
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $91,546 |
-| Utilization -10% | $48,350 |
-| Spend +10% | $84,719 |
-| Spend -10% | $55,176 |
-| Fixed costs +10% | $56,277 |
-| Fixed costs -10% | $83,618 |
+| Utilization +10% | $35,958 |
+| Utilization -10% | $2,869 |
+| Spend +10% | $30,517 |
+| Spend -10% | $8,311 |
+| Fixed costs +10% | $5,743 |
+| Fixed costs -10% | $33,084 |
 
 ## Late-Night Incremental (Bridge)
-- Incremental sales (monthly): $159,593
-- Incremental variable costs (monthly): $64,842
-- Incremental gross profit (monthly): $94,751
+- Incremental sales (monthly): $74,477
+- Incremental variable costs (monthly): $30,260
+- Incremental gross profit (monthly): $44,217
 - Incremental fixed costs (monthly): $5,726
-- Incremental NOI (monthly): $89,024
-- Incremental cash flow after debt (monthly): $89,024
+- Incremental NOI (monthly): $38,491
+- Incremental cash flow after debt (monthly): $38,491
 - Break-even incremental sales (per day): $322
 - Late-night worth it?: True
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
-- Payback period: 1.25 years
+- Payback period: 3.45 years
 
 ## Break-even Snapshots
 - Monthly fixed costs: $136,706
-- Gross margin (after variable costs): 58.7%
-- Break-even sales (monthly): $232,724
-- Break-even sales (per day, operating): $7,757
-- Break-even sales (per day, after debt): $8,287
+- Gross margin (after variable costs): 58.6%
+- Break-even sales (monthly): $233,477
+- Break-even sales (per day, operating): $7,783
+- Break-even sales (per day, after debt): $8,313
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

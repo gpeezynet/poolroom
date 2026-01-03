@@ -9,6 +9,11 @@
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 
+## Legal Hours Constraint
+- Legal max open hours/day: 16.0
+- Modeled open hours/day (capped): 14.0
+- NOTE: All-night operation is not modeled for alcohol venues; this model enforces legal max hours.
+
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
 - Avg table hours sold per table (weekday/weekend): 3.00 / 5.00

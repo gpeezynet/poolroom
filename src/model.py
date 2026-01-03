@@ -62,6 +62,16 @@ def compute_scenario(
                 pass
         raise ValueError(f"Assumption {path} must be numeric, got {value!r}")
 
+    def _time_to_hours(value: Any, path: str) -> float:
+        if not isinstance(value, str):
+            raise ValueError(f"Assumption {path} must be time string, got {value!r}")
+        parts = value.split(":")
+        if len(parts) != 2:
+            raise ValueError(f"Assumption {path} must be HH:MM, got {value!r}")
+        hours = int(parts[0])
+        minutes = int(parts[1])
+        return hours + minutes / 60
+
     modeling = assumptions["modeling"]
     weeks_per_month = float(modeling["weeks_per_month"])
     weekdays_per_week = float(modeling["weekdays_per_week"])
@@ -75,6 +85,22 @@ def compute_scenario(
     labor_weeks_per_month = 4.333
 
     revenue = assumptions["revenue"]
+    late_night = bool(scenario.get("late_night", False))
+    legal = assumptions["legal_hours"]
+    prohibited = legal["alcohol_sales_prohibited"]
+    prohibited_start = _time_to_hours(
+        prohibited["start"], "legal_hours.alcohol_sales_prohibited.start"
+    )
+    prohibited_end = _time_to_hours(
+        prohibited["end"], "legal_hours.alcohol_sales_prohibited.end"
+    )
+    if prohibited_end <= prohibited_start:
+        prohibited_hours = (24 - prohibited_start) + prohibited_end
+    else:
+        prohibited_hours = prohibited_end - prohibited_start
+    legal_max_open_hours_per_day = max(24 - prohibited_hours, 0)
+    legal_hours_enforced = bool(legal.get("no_alcohol_after_2am_enforced", False))
+
     pricing_windows = revenue["pricing_windows"]
     core_hours = float(pricing_windows["core_hours"])
     late_hours = float(pricing_windows["late_hours"])
@@ -84,7 +110,6 @@ def compute_scenario(
     core_share = core_hours / total_window_hours
     late_share = late_hours / total_window_hours
 
-    late_night = bool(scenario.get("late_night", False))
     hours_assumptions = assumptions.get("hours", {})
     standard_open_hours_per_day = _num(
         hours_assumptions.get("standard_open_hours_per_day", 0),
@@ -94,9 +119,19 @@ def compute_scenario(
         hours_assumptions.get("late_extra_hours_per_day", 0),
         "hours.late_extra_hours_per_day",
     )
+    late_extra_hours_per_day_capped = late_extra_hours_per_day
+    if legal_hours_enforced:
+        max_late_extra_per_day = max(
+            legal_max_open_hours_per_day - standard_open_hours_per_day, 0
+        )
+        late_extra_hours_per_day_capped = min(
+            late_extra_hours_per_day, max_late_extra_per_day
+        )
     open_hours_per_day = standard_open_hours_per_day + (
-        late_extra_hours_per_day if late_night else 0
+        late_extra_hours_per_day_capped if late_night else 0
     )
+    if legal_hours_enforced:
+        open_hours_per_day = min(open_hours_per_day, legal_max_open_hours_per_day)
 
     table_rate_offpeak = float(revenue["table_hourly_rate_offpeak"])
     table_rate_prime = float(revenue["table_hourly_rate_prime"])
@@ -220,11 +255,20 @@ def compute_scenario(
     late_incremental_food_revenue = 0.0
     late_incremental_sales_monthly = 0.0
     late_incremental_guests = 0.0
+    extra_hours_per_week_capped = 0.0
     if late_night:
         extra_hours_per_week = _num(
             late_settings.get("extra_hours_per_week", 0),
             "late_night.extra_hours_per_week",
         )
+        extra_hours_per_week_capped = extra_hours_per_week
+        if legal_hours_enforced:
+            max_late_extra_per_day = max(
+                legal_max_open_hours_per_day - standard_open_hours_per_day, 0
+            )
+            extra_hours_per_week_capped = min(
+                extra_hours_per_week, max_late_extra_per_day * 7
+            )
         utilization_multiplier_late = _num(
             late_settings.get("utilization_multiplier_late", 1),
             "late_night.utilization_multiplier_late",
@@ -234,7 +278,7 @@ def compute_scenario(
             "late_night.spend_multiplier_late",
         )
         late_incremental_table_hours = (
-            tables * extra_hours_per_week * weeks_per_month * utilization_multiplier_late
+            tables * extra_hours_per_week_capped * weeks_per_month * utilization_multiplier_late
         )
         remaining_table_hours = max(
             total_available_table_hours - base_table_hours_total, 0
@@ -606,6 +650,7 @@ def compute_scenario(
             "table_sales_monthly": late_incremental_table_revenue,
             "bar_sales_monthly": late_incremental_bar_revenue,
             "food_sales_monthly": late_incremental_food_revenue,
+            "extra_hours_per_week_capped": extra_hours_per_week_capped,
         }
 
     late_incremental_variable_costs_monthly = None
@@ -625,7 +670,6 @@ def compute_scenario(
         late_incremental_debt_service_monthly = late_incremental["incremental_debt_service_monthly"]
 
     warnings = []
-    legal = assumptions["legal_hours"]
     warnings.append(
         "Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon."
     )
@@ -750,6 +794,12 @@ def compute_scenario(
             "bar_only_food_spend_per_guest": bar_only_food_spend,
             "bar_only_weekdays_per_month": weekdays_per_month,
             "bar_only_weekend_days_per_month": weekend_days_per_month,
+            "open_hours_per_day_modeled": open_hours_per_day,
+            "legal_max_open_hours_per_day": legal_max_open_hours_per_day,
+            "standard_open_hours_per_day": standard_open_hours_per_day,
+            "late_extra_hours_per_day_capped": late_extra_hours_per_day_capped,
+            "late_extra_hours_per_week_capped": extra_hours_per_week_capped,
+            "legal_hours_enforced": legal_hours_enforced,
         },
         "periods": periods,
         "warnings": warnings,

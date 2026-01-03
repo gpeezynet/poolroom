@@ -5,10 +5,17 @@
 - Size: 8000 sf
 - Pricing style: hourly
 - Rent/CAM: $18.00/sf/yr, $4.00/sf/yr
-- Estimated guests per month: 6640
+- Estimated guests per month: 4895
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 - Late bar/food fractions: 1.00 / 1.00
+
+## Legal Hours Constraint
+- Legal max open hours/day: 16.0
+- Modeled open hours/day (capped): 16.0
+- Capped late extra hours/day: 2.0
+- Capped late extra hours/week: 14.0
+- NOTE: All-night operation is not modeled for alcohol venues; this model enforces legal max hours.
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
@@ -19,16 +26,16 @@
 - Multipliers (utilization/spend): 0.80 / 0.90
 
 ## Monthly P&L
-- Table revenue: $39,947
-- Bar revenue (table-driven): $79,015
-- Food revenue (table-driven): $21,949
+- Table revenue: $28,308
+- Bar revenue (table-driven): $57,237
+- Food revenue (table-driven): $15,899
 - Bar-only bar revenue: $23,929
 - Bar-only food revenue: $3,324
-- Total monthly sales: $168,163
+- Total monthly sales: $128,697
 
-- Bar COGS: $20,589
-- Food COGS: $7,582
-- Labor: $36,996
+- Bar COGS: $16,233
+- Food COGS: $5,767
+- Labor: $28,313
 - Rent: $13,500
 - CAM: $3,000
 - Property tax/insurance (NNN): $1,500
@@ -36,7 +43,7 @@
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
-- Payment processing: $4,238
+- Payment processing: $3,243
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -45,10 +52,10 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $155,966
+- Total expenses: $140,119
 
-- Monthly net: $12,197
-- Annual net: $146,368
+- Monthly net: $-11,421
+- Annual net: $-137,057
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
@@ -76,46 +83,46 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $12,197
-- Cash flow after debt: $2,872
-- DSCR: 1.31x (130.8%)
+- NOI (monthly): $-11,421
+- Cash flow after debt: $-20,747
+- DSCR: 0.00x (0.0%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $2,872 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 0.97x
-- Required additional sales (per day): $0
-- Notes: n/a
+- Cash gap (monthly): $-20,747 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.28x
+- Required additional sales (per day): $1,184
+- Notes: Required utilization > 1.25 (aggressive)
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $12,748 |
-| Utilization -10% | $-7,004 |
-| Spend +10% | $8,801 |
-| Spend -10% | $-3,058 |
-| Fixed costs +10% | $-5,784 |
-| Fixed costs -10% | $11,528 |
+| Utilization +10% | $-13,233 |
+| Utilization -10% | $-28,261 |
+| Spend +10% | $-16,477 |
+| Spend -10% | $-25,017 |
+| Fixed costs +10% | $-29,403 |
+| Fixed costs -10% | $-12,091 |
 
 ## Late-Night Incremental (Bridge)
-- Incremental sales (monthly): $73,999
-- Incremental variable costs (monthly): $29,714
-- Incremental gross profit (monthly): $44,285
+- Incremental sales (monthly): $34,533
+- Incremental variable costs (monthly): $13,867
+- Incremental gross profit (monthly): $20,666
 - Incremental fixed costs (monthly): $5,726
-- Incremental NOI (monthly): $38,559
-- Incremental cash flow after debt (monthly): $38,559
+- Incremental NOI (monthly): $14,940
+- Incremental cash flow after debt (monthly): $14,940
 - Break-even incremental sales (per day): $319
 - Late-night worth it?: True
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 4.24 years
+- Payback period: n/a
 
 ## Break-even Snapshots
 - Monthly fixed costs: $86,562
-- Gross margin (after variable costs): 58.7%
-- Break-even sales (monthly): $147,394
-- Break-even sales (per day, operating): $4,913
-- Break-even sales (per day, after debt): $5,442
+- Gross margin (after variable costs): 58.4%
+- Break-even sales (monthly): $148,259
+- Break-even sales (per day, operating): $4,942
+- Break-even sales (per day, after debt): $5,474
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

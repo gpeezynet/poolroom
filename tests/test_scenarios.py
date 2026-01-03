@@ -86,6 +86,27 @@ class ScenarioSmokeTests(unittest.TestCase):
                     "food_sales_monthly",
                 ):
                     self.assertIn(key, late_incremental, f"Missing late_incremental.{key} for {scenario_id}")
+                drivers = data.get("revenue_drivers", {})
+                legal_max = drivers.get("legal_max_open_hours_per_day")
+                modeled_open = drivers.get("open_hours_per_day_modeled")
+                self.assertIsNotNone(legal_max, f"Missing legal_max_open_hours_per_day for {scenario_id}")
+                self.assertIsNotNone(modeled_open, f"Missing open_hours_per_day_modeled for {scenario_id}")
+                self.assertLessEqual(
+                    modeled_open,
+                    legal_max + 1e-6,
+                    f"Modeled hours exceed legal max for {scenario_id}",
+                )
+                standard_hours = drivers.get("standard_open_hours_per_day", 0)
+                capped_week = late_incremental.get("extra_hours_per_week_capped")
+                self.assertIsNotNone(
+                    capped_week, f"Missing extra_hours_per_week_capped for {scenario_id}"
+                )
+                max_extra_week = max((legal_max - standard_hours), 0) * 7
+                self.assertLessEqual(
+                    capped_week,
+                    max_extra_week + 1e-6,
+                    f"Late hours/week exceed legal cap for {scenario_id}",
+                )
             if "LOCKUP" in scenario_id:
                 self.assertIsNotNone(late_incremental, f"Missing late_incremental for {scenario_id}")
                 self.assertGreater(
