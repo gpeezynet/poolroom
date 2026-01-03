@@ -195,6 +195,10 @@ revenue:
     month_9: 0.90
     month_12: 1.00
 
+hours:
+  standard_open_hours_per_day: 14
+  late_extra_hours_per_day: 6
+
 cogs:
   bar_cogs_pct:
     beer_low: 0.24

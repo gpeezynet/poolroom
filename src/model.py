@@ -30,8 +30,11 @@ def _period_metrics(
     avg_guests_per_table_hour: float,
     days_per_month: float,
     utilization_multiplier: float,
+    max_table_hours: float | None = None,
 ) -> Dict[str, float]:
     table_hours = tables * hours_per_table * days_per_month * utilization_multiplier
+    if max_table_hours is not None:
+        table_hours = min(table_hours, max_table_hours)
     guests = table_hours * avg_guests_per_table_hour
     return {
         "table_hours": table_hours,
@@ -75,6 +78,20 @@ def compute_scenario(
     core_share = core_hours / total_window_hours
     late_share = late_hours / total_window_hours
 
+    late_night = bool(scenario.get("late_night", False))
+    hours_assumptions = assumptions.get("hours", {})
+    standard_open_hours_per_day = _num(
+        hours_assumptions.get("standard_open_hours_per_day", 0),
+        "hours.standard_open_hours_per_day",
+    )
+    late_extra_hours_per_day = _num(
+        hours_assumptions.get("late_extra_hours_per_day", 0),
+        "hours.late_extra_hours_per_day",
+    )
+    open_hours_per_day = standard_open_hours_per_day + (
+        late_extra_hours_per_day if late_night else 0
+    )
+
     table_rate_offpeak = float(revenue["table_hourly_rate_offpeak"])
     table_rate_prime = float(revenue["table_hourly_rate_prime"])
     table_rate_late = float(revenue["table_hourly_rate_late"])
@@ -101,6 +118,7 @@ def compute_scenario(
 
     weekday_days_per_month = weeks_per_month * weekdays_per_week
     weekend_days_per_month = weeks_per_month * weekend_days_per_week
+    modeled_days_per_month = weekday_days_per_month + weekend_days_per_month
 
     periods = []
     for day_type, days_per_month, hours_per_table_day, core_rate in (
@@ -111,12 +129,17 @@ def compute_scenario(
             ("core", core_share, core_rate),
             ("late", late_share, table_rate_late),
         ):
+            cap_days = 0.0
+            if modeled_days_per_month > 0:
+                cap_days = 30.0 * (days_per_month / modeled_days_per_month)
+            max_table_hours = tables * open_hours_per_day * cap_days * share
             metrics = _period_metrics(
                 tables=tables,
                 hours_per_table=hours_per_table_day * share,
                 avg_guests_per_table_hour=avg_guests_per_table_hour,
                 days_per_month=days_per_month,
                 utilization_multiplier=utilization_multiplier,
+                max_table_hours=max_table_hours,
             )
 
             if pricing_style == "hourly":
@@ -145,8 +168,9 @@ def compute_scenario(
     bar_revenue = sum(p["bar_revenue"] for p in periods)
     food_revenue = sum(p["food_revenue"] for p in periods)
     total_guests = sum(p["metrics"]["guests"] for p in periods)
+    base_table_hours_total = sum(p["metrics"]["table_hours"] for p in periods)
+    total_available_table_hours = tables * open_hours_per_day * 30
 
-    late_night = bool(scenario.get("late_night", False))
     late_settings = assumptions.get("late_night", {})
     late_incremental_table_revenue = 0.0
     late_incremental_bar_revenue = 0.0
@@ -168,6 +192,12 @@ def compute_scenario(
         )
         late_incremental_table_hours = (
             tables * extra_hours_per_week * weeks_per_month * utilization_multiplier_late
+        )
+        remaining_table_hours = max(
+            total_available_table_hours - base_table_hours_total, 0
+        )
+        late_incremental_table_hours = min(
+            late_incremental_table_hours, remaining_table_hours
         )
         late_incremental_guests = late_incremental_table_hours * avg_guests_per_table_hour
         late_incremental_table_revenue = late_incremental_table_hours * table_rate_late
@@ -430,6 +460,13 @@ def compute_scenario(
 
     variable_costs = total_cogs + labor + processing_fees
     contribution_margin = total_revenue - variable_costs
+    gross_profit_before_fixed = contribution_margin
+    required_gross_profit = monthly_fixed_costs + monthly_debt_service
+    required_utilization_multiplier_for_cash_break_even = None
+    if gross_profit_before_fixed > 0:
+        required_utilization_multiplier_for_cash_break_even = max(
+            required_gross_profit / gross_profit_before_fixed, 0.0
+        )
     noi = contribution_margin - monthly_fixed_costs
     dscr = None
     if annual_debt_service > 0:
@@ -446,6 +483,12 @@ def compute_scenario(
             breakeven_revenue = monthly_fixed_costs / (1 - variable_ratio)
             if monthly_debt_service > 0:
                 breakeven_revenue_after_debt = (monthly_fixed_costs + monthly_debt_service) / (1 - variable_ratio)
+
+    cash_gap_monthly = cash_flow_after_debt
+    gross_margin_rate = gross_margin_pct if gross_margin_pct is not None else 0.0
+    sales_gap_per_day_for_cash_break_even = (
+        max(0.0, -cash_flow_after_debt) / max(gross_margin_rate, 0.01) / 30
+    )
 
     late_incremental = None
     if late_night:
@@ -485,14 +528,14 @@ def compute_scenario(
             late_incremental_cash_after_debt_monthly = (
                 late_incremental_noi_monthly - late_incremental_debt_service_monthly
             )
-            gross_margin_rate = None
+            late_incremental_gross_margin_rate = None
             if late_incremental_sales_monthly > 0:
-                gross_margin_rate = (
+                late_incremental_gross_margin_rate = (
                     late_incremental_gross_profit_monthly / late_incremental_sales_monthly
                 )
-            if gross_margin_rate and gross_margin_rate > 0:
+            if late_incremental_gross_margin_rate and late_incremental_gross_margin_rate > 0:
                 late_break_even_incremental_sales_per_day = (
-                    late_incremental_fixed_costs_monthly / gross_margin_rate / 30
+                    late_incremental_fixed_costs_monthly / late_incremental_gross_margin_rate / 30
                 )
 
         late_incremental = {
@@ -555,6 +598,8 @@ def compute_scenario(
             "bar_cogs": bar_cogs,
             "food_cogs": food_cogs,
             "total_cogs": total_cogs,
+            "monthly_variable_costs": variable_costs,
+            "gross_profit_before_fixed": gross_profit_before_fixed,
             "labor": labor,
             "semi_fixed_labor_monthly": semi_fixed_labor_monthly,
             "rent": rent,
@@ -583,6 +628,11 @@ def compute_scenario(
             "breakeven_revenue": breakeven_revenue,
             "breakeven_revenue_after_debt": breakeven_revenue_after_debt,
             "gross_margin_pct": gross_margin_pct,
+            "gross_margin_rate": gross_margin_rate,
+            "required_gross_profit": required_gross_profit,
+            "required_utilization_multiplier_for_cash_break_even": required_utilization_multiplier_for_cash_break_even,
+            "cash_gap_monthly": cash_gap_monthly,
+            "sales_gap_per_day_for_cash_break_even": sales_gap_per_day_for_cash_break_even,
             "monthly_debt_service": monthly_debt_service,
             "annual_debt_service": annual_debt_service,
             "noi": noi,

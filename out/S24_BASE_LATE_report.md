@@ -75,6 +75,22 @@
 - Cash flow after debt: $55,160
 - DSCR: 6.91x (691.5%)
 
+## What Must Be True (Targets)
+- Cash gap (monthly): $55,160 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.73x
+- Required additional sales (per day): $0
+- Notes: n/a
+
+## Sensitivity (Cash After Debt)
+| Lever | Cash after debt (monthly) |
+| --- | --- |
+| Utilization +10% | $75,279 |
+| Utilization -10% | $35,041 |
+| Spend +10% | $70,022 |
+| Spend -10% | $40,298 |
+| Fixed costs +10% | $41,490 |
+| Fixed costs -10% | $68,831 |
+
 ## Late-Night Incremental (Bridge)
 - Incremental sales (monthly): $159,593
 - Incremental variable costs (monthly): $64,842

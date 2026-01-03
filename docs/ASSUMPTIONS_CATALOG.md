@@ -29,6 +29,8 @@ Internal defaults pending vendor quotes.
 | capex.s12_soft_cost_pct | 0.10 | internal_default | Pending vendor quotes. |
 | capex.s24_soft_cost_pct | 0.10 | internal_default | Pending vendor quotes. |
 | capex.opening_working_capital | 60000 | internal_default | Pending vendor quotes. |
+| hours.standard_open_hours_per_day | 14 | internal_default | Pending vendor quotes. |
+| hours.late_extra_hours_per_day | 6 | internal_default | Pending vendor quotes. |
 | late_night.extra_hours_per_week | 30 | internal_default | Pending vendor quotes. |
 | late_night.utilization_multiplier_late | 0.70 | internal_default | Pending vendor quotes. |
 | late_night.spend_multiplier_late | 1.10 | internal_default | Pending vendor quotes. |

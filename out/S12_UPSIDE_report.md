@@ -75,6 +75,22 @@
 - Cash flow after debt: $-24,804
 - DSCR: 0.00x (0.0%)
 
+## What Must Be True (Targets)
+- Cash gap (monthly): $-24,804 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.38x
+- Required additional sales (per day): $1,414
+- Notes: Required utilization > 1.25 (aggressive)
+
+## Sensitivity (Cash After Debt)
+| Lever | Cash after debt (monthly) |
+| --- | --- |
+| Utilization +10% | $-18,268 |
+| Utilization -10% | $-31,339 |
+| Spend +10% | $-19,791 |
+| Spend -10% | $-29,816 |
+| Fixed costs +10% | $-32,887 |
+| Fixed costs -10% | $-16,720 |
+
 ## ROI Metrics
 - Startup cost (likely): $620,000
 - Payback period: n/a

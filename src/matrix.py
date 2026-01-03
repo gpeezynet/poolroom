@@ -30,6 +30,10 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "cash_after_debt",
         "dscr",
         "break_even_sales_per_day",
+        "gross_margin_rate",
+        "cash_gap_monthly",
+        "required_utilization_multiplier_for_cash_break_even",
+        "sales_gap_per_day_for_cash_break_even",
         "late_incremental_noi",
         "late_incremental_cash_after_debt",
     ]
@@ -57,6 +61,14 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             "cash_after_debt": totals.get("cash_flow_after_debt"),
             "dscr": totals.get("dscr"),
             "break_even_sales_per_day": breakeven_sales_per_day,
+            "gross_margin_rate": totals.get("gross_margin_rate"),
+            "cash_gap_monthly": totals.get("cash_gap_monthly"),
+            "required_utilization_multiplier_for_cash_break_even": totals.get(
+                "required_utilization_multiplier_for_cash_break_even"
+            ),
+            "sales_gap_per_day_for_cash_break_even": totals.get(
+                "sales_gap_per_day_for_cash_break_even"
+            ),
             "late_incremental_noi": late_incremental.get("noi_monthly"),
             "late_incremental_cash_after_debt": late_incremental.get(
                 "cash_after_debt_monthly"

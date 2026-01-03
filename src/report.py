@@ -134,6 +134,72 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- DSCR: {_dscr(totals.get('dscr'))}")
     lines.append("")
 
+    lines.append("## What Must Be True (Targets)")
+    cash_gap = totals.get("cash_gap_monthly")
+    required_util = totals.get("required_utilization_multiplier_for_cash_break_even")
+    required_sales_day = totals.get("sales_gap_per_day_for_cash_break_even")
+    lines.append(f"- Cash gap (monthly): {_money(cash_gap)} (negative means shortfall)")
+    if required_util is None:
+        lines.append("- Required utilization multiplier (cash break-even): n/a")
+    else:
+        lines.append(
+            "- Required utilization multiplier (cash break-even): "
+            f"{required_util:.2f}x"
+        )
+    lines.append(
+        f"- Required additional sales (per day): {_money(required_sales_day)}"
+    )
+    notes = []
+    if required_util is not None:
+        if required_util > 2.00:
+            notes.append("Required utilization > 2.00 (unlikely)")
+        elif required_util > 1.50:
+            notes.append("Required utilization > 1.50 (very aggressive)")
+        elif required_util > 1.25:
+            notes.append("Required utilization > 1.25 (aggressive)")
+    lines.append(f"- Notes: {', '.join(notes) if notes else 'n/a'}")
+    lines.append("")
+
+    gross_profit_before_fixed = totals.get("gross_profit_before_fixed")
+    fixed_costs = totals.get("monthly_fixed_costs")
+    debt_service = totals.get("monthly_debt_service")
+    cash_after_debt = totals.get("cash_flow_after_debt")
+    gross_margin_rate = totals.get("gross_margin_rate") or 0.0
+    bar_revenue = totals.get("bar_revenue") or 0.0
+    food_revenue = totals.get("food_revenue") or 0.0
+
+    def _cash_after_debt_with_util(factor: float) -> float | None:
+        if gross_profit_before_fixed is None or fixed_costs is None or debt_service is None:
+            return None
+        return gross_profit_before_fixed * factor - fixed_costs - debt_service
+
+    def _cash_after_debt_with_spend(factor: float) -> float | None:
+        if cash_after_debt is None:
+            return None
+        delta_sales = (bar_revenue + food_revenue) * (factor - 1)
+        return cash_after_debt + delta_sales * gross_margin_rate
+
+    def _cash_after_debt_with_fixed(factor: float) -> float | None:
+        if cash_after_debt is None or fixed_costs is None:
+            return None
+        return cash_after_debt - fixed_costs * (factor - 1)
+
+    sensitivity_rows = [
+        ("Utilization +10%", _cash_after_debt_with_util(1.10)),
+        ("Utilization -10%", _cash_after_debt_with_util(0.90)),
+        ("Spend +10%", _cash_after_debt_with_spend(1.10)),
+        ("Spend -10%", _cash_after_debt_with_spend(0.90)),
+        ("Fixed costs +10%", _cash_after_debt_with_fixed(1.10)),
+        ("Fixed costs -10%", _cash_after_debt_with_fixed(0.90)),
+    ]
+
+    lines.append("## Sensitivity (Cash After Debt)")
+    lines.append("| Lever | Cash after debt (monthly) |")
+    lines.append("| --- | --- |")
+    for label, value in sensitivity_rows:
+        lines.append(f"| {label} | {_money(value)} |")
+    lines.append("")
+
     if result.get("late_night"):
         late_incremental = result.get("late_incremental") or {}
         lines.append("## Late-Night Incremental (Bridge)")

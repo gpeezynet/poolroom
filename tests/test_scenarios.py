@@ -56,6 +56,9 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "semi_fixed_labor_monthly",
                 "monthly_debt_service",
                 "dscr",
+                "cash_gap_monthly",
+                "required_utilization_multiplier_for_cash_break_even",
+                "sales_gap_per_day_for_cash_break_even",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
