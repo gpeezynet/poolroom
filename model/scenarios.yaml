@@ -1,0 +1,34 @@
+﻿scenarios:
+  S12:
+    name: "12-table opening model"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+
+  S24:
+    name: "24-table phase-2 model"
+    tables: 24
+    size_sf:
+      low: 12000
+      high: 20000
+      default: 15000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 670000
+      likely: 1190000
+      high: 1920000
+    rent_tier: "mid"
+    cam_tier: "mid"

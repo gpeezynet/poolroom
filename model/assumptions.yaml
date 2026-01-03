@@ -1,0 +1,335 @@
+﻿meta:
+  source_docs:
+    - docs/DR-01_market.md
+    - docs/DR-02_legal.md
+    - docs/DR-03_site.md
+    - docs/DR-04_capex.md
+    - docs/DR-05_unit_econ.md
+  notes: "Defaults derived from research docs; any placeholder fields are labeled explicitly."
+
+facility:
+  rent_per_sf_yr:
+    low: 12
+    mid: 18.5
+    high: 25
+    premium_high: 25
+    notes: "Huntsville retail lease comps: $12-$15 low, $15-$25 typical, $25+ premium."
+  cam_per_sf_yr:
+    low: 2
+    mid: 3.5
+    high: 5
+    premium_high: 8
+    example_listing: 2.25
+  lease_terms:
+    initial_term_years:
+      low: 3
+      high: 5
+    escalations_pct_yr:
+      low: 0.02
+      high: 0.03
+    security_deposit_months:
+      low: 1
+      high: 3
+  utilities_per_month:
+    low: 2000
+    mid: 2500
+    high: 3000
+    electricity_per_month:
+      low: 1500
+      high: 2500
+    water_per_month:
+      low: 150
+      high: 300
+    gas_per_month:
+      low: 200
+      high: 500
+  hvac:
+    cooling_tons_per_sf: 0.0025
+    example_10000_sf_tons: 25
+    service_contract_per_year: PLACEHOLDER # DR-17_utilities_hvac
+    filter_replacement_per_month: PLACEHOLDER # DR-17_utilities_hvac
+    hvac_maintenance_reserve_per_year: PLACEHOLDER # DR-17_utilities_hvac
+  utility_deposit_months: PLACEHOLDER # DR-17_utilities_hvac
+
+legal_hours:
+  alcohol_sales_prohibited:
+    start: "02:00"
+    end: "10:00"
+  sunday_sales_start: "12:00"
+  last_call_time_range: "01:30-01:45"
+  late_hours_permit_required: true
+  no_alcohol_after_2am_enforced: true
+
+space_program:
+  overall_size_sf:
+    low: 5000
+    high: 12000
+  sf_per_table:
+    low: 250
+    mid: 275
+    high: 300
+  table_clearance:
+    eight_ft_table_min_ft: "13x17"
+    eight_ft_table_comfort_ft: "14x18"
+    nine_ft_table_comfort_ft: "15x20"
+    seven_ft_table_min_ft: "12x16"
+  allocations_sf:
+    bar_counter_and_back: { low: 200, high: 300 }
+    bar_lounge: { low: 300, high: 500 }
+    kitchen_prep: { low: 100, high: 200 }
+    restrooms_total: { low: 300, high: 400 }
+    storage: { low: 100, high: 200 }
+    office: 80
+    walk_in_cooler: 80
+  bar_and_seating_pct_of_floor: 0.15
+  circulation_pct:
+    low: 0.10
+    high: 0.15
+  parking:
+    spaces_per_1000_sf:
+      low: 5
+      high: 10
+    spaces_per_table: 1
+    spaces_per_100_sf_patron_area: 1
+    example_6000_sf_spaces:
+      low: 30
+      high: 50
+
+revenue:
+  table_pricing:
+    hourly_rate_per_table: 10
+    hourly_rate_competitor_low: 6
+    hourly_rate_competitor_mid: 7
+    per_person_wristband_low: 5
+    per_person_wristband_high: 6
+    per_person_wristband_competitor: 8
+    all_day_wristband_example: 10
+  utilization:
+    weekday_core: 0.50
+    weekend_core: 0.80
+    weekday_late: 0.20
+    weekend_late: 0.60
+  guests_per_active_table:
+    weekday_core: 2.0
+    weekend_core: 4.0
+    weekday_late: 1.5
+    weekend_late: 2.5
+    notes: "Late-hour guest counts are midpoints from ranges in docs."
+  average_check:
+    core: 25
+    late: 18
+    late_low: 15
+    late_high: 20
+  drink_pricing:
+    domestic_beer: 4
+    craft_beer_low: 5
+    craft_beer_high: 6
+    basic_cocktail_low: 6
+    basic_cocktail_high: 8
+    top_shelf_cocktail_low: 10
+    top_shelf_cocktail_high: 12
+    call_shot_low: 4
+    call_shot_high: 6
+    premium_shot_high: 8
+  pricing_windows:
+    core_hours: 4
+    late_hours: 2
+  ramp_up_curve:
+    month_1: 0.30
+    month_3: 0.50
+    month_6: 0.75
+    month_9: 0.90
+    month_12: 1.00
+
+cogs:
+  bar_cogs_pct:
+    beer_low: 0.24
+    beer_high: 0.28
+    spirits_low: 0.18
+    spirits_high: 0.20
+    blended_target: 0.20
+  food_cogs_pct_placeholder: 0.30
+  distribution:
+    beer_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
+    liquor_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
+    wine_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
+    delivery_fee_per_month: PLACEHOLDER # DR-10_distribution_cogs
+    keg_deposit_per_keg: PLACEHOLDER # DR-10_distribution_cogs
+
+labor:
+  target_pct_of_sales:
+    low: 0.20
+    high: 0.25
+    default: 0.22
+  wages:
+    bartender_base_hourly: 2.13
+    bartender_effective_hourly: 15
+    barback_hourly_low: 8
+    barback_hourly_high: 12
+    manager_hourly: PLACEHOLDER # DR-12_labor_wages
+    cook_hourly: PLACEHOLDER # DR-12_labor_wages
+    server_hourly: PLACEHOLDER # DR-12_labor_wages
+    cleaner_hourly: PLACEHOLDER # DR-12_labor_wages
+  staffing_roles_by_time_block:
+    day: ["bartender"]
+    evening: ["bartender", "bartender", "barback", "security", "manager"]
+    late: ["bartender", "bartender", "barback", "security", "security", "manager"]
+    close: ["bartender", "barback", "manager"]
+
+security:
+  hourly_rate:
+    low: 13
+    high: 17
+    default: 15
+  off_duty_officer_hourly_min: 40
+  nightly_cost_range:
+    low: 60
+    high: 100
+  weekly_cost_range:
+    low: 300
+    high: 500
+    default: 400
+  camera_system:
+    upfront_cost: PLACEHOLDER # DR-07_security
+    monthly_monitoring: PLACEHOLDER # DR-07_security
+  id_scanner:
+    upfront_cost: PLACEHOLDER # DR-07_security
+    monthly_service: PLACEHOLDER # DR-07_security
+  staffing_ratio_per_100_patrons: PLACEHOLDER # DR-07_security
+
+insurance:
+  general_liability_per_year:
+    low: 500
+    high: 1000
+  liquor_liability_per_year:
+    low: 1000
+    high: 30000
+  combined_policy_per_year:
+    low: 3000
+    high: 10000
+    default: 6000
+  liability_limits:
+    general_liability: PLACEHOLDER # DR-06_insurance
+    liquor_liability: PLACEHOLDER # DR-06_insurance
+    assault_battery: PLACEHOLDER # DR-06_insurance
+  deductible_per_claim: PLACEHOLDER # DR-06_insurance
+  broker_fee_per_year: PLACEHOLDER # DR-06_insurance
+
+maintenance:
+  cloth_replacement_cycle_months:
+    low: 18
+    high: 24
+  annual_budget_12_tables:
+    cloth: { low: 4000, high: 6000 }
+    table_leveling: 1500
+    rail_cushions: 500
+    balls_and_cues: 500
+    cleaning_supplies: 300
+    total_low: 6500
+    total_high: 8500
+  annual_budget_24_tables:
+    cloth: { low: 8000, high: 12000 }
+    table_leveling: 2500
+    rail_cushions: 1000
+    balls_and_cues: 1000
+    cleaning_supplies: 500
+    total_low: 13500
+    total_high: 17000
+  equipment_maintenance:
+    kitchen_equipment_per_year: PLACEHOLDER # DR-16_equipment_procurement
+    pos_hardware_per_year: PLACEHOLDER # DR-16_equipment_procurement
+    table_lighting_per_year: PLACEHOLDER # DR-16_equipment_procurement
+    accessory_replacement_per_year: PLACEHOLDER # DR-16_equipment_procurement
+
+licenses_and_fees:
+  abc_state_fee_per_year: 300
+  abc_application_fee: 100
+  city_filing_fee: 100
+  background_check_fee_per_person: 25
+  pool_table_license_per_table_per_year: 38.50
+  pool_hall_bond_amount: 1000
+  pool_hall_bond_cost_per_year: 100
+  beer_license_per_year: 112.50
+  wine_license_per_year: 112.50
+  tobacco_license_per_year: 25
+  soft_drink_license_fountain_per_year: 38.50
+  soft_drink_license_bottled_per_year: 4.75
+  liquor_tax_surety_bond_amount: 8000
+  abc_license_timeline_days:
+    low: 45
+    high: 60
+
+music_licensing:
+  ascap_per_year: PLACEHOLDER # DR-08_music_licensing
+  bmi_per_year: PLACEHOLDER # DR-08_music_licensing
+  sesac_per_year: PLACEHOLDER # DR-08_music_licensing
+  gmr_per_year: PLACEHOLDER # DR-08_music_licensing
+  total_music_licenses_per_year: PLACEHOLDER # DR-08_music_licensing
+
+pos_stack:
+  terminals: PLACEHOLDER # DR-09_pos_stack
+  hardware_per_terminal: PLACEHOLDER # DR-09_pos_stack
+  monthly_software_fee: PLACEHOLDER # DR-09_pos_stack
+  payment_processing_pct: PLACEHOLDER # DR-09_pos_stack
+  onboarding_fee: PLACEHOLDER # DR-09_pos_stack
+
+kitchen_lite:
+  equipment_budget: PLACEHOLDER # DR-11_kitchen_lite
+  hood_required: PLACEHOLDER # DR-11_kitchen_lite
+  grease_trap_required: PLACEHOLDER # DR-11_kitchen_lite
+  food_prep_area_sf: PLACEHOLDER # DR-11_kitchen_lite
+  menu_scope_notes: PLACEHOLDER # DR-11_kitchen_lite
+
+marketing:
+  launch_budget: PLACEHOLDER # DR-13_marketing_launch
+  monthly_budget: PLACEHOLDER # DR-13_marketing_launch
+  channel_split_pct: PLACEHOLDER # DR-13_marketing_launch
+  cost_per_acquisition: PLACEHOLDER # DR-13_marketing_launch
+
+leagues_tournaments:
+  league_night_fee_per_player: PLACEHOLDER # DR-14_leagues_tournaments
+  tournament_entry_fee: PLACEHOLDER # DR-14_leagues_tournaments
+  prize_payout_pct: PLACEHOLDER # DR-14_leagues_tournaments
+  table_time_comped_hours: PLACEHOLDER # DR-14_leagues_tournaments
+
+memberships:
+  annual_fee: PLACEHOLDER # DR-15_memberships
+  monthly_fee: PLACEHOLDER # DR-15_memberships
+  discount_pct: PLACEHOLDER # DR-15_memberships
+  target_member_count: PLACEHOLDER # DR-15_memberships
+
+equipment_procurement:
+  table_cost_per_unit: PLACEHOLDER # DR-16_equipment_procurement
+  table_install_per_unit: PLACEHOLDER # DR-16_equipment_procurement
+  table_light_per_unit: PLACEHOLDER # DR-16_equipment_procurement
+  accessories_budget: PLACEHOLDER # DR-16_equipment_procurement
+
+code_ada:
+  occupant_load_limit: PLACEHOLDER # DR-18_code_ada_egress
+  exit_count_required: PLACEHOLDER # DR-18_code_ada_egress
+  ada_restroom_upgrades_cost: PLACEHOLDER # DR-18_code_ada_egress
+  sprinkler_requirement: PLACEHOLDER # DR-18_code_ada_egress
+  egress_upgrade_cost: PLACEHOLDER # DR-18_code_ada_egress
+
+financing:
+  loan_amount: PLACEHOLDER # DR-19_finance_sba_banks
+  interest_rate: PLACEHOLDER # DR-19_finance_sba_banks
+  term_years: PLACEHOLDER # DR-19_finance_sba_banks
+  down_payment_pct: PLACEHOLDER # DR-19_finance_sba_banks
+  sba_guarantee_fee: PLACEHOLDER # DR-19_finance_sba_banks
+  dscr_target: PLACEHOLDER # DR-19_finance_sba_banks
+
+ops_binder:
+  training_hours_per_role: PLACEHOLDER # DR-20_ops_binder
+  sop_update_cadence_months: PLACEHOLDER # DR-20_ops_binder
+  compliance_audit_frequency_per_year: PLACEHOLDER # DR-20_ops_binder
+  checklist_count: PLACEHOLDER # DR-20_ops_binder
+
+modeling:
+  weeks_per_month: 4.33
+  weekdays_per_week: 4
+  weekend_days_per_week: 3
+  food_revenue_pct_of_bar_placeholder: 0.15
+  other_opex_per_month_placeholder: 2000
+  table_pricing_style_default: "hourly"
+  wristband_count_method: "core_only"
