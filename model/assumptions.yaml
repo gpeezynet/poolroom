@@ -150,11 +150,11 @@ cogs:
     blended_target: 0.20
   food_cogs_pct_placeholder: 0.30
   distribution:
-    beer_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
-    liquor_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
-    wine_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
-    delivery_fee_per_month: PLACEHOLDER # DR-10_distribution_cogs
-    keg_deposit_per_keg: PLACEHOLDER # DR-10_distribution_cogs
+    beer_discount_pct: 0.08 # DR-10_distribution_cogs
+    liquor_discount_pct: 0.05 # DR-10_distribution_cogs
+    wine_discount_pct: 0.05 # DR-10_distribution_cogs
+    delivery_fee_per_month: 0 # DR-10_distribution_cogs
+    keg_deposit_per_keg: 40 # DR-10_distribution_cogs
 
 labor:
   target_pct_of_sales:
@@ -190,12 +190,12 @@ security:
     high: 500
     default: 400
   camera_system:
-    upfront_cost: PLACEHOLDER # DR-07_security
-    monthly_monitoring: PLACEHOLDER # DR-07_security
+    upfront_cost: 10000 # DR-07_security
+    monthly_monitoring: 30 # DR-07_security
   id_scanner:
-    upfront_cost: PLACEHOLDER # DR-07_security
-    monthly_service: PLACEHOLDER # DR-07_security
-  staffing_ratio_per_100_patrons: PLACEHOLDER # DR-07_security
+    upfront_cost: 1000 # DR-07_security
+    monthly_service: 30 # DR-07_security
+  staffing_ratio_per_100_patrons: 1 # DR-07_security
 
 insurance:
   general_liability_per_year:
@@ -209,11 +209,11 @@ insurance:
     high: 10000
     default: 6000
   liability_limits:
-    general_liability: PLACEHOLDER # DR-06_insurance
-    liquor_liability: PLACEHOLDER # DR-06_insurance
-    assault_battery: PLACEHOLDER # DR-06_insurance
-  deductible_per_claim: PLACEHOLDER # DR-06_insurance
-  broker_fee_per_year: PLACEHOLDER # DR-06_insurance
+    general_liability: 1000000 # DR-06_insurance
+    liquor_liability: 1000000 # DR-06_insurance
+    assault_battery: 250000 # DR-06_insurance
+  deductible_per_claim: 1000 # DR-06_insurance
+  broker_fee_per_year: 0 # DR-06_insurance
 
 maintenance:
   cloth_replacement_cycle_months:
@@ -236,10 +236,10 @@ maintenance:
     total_low: 13500
     total_high: 17000
   equipment_maintenance:
-    kitchen_equipment_per_year: PLACEHOLDER # DR-16_equipment_procurement
-    pos_hardware_per_year: PLACEHOLDER # DR-16_equipment_procurement
-    table_lighting_per_year: PLACEHOLDER # DR-16_equipment_procurement
-    accessory_replacement_per_year: PLACEHOLDER # DR-16_equipment_procurement
+    kitchen_equipment_per_year: 1000 # DR-16_equipment_procurement
+    pos_hardware_per_year: 500 # DR-16_equipment_procurement
+    table_lighting_per_year: 300 # DR-16_equipment_procurement
+    accessory_replacement_per_year: 500 # DR-16_equipment_procurement
 
 licenses_and_fees:
   abc_state_fee_per_year: 300
@@ -275,11 +275,11 @@ pos_stack:
   card_mix_pct: 0.9
 
 kitchen_lite:
-  equipment_budget: PLACEHOLDER # DR-11_kitchen_lite
-  hood_required: PLACEHOLDER # DR-11_kitchen_lite
-  grease_trap_required: PLACEHOLDER # DR-11_kitchen_lite
-  food_prep_area_sf: PLACEHOLDER # DR-11_kitchen_lite
-  menu_scope_notes: PLACEHOLDER # DR-11_kitchen_lite
+  equipment_budget: 15000 # DR-11_kitchen_lite
+  hood_required: false # DR-11_kitchen_lite
+  grease_trap_required: false # DR-11_kitchen_lite
+  food_prep_area_sf: 150 # DR-11_kitchen_lite
+  menu_scope_notes: "Ventless oven + cold prep; avoid frying to reduce hood/grease triggers." # DR-11_kitchen_lite
 
 marketing:
   launch_budget: 12000 # DR-13_marketing_launch
@@ -288,43 +288,43 @@ marketing:
   cost_per_acquisition: 25 # DR-13_marketing_launch
 
 leagues_tournaments:
-  league_night_fee_per_player: PLACEHOLDER # DR-14_leagues_tournaments
-  tournament_entry_fee: PLACEHOLDER # DR-14_leagues_tournaments
-  prize_payout_pct: PLACEHOLDER # DR-14_leagues_tournaments
-  table_time_comped_hours: PLACEHOLDER # DR-14_leagues_tournaments
+  league_night_fee_per_player: 2 # DR-14_leagues_tournaments
+  tournament_entry_fee: 20 # DR-14_leagues_tournaments
+  prize_payout_pct: 0.75 # DR-14_leagues_tournaments
+  table_time_comped_hours: 12 # DR-14_leagues_tournaments
 
 memberships:
-  annual_fee: PLACEHOLDER # DR-15_memberships
-  monthly_fee: PLACEHOLDER # DR-15_memberships
-  discount_pct: PLACEHOLDER # DR-15_memberships
-  target_member_count: PLACEHOLDER # DR-15_memberships
+  annual_fee: 199 # DR-15_memberships
+  monthly_fee: 25 # DR-15_memberships
+  discount_pct: 0.10 # DR-15_memberships
+  target_member_count: 150 # DR-15_memberships
 
 equipment_procurement:
-  table_cost_per_unit: PLACEHOLDER # DR-16_equipment_procurement
-  table_install_per_unit: PLACEHOLDER # DR-16_equipment_procurement
-  table_light_per_unit: PLACEHOLDER # DR-16_equipment_procurement
-  accessories_budget: PLACEHOLDER # DR-16_equipment_procurement
+  table_cost_per_unit: 6000 # DR-16_equipment_procurement
+  table_install_per_unit: 500 # DR-16_equipment_procurement
+  table_light_per_unit: 200 # DR-16_equipment_procurement
+  accessories_budget: 8000 # DR-16_equipment_procurement
 
 code_ada:
-  occupant_load_limit: PLACEHOLDER # DR-18_code_ada_egress
-  exit_count_required: PLACEHOLDER # DR-18_code_ada_egress
-  ada_restroom_upgrades_cost: PLACEHOLDER # DR-18_code_ada_egress
-  sprinkler_requirement: PLACEHOLDER # DR-18_code_ada_egress
-  egress_upgrade_cost: PLACEHOLDER # DR-18_code_ada_egress
+  occupant_load_limit: 150 # DR-18_code_ada_egress
+  exit_count_required: 2 # DR-18_code_ada_egress
+  ada_restroom_upgrades_cost: 10000 # DR-18_code_ada_egress
+  sprinkler_requirement: "CONDITIONAL" # DR-18_code_ada_egress
+  egress_upgrade_cost: 15000 # DR-18_code_ada_egress
 
 financing:
-  loan_amount: PLACEHOLDER # DR-19_finance_sba_banks
-  interest_rate: PLACEHOLDER # DR-19_finance_sba_banks
-  term_years: PLACEHOLDER # DR-19_finance_sba_banks
-  down_payment_pct: PLACEHOLDER # DR-19_finance_sba_banks
-  sba_guarantee_fee: PLACEHOLDER # DR-19_finance_sba_banks
-  dscr_target: PLACEHOLDER # DR-19_finance_sba_banks
+  loan_amount: 650000 # DR-19_finance_sba_banks
+  interest_rate: 0.12 # DR-19_finance_sba_banks
+  term_years: 10 # DR-19_finance_sba_banks
+  down_payment_pct: 0.20 # DR-19_finance_sba_banks
+  sba_guarantee_fee: 0.035 # DR-19_finance_sba_banks
+  dscr_target: 1.25 # DR-19_finance_sba_banks
 
 ops_binder:
-  training_hours_per_role: PLACEHOLDER # DR-20_ops_binder
-  sop_update_cadence_months: PLACEHOLDER # DR-20_ops_binder
-  compliance_audit_frequency_per_year: PLACEHOLDER # DR-20_ops_binder
-  checklist_count: PLACEHOLDER # DR-20_ops_binder
+  training_hours_per_role: 8 # DR-20_ops_binder
+  sop_update_cadence_months: 3 # DR-20_ops_binder
+  compliance_audit_frequency_per_year: 4 # DR-20_ops_binder
+  checklist_count: 25 # DR-20_ops_binder
 
 modeling:
   weeks_per_month: 4.33
