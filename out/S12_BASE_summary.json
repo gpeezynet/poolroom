@@ -72,8 +72,8 @@
     "table_hourly_rate_prime": 16.0,
     "utilization_multiplier": 1.0
   },
-  "scenario_id": "S12",
-  "scenario_name": "12-table opening model",
+  "scenario_id": "S12_BASE",
+  "scenario_name": "12-table base",
   "size_sf": 8000.0,
   "startup_cost": 620000.0,
   "tables": 12,

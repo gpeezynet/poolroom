@@ -17,15 +17,14 @@ def pick_tier(mapping: Dict[str, Any], tier: str | None, default_key: str = "mid
 
 def _period_metrics(
     tables: int,
-    utilization: float,
-    guests_per_table: float,
-    hours: float,
+    hours_per_table: float,
+    avg_guests_per_table_hour: float,
+    days_per_month: float,
+    utilization_multiplier: float,
 ) -> Dict[str, float]:
-    active_tables = tables * utilization
-    table_hours = active_tables * hours
-    guests = active_tables * guests_per_table
+    table_hours = tables * hours_per_table * days_per_month * utilization_multiplier
+    guests = table_hours * avg_guests_per_table_hour
     return {
-        "active_tables": active_tables,
         "table_hours": table_hours,
         "guests": guests,
     }
@@ -45,66 +44,85 @@ def compute_scenario(
     weekend_days_per_week = float(modeling["weekend_days_per_week"])
 
     revenue = assumptions["revenue"]
-    utilization = revenue["utilization"]
-    guests_per_active_table = revenue["guests_per_active_table"]
     pricing_windows = revenue["pricing_windows"]
     core_hours = float(pricing_windows["core_hours"])
     late_hours = float(pricing_windows["late_hours"])
+    total_window_hours = core_hours + late_hours
+    if total_window_hours <= 0:
+        raise ValueError("pricing_windows core + late hours must be > 0")
+    core_share = core_hours / total_window_hours
+    late_share = late_hours / total_window_hours
+
+    table_rate_offpeak = float(revenue["table_hourly_rate_offpeak"])
+    table_rate_prime = float(revenue["table_hourly_rate_prime"])
+    table_rate_late = float(revenue["table_hourly_rate_late"])
+    avg_hours_weekday = float(revenue["avg_table_hours_sold_per_table_weekday"])
+    avg_hours_weekend = float(revenue["avg_table_hours_sold_per_table_weekend"])
+    avg_guests_per_table_hour = float(revenue["avg_guests_per_table_hour"])
+
+    bar_attach_rate = float(revenue["bar_attach_rate"])
+    avg_bar_spend = float(revenue["avg_bar_spend_per_guest"])
+    food_attach_rate = float(revenue["food_attach_rate"])
+    avg_food_spend = float(revenue["avg_food_spend_per_guest"])
 
     pricing_style = scenario.get(
         "pricing_style", modeling.get("table_pricing_style_default", "hourly")
     )
     table_pricing = revenue["table_pricing"]
-    hourly_rate = float(table_pricing["hourly_rate_per_table"])
     wristband_price = float(table_pricing.get("per_person_wristband_high", 6))
     wristband_count_method = modeling.get("wristband_count_method", "core_only")
 
-    avg_check = revenue["average_check"]
+    utilization_multiplier = float(scenario.get("utilization_multiplier", 1.0))
+    spend_multiplier = float(scenario.get("spend_multiplier", 1.0))
+    avg_bar_spend *= spend_multiplier
+    avg_food_spend *= spend_multiplier
 
     weekday_days_per_month = weeks_per_month * weekdays_per_week
     weekend_days_per_month = weeks_per_month * weekend_days_per_week
 
     periods = []
-    for day_type, days_per_month in (
-        ("weekday", weekday_days_per_month),
-        ("weekend", weekend_days_per_month),
+    for day_type, days_per_month, hours_per_table_day, core_rate in (
+        ("weekday", weekday_days_per_month, avg_hours_weekday, table_rate_offpeak),
+        ("weekend", weekend_days_per_month, avg_hours_weekend, table_rate_prime),
     ):
-        for period_name, hours in (("core", core_hours), ("late", late_hours)):
-            util_key = f"{day_type}_{period_name}"
+        for period_name, share, rate in (
+            ("core", core_share, core_rate),
+            ("late", late_share, table_rate_late),
+        ):
             metrics = _period_metrics(
                 tables=tables,
-                utilization=float(utilization[util_key]),
-                guests_per_table=float(guests_per_active_table[util_key]),
-                hours=hours,
+                hours_per_table=hours_per_table_day * share,
+                avg_guests_per_table_hour=avg_guests_per_table_hour,
+                days_per_month=days_per_month,
+                utilization_multiplier=utilization_multiplier,
             )
 
             if pricing_style == "hourly":
-                table_revenue = metrics["table_hours"] * hourly_rate
+                table_revenue = metrics["table_hours"] * rate
             else:
+                guests_for_revenue = metrics["guests"]
                 if wristband_count_method == "core_only" and period_name != "core":
-                    table_revenue = 0.0
-                else:
-                    table_revenue = metrics["guests"] * wristband_price
+                    guests_for_revenue = 0.0
+                table_revenue = guests_for_revenue * wristband_price
 
-            bar_revenue = metrics["guests"] * float(avg_check[period_name])
+            bar_revenue = metrics["guests"] * bar_attach_rate * avg_bar_spend
+            food_revenue = metrics["guests"] * food_attach_rate * avg_food_spend
 
             periods.append(
                 {
                     "day_type": day_type,
                     "period": period_name,
-                    "days_per_month": days_per_month,
                     "metrics": metrics,
                     "table_revenue": table_revenue,
                     "bar_revenue": bar_revenue,
+                    "food_revenue": food_revenue,
                 }
             )
 
-    table_revenue = sum(p["table_revenue"] * p["days_per_month"] for p in periods)
-    bar_revenue = sum(p["bar_revenue"] * p["days_per_month"] for p in periods)
-    total_guests = sum(p["metrics"]["guests"] * p["days_per_month"] for p in periods)
-
-    food_pct = float(modeling["food_revenue_pct_of_bar_placeholder"])
-    food_revenue = bar_revenue * food_pct
+    table_revenue = sum(p["table_revenue"] for p in periods)
+    bar_revenue = sum(p["bar_revenue"] for p in periods)
+    food_revenue = sum(p["food_revenue"] for p in periods)
+    total_guests = sum(p["metrics"]["guests"] for p in periods)
 
     total_revenue = table_revenue + bar_revenue + food_revenue
 
@@ -214,7 +232,6 @@ def compute_scenario(
     )
     total_expenses = total_cogs + labor + processing_fees + fixed_costs
 
-
     monthly_net = total_revenue - total_expenses
     annual_net = monthly_net * 12
 
@@ -227,8 +244,10 @@ def compute_scenario(
 
     variable_costs = total_cogs + labor + processing_fees
     breakeven_revenue = None
+    gross_margin_pct = None
     if total_revenue > 0:
         variable_ratio = variable_costs / total_revenue
+        gross_margin_pct = 1 - variable_ratio
         if variable_ratio < 1:
             breakeven_revenue = fixed_costs / (1 - variable_ratio)
 
@@ -281,10 +300,12 @@ def compute_scenario(
             "maintenance_reserve": maintenance_reserve,
             "licenses_fees": licenses_fees,
             "other_opex": other_opex,
+            "fixed_costs": fixed_costs,
             "total_expenses": total_expenses,
             "monthly_net": monthly_net,
             "annual_net": annual_net,
             "breakeven_revenue": breakeven_revenue,
+            "gross_margin_pct": gross_margin_pct,
         },
         "startup_cost": startup_cost,
         "payback_years": payback_years,
@@ -296,8 +317,23 @@ def compute_scenario(
             "labor_pct": labor_pct,
             "bar_cogs_pct": float(cogs["bar_cogs_pct"]["blended_target"]),
             "food_cogs_pct_placeholder": float(cogs["food_cogs_pct_placeholder"]),
-            "food_revenue_pct_placeholder": food_pct,
             "utilities_per_month": utilities,
+            "bar_attach_rate": bar_attach_rate,
+            "food_attach_rate": food_attach_rate,
+        },
+        "revenue_drivers": {
+            "table_hourly_rate_offpeak": table_rate_offpeak,
+            "table_hourly_rate_prime": table_rate_prime,
+            "table_hourly_rate_late": table_rate_late,
+            "avg_table_hours_sold_per_table_weekday": avg_hours_weekday,
+            "avg_table_hours_sold_per_table_weekend": avg_hours_weekend,
+            "avg_guests_per_table_hour": avg_guests_per_table_hour,
+            "bar_attach_rate": bar_attach_rate,
+            "avg_bar_spend_per_guest": avg_bar_spend,
+            "food_attach_rate": food_attach_rate,
+            "avg_food_spend_per_guest": avg_food_spend,
+            "utilization_multiplier": utilization_multiplier,
+            "spend_multiplier": spend_multiplier,
         },
         "periods": periods,
         "warnings": warnings,

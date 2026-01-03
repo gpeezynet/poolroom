@@ -1,4 +1,4 @@
-# ROI Report: S12 - 12-table opening model
+# ROI Report: S12_BASE - 12-table base
 
 ## Scenario Inputs
 - Tables: 12

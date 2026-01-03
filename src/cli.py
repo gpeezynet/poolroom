@@ -38,6 +38,9 @@ def run_scenarios(assumptions_path: Path, scenarios_path: Path, out_dir: Path, i
 
         report_path.write_text(render_report(result), encoding="utf-8")
         write_json(summary_path, result)
+        print(
+            f"Generated {report_path.as_posix()} and {summary_path.as_posix()}"
+        )
 
 
 def build_parser() -> argparse.ArgumentParser:

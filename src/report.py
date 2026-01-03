@@ -31,6 +31,40 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Estimated guests per month: {result['total_guests']:.0f}")
     lines.append("")
 
+    drivers = result.get("revenue_drivers", {})
+    lines.append("## Revenue Drivers")
+    lines.append(
+        "- Table rates (offpeak/prime/late): "
+        f"{_money(drivers.get('table_hourly_rate_offpeak'))}/hr, "
+        f"{_money(drivers.get('table_hourly_rate_prime'))}/hr, "
+        f"{_money(drivers.get('table_hourly_rate_late'))}/hr"
+    )
+    lines.append(
+        "- Avg table hours sold per table (weekday/weekend): "
+        f"{drivers.get('avg_table_hours_sold_per_table_weekday', 0):.2f} / "
+        f"{drivers.get('avg_table_hours_sold_per_table_weekend', 0):.2f}"
+    )
+    lines.append(
+        "- Avg guests per table hour: "
+        f"{drivers.get('avg_guests_per_table_hour', 0):.2f}"
+    )
+    lines.append(
+        "- Bar attach + spend per guest: "
+        f"{_pct(drivers.get('bar_attach_rate'))} @ "
+        f"{_money(drivers.get('avg_bar_spend_per_guest'))}"
+    )
+    lines.append(
+        "- Food attach + spend per guest: "
+        f"{_pct(drivers.get('food_attach_rate'))} @ "
+        f"{_money(drivers.get('avg_food_spend_per_guest'))}"
+    )
+    lines.append(
+        "- Multipliers (utilization/spend): "
+        f"{drivers.get('utilization_multiplier', 1.0):.2f} / "
+        f"{drivers.get('spend_multiplier', 1.0):.2f}"
+    )
+    lines.append("")
+
     lines.append("## Monthly P&L")
     lines.append(f"- Table revenue: {_money(totals['table_revenue'])}")
     lines.append(f"- Bar revenue: {_money(totals['bar_revenue'])}")
@@ -64,9 +98,17 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append("## ROI Metrics")
     lines.append(f"- Startup cost (likely): {_money(result['startup_cost'])}")
     lines.append(f"- Payback period: {result['payback_years']:.2f} years" if result["payback_years"] is not None else "- Payback period: n/a")
+    lines.append("")
+
+    breakeven_monthly = totals.get("breakeven_revenue")
+    breakeven_daily = breakeven_monthly / 30 if breakeven_monthly is not None else None
+    lines.append("## Break-even Snapshots")
+    lines.append(f"- Monthly fixed costs: {_money(totals.get('fixed_costs'))}")
     lines.append(
-        f"- Break-even revenue (monthly): {_money(totals['breakeven_revenue'])}"
+        f"- Gross margin (after variable costs): {_pct(totals.get('gross_margin_pct'))}"
     )
+    lines.append(f"- Break-even sales (monthly): {_money(breakeven_monthly)}")
+    lines.append(f"- Break-even sales (per day): {_money(breakeven_daily)}")
     lines.append("")
 
     lines.append("## Compliance Warnings")
@@ -76,7 +118,7 @@ def render_report(result: Dict[str, Any]) -> str:
 
     lines.append("## Notes")
     lines.append(
-        "- Food revenue and other opex are placeholders; adjust in model/assumptions.yaml before decision-making."
+        "- Food COGS and other opex are placeholders; adjust in model/assumptions.yaml before decision-making."
     )
     if result["pricing_style"] == "wristband" and result["wristband_count_method"] == "core_only":
         lines.append(

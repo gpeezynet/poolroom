@@ -4,6 +4,17 @@ Internal defaults pending vendor quotes.
 
 | Assumption Key | Value | Status | Notes |
 | --- | --- | --- | --- |
+| revenue.table_hourly_rate_offpeak | 12 | internal_default | Pending vendor quotes. |
+| revenue.table_hourly_rate_prime | 16 | internal_default | Pending vendor quotes. |
+| revenue.table_hourly_rate_late | 20 | internal_default | Pending vendor quotes. |
+| revenue.avg_table_hours_sold_per_table_weekday | 3.0 | internal_default | Pending vendor quotes. |
+| revenue.avg_table_hours_sold_per_table_weekend | 5.0 | internal_default | Pending vendor quotes. |
+| revenue.avg_guests_per_table_hour | 3.0 | internal_default | Pending vendor quotes. |
+| revenue.bar_attach_rate | 0.70 | internal_default | Pending vendor quotes. |
+| revenue.avg_bar_spend_per_guest | 18 | internal_default | Pending vendor quotes. |
+| revenue.food_attach_rate | 0.35 | internal_default | Pending vendor quotes. |
+| revenue.avg_food_spend_per_guest | 10 | internal_default | Pending vendor quotes. |
+| revenue.ramp_months | month 1:0.35; month 3:0.60; month 6:0.80; month 12:1.00 | internal_default | Pending vendor quotes. |
 | cogs.distribution.beer_discount_pct | 0.08 | internal_default | Pending vendor quotes. |
 | cogs.distribution.liquor_discount_pct | 0.05 | internal_default | Pending vendor quotes. |
 | cogs.distribution.wine_discount_pct | 0.05 | internal_default | Pending vendor quotes. |

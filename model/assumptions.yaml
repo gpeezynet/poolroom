@@ -96,6 +96,21 @@ space_program:
       high: 50
 
 revenue:
+  table_hourly_rate_offpeak: 12
+  table_hourly_rate_prime: 16
+  table_hourly_rate_late: 20
+  avg_table_hours_sold_per_table_weekday: 3.0
+  avg_table_hours_sold_per_table_weekend: 5.0
+  bar_attach_rate: 0.70
+  avg_bar_spend_per_guest: 18
+  food_attach_rate: 0.35
+  avg_food_spend_per_guest: 10
+  avg_guests_per_table_hour: 3.0
+  ramp_months:
+    - { month: 1, factor: 0.35 }
+    - { month: 3, factor: 0.60 }
+    - { month: 6, factor: 0.80 }
+    - { month: 12, factor: 1.00 }
   table_pricing:
     hourly_rate_per_table: 10
     hourly_rate_competitor_low: 6

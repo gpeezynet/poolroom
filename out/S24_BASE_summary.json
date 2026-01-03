@@ -8,9 +8,20 @@
     "utilities_per_month": 2500.0
   },
   "cam_per_sf": 3.5,
-  "payback_months": 20.451034710039686,
-  "payback_years": 1.7042528925033074,
+  "payback_months": 17.010554687523015,
+  "payback_years": 1.4175462239602514,
   "periods": [
+    {
+      "bar_revenue": 31425.407999999996,
+      "day_type": "weekday",
+      "food_revenue": 8729.279999999999,
+      "metrics": {
+        "guests": 2494.08,
+        "table_hours": 831.36
+      },
+      "period": "core",
+      "table_revenue": 9976.32
+    },
     {
       "bar_revenue": 15712.703999999998,
       "day_type": "weekday",
@@ -19,19 +30,19 @@
         "guests": 1247.04,
         "table_hours": 415.68
       },
-      "period": "core",
-      "table_revenue": 4988.16
+      "period": "late",
+      "table_revenue": 8313.6
     },
     {
-      "bar_revenue": 7856.351999999999,
-      "day_type": "weekday",
-      "food_revenue": 2182.3199999999997,
+      "bar_revenue": 39281.76,
+      "day_type": "weekend",
+      "food_revenue": 10911.6,
       "metrics": {
-        "guests": 623.52,
-        "table_hours": 207.84
+        "guests": 3117.6000000000004,
+        "table_hours": 1039.2
       },
-      "period": "late",
-      "table_revenue": 4156.8
+      "period": "core",
+      "table_revenue": 16627.2
     },
     {
       "bar_revenue": 19640.88,
@@ -41,19 +52,8 @@
         "guests": 1558.8000000000002,
         "table_hours": 519.6
       },
-      "period": "core",
-      "table_revenue": 8313.6
-    },
-    {
-      "bar_revenue": 9820.44,
-      "day_type": "weekend",
-      "food_revenue": 2727.9,
-      "metrics": {
-        "guests": 779.4000000000001,
-        "table_hours": 259.8
-      },
       "period": "late",
-      "table_revenue": 5196.0
+      "table_revenue": 10392.0
     }
   ],
   "pricing_style": "hourly",
@@ -72,41 +72,41 @@
     "table_hourly_rate_prime": 16.0,
     "utilization_multiplier": 1.0
   },
-  "scenario_id": "S12",
-  "scenario_name": "12-table opening model",
-  "size_sf": 8000.0,
-  "startup_cost": 620000.0,
-  "tables": 12,
-  "total_guests": 4208.76,
+  "scenario_id": "S24_BASE",
+  "scenario_name": "24-table base",
+  "size_sf": 15000.0,
+  "startup_cost": 1190000.0,
+  "tables": 24,
+  "total_guests": 8417.52,
   "totals": {
-    "annual_net": 363795.77392959996,
-    "bar_cogs": 10606.0752,
-    "bar_revenue": 53030.376,
-    "breakeven_revenue": 38911.535857582094,
-    "cam": 2333.3333333333335,
-    "fixed_costs": 22904.104166666668,
-    "food_cogs": 4419.197999999999,
-    "food_revenue": 14730.66,
+    "annual_net": 839478.7978591999,
+    "bar_cogs": 21212.1504,
+    "bar_revenue": 106060.752,
+    "breakeven_revenue": 61982.73472904815,
+    "cam": 4375.0,
+    "fixed_costs": 36484.270833333336,
+    "food_cogs": 8838.395999999999,
+    "food_revenue": 29461.32,
     "gross_margin_pct": 0.5886198954083098,
     "hvac_filters": 100.0,
     "hvac_reserve": 166.66666666666666,
     "hvac_service": 100.0,
     "insurance": 500.0,
-    "labor": 19891.43112,
-    "licenses_fees": 96.27083333333333,
-    "maintenance_reserve": 708.3333333333334,
+    "labor": 39782.86224,
+    "licenses_fees": 134.77083333333334,
+    "maintenance_reserve": 1416.6666666666667,
     "marketing": 750.0,
-    "monthly_net": 30316.31449413333,
+    "monthly_net": 69956.56648826666,
     "music_licensing": 204.16666666666666,
     "other_opex": 1200.0,
     "pos_software": 180.0,
-    "processing_fees": 2278.4730192,
-    "rent": 12333.333333333334,
+    "processing_fees": 4556.9460384,
+    "rent": 23125.0,
     "security": 1732.0,
-    "table_revenue": 22654.56,
-    "total_cogs": 15025.2732,
-    "total_expenses": 60099.281505866675,
-    "total_revenue": 90415.596,
+    "table_revenue": 45309.12,
+    "total_cogs": 30050.5464,
+    "total_expenses": 110874.62551173335,
+    "total_revenue": 180831.192,
     "utilities": 2500.0
   },
   "warnings": [

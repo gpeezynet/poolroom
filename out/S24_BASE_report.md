@@ -1,11 +1,11 @@
-# ROI Report: S12 - 12-table opening model
+# ROI Report: S24_BASE - 24-table base
 
 ## Scenario Inputs
-- Tables: 12
-- Size: 8000 sf
+- Tables: 24
+- Size: 15000 sf
 - Pricing style: hourly
 - Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
-- Estimated guests per month: 4209
+- Estimated guests per month: 8418
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
@@ -16,43 +16,43 @@
 - Multipliers (utilization/spend): 1.00 / 1.00
 
 ## Monthly P&L
-- Table revenue: $22,655
-- Bar revenue: $53,030
-- Food revenue: $14,731
-- Total revenue: $90,416
+- Table revenue: $45,309
+- Bar revenue: $106,061
+- Food revenue: $29,461
+- Total revenue: $180,831
 
-- Bar COGS: $10,606
-- Food COGS: $4,419
-- Labor: $19,891
-- Rent: $12,333
-- CAM: $2,333
+- Bar COGS: $21,212
+- Food COGS: $8,838
+- Labor: $39,783
+- Rent: $23,125
+- CAM: $4,375
 - Utilities: $2,500
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
-- Payment processing: $2,278
+- Payment processing: $4,557
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
 - HVAC filters: $100
 - HVAC reserve: $167
-- Maintenance reserve: $708
-- Licenses & fees: $96
+- Maintenance reserve: $1,417
+- Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $60,099
+- Total expenses: $110,875
 
-- Monthly net: $30,316
-- Annual net: $363,796
+- Monthly net: $69,957
+- Annual net: $839,479
 
 ## ROI Metrics
-- Startup cost (likely): $620,000
-- Payback period: 1.70 years
+- Startup cost (likely): $1,190,000
+- Payback period: 1.42 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $22,904
+- Monthly fixed costs: $36,484
 - Gross margin (after variable costs): 58.9%
-- Break-even sales (monthly): $38,912
-- Break-even sales (per day): $1,297
+- Break-even sales (monthly): $61,983
+- Break-even sales (per day): $2,066
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

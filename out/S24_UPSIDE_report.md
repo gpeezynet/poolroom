@@ -1,58 +1,58 @@
-# ROI Report: S12 - 12-table opening model
+# ROI Report: S24_UPSIDE - 24-table upside
 
 ## Scenario Inputs
-- Tables: 12
-- Size: 8000 sf
+- Tables: 24
+- Size: 15000 sf
 - Pricing style: hourly
 - Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
-- Estimated guests per month: 4209
+- Estimated guests per month: 9680
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
 - Avg table hours sold per table (weekday/weekend): 3.00 / 5.00
 - Avg guests per table hour: 3.00
-- Bar attach + spend per guest: 70.0% @ $18
-- Food attach + spend per guest: 35.0% @ $10
-- Multipliers (utilization/spend): 1.00 / 1.00
+- Bar attach + spend per guest: 70.0% @ $20
+- Food attach + spend per guest: 35.0% @ $11
+- Multipliers (utilization/spend): 1.15 / 1.10
 
 ## Monthly P&L
-- Table revenue: $22,655
-- Bar revenue: $53,030
-- Food revenue: $14,731
-- Total revenue: $90,416
+- Table revenue: $52,105
+- Bar revenue: $134,167
+- Food revenue: $37,269
+- Total revenue: $223,541
 
-- Bar COGS: $10,606
-- Food COGS: $4,419
-- Labor: $19,891
-- Rent: $12,333
-- CAM: $2,333
+- Bar COGS: $26,833
+- Food COGS: $11,181
+- Labor: $49,179
+- Rent: $23,125
+- CAM: $4,375
 - Utilities: $2,500
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
-- Payment processing: $2,278
+- Payment processing: $5,633
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
 - HVAC filters: $100
 - HVAC reserve: $167
-- Maintenance reserve: $708
-- Licenses & fees: $96
+- Maintenance reserve: $1,417
+- Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $60,099
+- Total expenses: $129,310
 
-- Monthly net: $30,316
-- Annual net: $363,796
+- Monthly net: $94,230
+- Annual net: $1,130,766
 
 ## ROI Metrics
-- Startup cost (likely): $620,000
-- Payback period: 1.70 years
+- Startup cost (likely): $1,190,000
+- Payback period: 1.05 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $22,904
-- Gross margin (after variable costs): 58.9%
-- Break-even sales (monthly): $38,912
-- Break-even sales (per day): $1,297
+- Monthly fixed costs: $36,484
+- Gross margin (after variable costs): 58.5%
+- Break-even sales (monthly): $62,393
+- Break-even sales (per day): $2,080
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.
