@@ -190,6 +190,18 @@ def render_report(result: Dict[str, Any]) -> str:
         "- Membership spend uplift: "
         f"{_pct(drivers.get('program_uplift_spend_multiplier', 0))}"
     )
+    lines.append(
+        "- Program incremental labor cost (monthly): "
+        f"{_money(totals.get('program_incremental_labor_cost_monthly'))}"
+    )
+    lines.append(
+        "- Program incremental security cost (monthly): "
+        f"{_money(totals.get('program_incremental_security_cost_monthly'))}"
+    )
+    lines.append(
+        "- Program net contribution (monthly): "
+        f"{_money(totals.get('program_net_contribution_monthly'))}"
+    )
     lines.append("")
 
     lines.append("## Fixed Cost Breakdown")

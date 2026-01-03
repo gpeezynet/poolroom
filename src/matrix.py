@@ -42,6 +42,9 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "bar_only_food_sales_monthly",
         "program_incremental_table_hours_sold_monthly",
         "program_incremental_bar_only_guests_monthly",
+        "program_incremental_labor_cost_monthly",
+        "program_incremental_security_cost_monthly",
+        "program_net_contribution_monthly",
         "program_total_revenue_monthly",
         "program_total_contribution_monthly",
         "late_incremental_noi",
@@ -94,6 +97,15 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             ),
             "program_incremental_bar_only_guests_monthly": totals.get(
                 "program_incremental_bar_only_guests_monthly"
+            ),
+            "program_incremental_labor_cost_monthly": totals.get(
+                "program_incremental_labor_cost_monthly"
+            ),
+            "program_incremental_security_cost_monthly": totals.get(
+                "program_incremental_security_cost_monthly"
+            ),
+            "program_net_contribution_monthly": totals.get(
+                "program_net_contribution_monthly"
             ),
             "program_total_revenue_monthly": totals.get("program_total_revenue_monthly"),
             "program_total_contribution_monthly": totals.get(

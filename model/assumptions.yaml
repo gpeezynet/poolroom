@@ -231,6 +231,16 @@ program_drivers:
     retention_utilization_uplift: 0.05
     spend_uplift: 0.03
 
+program_ops_costs:
+  leagues:
+    extra_bartender_hours_per_league_night: 2.0
+    extra_floor_hours_per_league_night: 2.0
+    extra_security_hours_per_league_night: 3.0
+  events:
+    extra_bartender_hours_per_event: 4.0
+    extra_floor_hours_per_event: 4.0
+    extra_security_hours_per_event: 5.0
+
 hours:
   standard_open_hours_per_day: 14
   late_extra_hours_per_day: 6
@@ -294,6 +304,8 @@ labor:
     evening: ["bartender", "bartender", "barback", "security", "manager"]
     late: ["bartender", "bartender", "barback", "security", "security", "manager"]
     close: ["bartender", "barback", "manager"]
+
+security_mode: "in_house"
 
 security:
   hourly_rate:

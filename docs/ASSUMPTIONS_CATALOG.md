@@ -55,6 +55,13 @@ Internal defaults pending vendor quotes.
 | program_drivers.events.extra_table_hours_per_table_per_event_day | 0.40 | internal_default | Pending vendor quotes. |
 | program_drivers.memberships.retention_utilization_uplift | 0.05 | internal_default | Pending vendor quotes. |
 | program_drivers.memberships.spend_uplift | 0.03 | internal_default | Pending vendor quotes. |
+| program_ops_costs.leagues.extra_bartender_hours_per_league_night | 2.0 | internal_default | Pending vendor quotes. |
+| program_ops_costs.leagues.extra_floor_hours_per_league_night | 2.0 | internal_default | Pending vendor quotes. |
+| program_ops_costs.leagues.extra_security_hours_per_league_night | 3.0 | internal_default | Pending vendor quotes. |
+| program_ops_costs.events.extra_bartender_hours_per_event | 4.0 | internal_default | Pending vendor quotes. |
+| program_ops_costs.events.extra_floor_hours_per_event | 4.0 | internal_default | Pending vendor quotes. |
+| program_ops_costs.events.extra_security_hours_per_event | 5.0 | internal_default | Pending vendor quotes. |
+| security_mode | in_house | internal_default | Pending vendor quotes. |
 | modeling.weekdays_per_month | 22 | internal_default | Pending vendor quotes. |
 | modeling.weekend_days_per_month | 8 | internal_default | Pending vendor quotes. |
 | late_night.extra_hours_per_week | 30 | internal_default | Pending vendor quotes. |

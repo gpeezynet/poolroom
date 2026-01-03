@@ -247,6 +247,8 @@ def compute_scenario(
 
     program_incremental_table_hours_sold_monthly = 0.0
     program_incremental_bar_only_guests_monthly = 0.0
+    program_league_nights_per_month = 0.0
+    program_events_per_month = 0.0
     if programs_enabled and programs_driver_mode:
         leagues_drivers = program_drivers.get("leagues", {})
         league_nights_per_week = _num(
@@ -276,6 +278,8 @@ def compute_scenario(
         )
 
         league_nights_per_month = league_nights_per_week * 4.33
+        program_league_nights_per_month = league_nights_per_month
+        program_events_per_month = events_driver_per_month
         requested_incremental_table_hours = tables * (
             league_nights_per_month * extra_table_hours_per_table_per_league_night
             + events_driver_per_month * extra_table_hours_per_table_per_event_day
@@ -525,13 +529,20 @@ def compute_scenario(
     rates = labor_assumptions.get("rates", {})
     s12_schedule = labor_assumptions.get("s12_schedule", {})
     s24_schedule = labor_assumptions.get("s24_schedule", {})
+    security_mode = str(assumptions.get("security_mode", "in_house")).lower()
+    if security_mode not in ("in_house", "contract"):
+        security_mode = "in_house"
+    security_contract = security_mode == "contract"
 
     def _schedule_hours(key: str) -> float:
-        return _select_by_tables(
+        hours = _select_by_tables(
             tables,
             _num(s12_schedule.get(key, 0), f"labor.s12_schedule.{key}"),
             _num(s24_schedule.get(key, 0), f"labor.s24_schedule.{key}"),
         )
+        if key == "security_hours_per_week" and security_contract:
+            return 0.0
+        return hours
 
     def _rate(role: str) -> float:
         return _num(rates.get(role, 0), f"labor.rates.{role}")
@@ -552,6 +563,8 @@ def compute_scenario(
             late_settings.get("extra_security_hours_per_week", 0),
             "late_night.extra_security_hours_per_week",
         )
+        if security_contract:
+            extra_security_hours = 0.0
         extra_floor_hours = _num(
             late_settings.get("extra_floor_hours_per_week", 0),
             "late_night.extra_floor_hours_per_week",
@@ -569,6 +582,64 @@ def compute_scenario(
             late_weekly_labor_cost * labor_weeks_per_month * (1 + burden_pct)
         )
         semi_fixed_labor_monthly += late_incremental_labor_cost_monthly
+
+    program_incremental_labor_cost_monthly = 0.0
+    program_incremental_security_cost_monthly = 0.0
+    if programs_enabled and programs_driver_mode:
+        program_ops = assumptions.get("program_ops_costs", {})
+        league_ops = program_ops.get("leagues", {})
+        event_ops = program_ops.get("events", {})
+
+        program_bartender_hours = (
+            program_league_nights_per_month
+            * _num(
+                league_ops.get("extra_bartender_hours_per_league_night", 0),
+                "program_ops_costs.leagues.extra_bartender_hours_per_league_night",
+            )
+            + program_events_per_month
+            * _num(
+                event_ops.get("extra_bartender_hours_per_event", 0),
+                "program_ops_costs.events.extra_bartender_hours_per_event",
+            )
+        )
+        program_floor_hours = (
+            program_league_nights_per_month
+            * _num(
+                league_ops.get("extra_floor_hours_per_league_night", 0),
+                "program_ops_costs.leagues.extra_floor_hours_per_league_night",
+            )
+            + program_events_per_month
+            * _num(
+                event_ops.get("extra_floor_hours_per_event", 0),
+                "program_ops_costs.events.extra_floor_hours_per_event",
+            )
+        )
+        program_security_hours = (
+            program_league_nights_per_month
+            * _num(
+                league_ops.get("extra_security_hours_per_league_night", 0),
+                "program_ops_costs.leagues.extra_security_hours_per_league_night",
+            )
+            + program_events_per_month
+            * _num(
+                event_ops.get("extra_security_hours_per_event", 0),
+                "program_ops_costs.events.extra_security_hours_per_event",
+            )
+        )
+        program_incremental_labor_cost_monthly = (
+            (program_bartender_hours * _rate("bartender"))
+            + (program_floor_hours * _rate("floor"))
+        ) * (1 + burden_pct)
+        if not security_contract:
+            program_incremental_security_cost_monthly = (
+                program_security_hours * _rate("security") * (1 + burden_pct)
+            )
+
+    program_net_contribution_monthly = (
+        program_total_contribution_monthly
+        - program_incremental_labor_cost_monthly
+        - program_incremental_security_cost_monthly
+    )
 
     site = assumptions.get("site", {})
     s12_sqft = _num(site.get("s12_sqft", size_sf), "site.s12_sqft")
@@ -626,6 +697,8 @@ def compute_scenario(
     insurance = insurance_per_year / 12
 
     security_weekly = float(assumptions["security"]["weekly_cost_range"]["default"])
+    if not security_contract:
+        security_weekly = 0.0
     security = security_weekly * weeks_per_month
 
     # POS & payment processing
@@ -690,6 +763,8 @@ def compute_scenario(
         + music_licensing
         + marketing
         + semi_fixed_labor_monthly
+        + program_incremental_labor_cost_monthly
+        + program_incremental_security_cost_monthly
         + hvac_service
         + hvac_filters
         + hvac_reserve
@@ -907,6 +982,9 @@ def compute_scenario(
             "program_event_contribution_monthly": program_event_contribution_monthly,
             "program_total_revenue_monthly": program_total_revenue_monthly,
             "program_total_contribution_monthly": program_total_contribution_monthly,
+            "program_incremental_labor_cost_monthly": program_incremental_labor_cost_monthly,
+            "program_incremental_security_cost_monthly": program_incremental_security_cost_monthly,
+            "program_net_contribution_monthly": program_net_contribution_monthly,
             "program_uplift_utilization_multiplier": program_uplift_utilization_multiplier,
             "program_uplift_spend_multiplier": program_uplift_spend_multiplier,
             "program_incremental_bar_only_guests_monthly": program_incremental_bar_only_guests_monthly,

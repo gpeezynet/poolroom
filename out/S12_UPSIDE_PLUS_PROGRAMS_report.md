@@ -38,7 +38,7 @@
 - Property tax/insurance (NNN): $1,500
 - Utilities: $3,400
 - Insurance: $500
-- Security: $1,732
+- Security: $0
 - POS software: $180
 - Payment processing: $3,540
 - Music licensing: $204
@@ -49,10 +49,10 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $138,767
+- Total expenses: $137,035
 
-- Monthly net: $1,708
-- Annual net: $20,496
+- Monthly net: $3,440
+- Annual net: $41,280
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $3,750 / $3,188
@@ -66,6 +66,9 @@
 - Program-driven bar-only guests (monthly): 0
 - Membership utilization uplift: 0.0%
 - Membership spend uplift: 0.0%
+- Program incremental labor cost (monthly): $0
+- Program incremental security cost (monthly): $0
+- Program net contribution (monthly): $5,980
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
@@ -75,7 +78,7 @@
 - Variable labor: percent of sales (not in fixed costs)
 - Marketing: $750
 - Music licensing: $204
-- Security monitoring: $1,732
+- Security monitoring: $0
 - POS software: $180
 - HVAC service: $100
 - HVAC filters: $100
@@ -83,7 +86,7 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Fixed costs total: $80,835
+- Fixed costs total: $79,103
 
 ## CAPEX & Financing
 - Total capex: $522,000
@@ -93,36 +96,36 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $98
-- Cash flow after debt: $-9,227
-- DSCR: 0.01x (1.1%)
+- NOI (monthly): $1,830
+- Cash flow after debt: $-7,495
+- DSCR: 0.20x (19.6%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-9,227 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.11x
-- Required additional sales (per day): $534
+- Cash gap (monthly): $-7,495 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.09x
+- Required additional sales (per day): $434
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $-1,134 |
-| Utilization -10% | $-17,321 |
-| Spend +10% | $-4,289 |
-| Spend -10% | $-14,166 |
-| Fixed costs +10% | $-17,311 |
-| Fixed costs -10% | $-1,144 |
+| Utilization +10% | $598 |
+| Utilization -10% | $-15,589 |
+| Spend +10% | $-2,557 |
+| Spend -10% | $-12,434 |
+| Fixed costs +10% | $-15,405 |
+| Fixed costs -10% | $415 |
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 30.25 years
+- Payback period: 15.02 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $80,835
+- Monthly fixed costs: $79,103
 - Gross margin (after variable costs): 57.6%
-- Break-even sales (monthly): $140,305
-- Break-even sales (per day, operating): $4,677
-- Break-even sales (per day, after debt): $5,216
+- Break-even sales (monthly): $137,298
+- Break-even sales (per day, operating): $4,577
+- Break-even sales (per day, after debt): $5,116
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

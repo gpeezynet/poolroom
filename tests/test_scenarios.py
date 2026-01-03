@@ -1,3 +1,4 @@
+import copy
 import json
 import subprocess
 import sys
@@ -8,6 +9,7 @@ import unittest
 import yaml
 
 from src.sensitivity import run_sensitivity
+from src.model import compute_scenario
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -71,6 +73,9 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "program_event_revenue_monthly",
                 "program_total_revenue_monthly",
                 "program_total_contribution_monthly",
+                "program_incremental_labor_cost_monthly",
+                "program_incremental_security_cost_monthly",
+                "program_net_contribution_monthly",
                 "program_uplift_utilization_multiplier",
                 "program_uplift_spend_multiplier",
                 "program_incremental_bar_only_guests_monthly",
@@ -159,6 +164,11 @@ class ScenarioSmokeTests(unittest.TestCase):
                     or totals.get("program_incremental_bar_only_guests_monthly", 0) > 0,
                     f"Program drivers should add demand for {scenario_id}",
                 )
+                self.assertGreater(
+                    totals.get("program_incremental_labor_cost_monthly", 0),
+                    0,
+                    f"Program labor costs should be positive for {scenario_id}",
+                )
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
                 sales = late_incremental["sales_monthly"]
                 variable_costs = late_incremental.get("variable_costs_monthly", 0)
@@ -233,6 +243,38 @@ class ScenarioSmokeTests(unittest.TestCase):
             self.assertTrue(csv_path.exists(), "Missing PROGRAM_SENSITIVITY.csv")
             self.assertTrue(md_path.exists(), "Missing PROGRAM_SENSITIVITY.md")
             self.assertTrue(md_path.read_text(encoding="utf-8").strip())
+
+    def test_security_mode_guard(self):
+        assumptions = load_assumptions()
+        scenarios = yaml.safe_load(
+            (ROOT / "model" / "scenarios.yaml").read_text(encoding="utf-8-sig")
+        )["scenarios"]
+        scenario = scenarios["S12_BASE"]
+
+        in_house = copy.deepcopy(assumptions)
+        in_house["security_mode"] = "in_house"
+        result_in_house = compute_scenario(in_house, "S12_BASE", scenario)
+
+        contract = copy.deepcopy(assumptions)
+        contract["security_mode"] = "contract"
+        result_contract = compute_scenario(contract, "S12_BASE", scenario)
+
+        self.assertAlmostEqual(
+            result_in_house["totals"].get("security", 0),
+            0,
+            places=6,
+            msg="In-house mode should zero out contract security cost",
+        )
+        self.assertGreater(
+            result_contract["totals"].get("security", 0),
+            0,
+            "Contract mode should include security weekly cost",
+        )
+        self.assertLessEqual(
+            result_contract["totals"].get("semi_fixed_labor_monthly", 0),
+            result_in_house["totals"].get("semi_fixed_labor_monthly", 0),
+            "Contract mode should not double-count security labor hours",
+        )
 
 
 if __name__ == "__main__":
