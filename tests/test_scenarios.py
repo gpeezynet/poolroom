@@ -64,6 +64,11 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "total_table_sales_monthly",
                 "total_bar_sales_monthly",
                 "total_food_sales_monthly",
+                "program_membership_revenue_monthly",
+                "program_league_revenue_monthly",
+                "program_event_revenue_monthly",
+                "program_total_revenue_monthly",
+                "program_total_contribution_monthly",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
@@ -123,6 +128,12 @@ class ScenarioSmokeTests(unittest.TestCase):
                     0,
                     places=6,
                     msg=f"Late food sales should be zero for {scenario_id}",
+                )
+            if "PLUS_PROGRAMS" in scenario_id:
+                self.assertGreater(
+                    totals.get("program_total_revenue_monthly", 0),
+                    0,
+                    f"Programs should be active for {scenario_id}",
                 )
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
                 sales = late_incremental["sales_monthly"]

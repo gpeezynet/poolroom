@@ -147,6 +147,32 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Annual net: {_money(totals['annual_net'])}")
     lines.append("")
 
+    lines.append("## Programs (Non-table Revenue)")
+    lines.append(
+        "- Membership revenue + contribution: "
+        f"{_money(totals.get('program_membership_revenue_monthly'))} / "
+        f"{_money(totals.get('program_membership_contribution_monthly'))}"
+    )
+    lines.append(
+        "- League revenue + contribution: "
+        f"{_money(totals.get('program_league_revenue_monthly'))} / "
+        f"{_money(totals.get('program_league_contribution_monthly'))}"
+    )
+    lines.append(
+        "- Event revenue + contribution: "
+        f"{_money(totals.get('program_event_revenue_monthly'))} / "
+        f"{_money(totals.get('program_event_contribution_monthly'))}"
+    )
+    lines.append(
+        f"- Total programs contribution: {_money(totals.get('program_total_contribution_monthly'))}"
+    )
+    if drivers.get("program_membership_discount_leakage_pct", 0):
+        lines.append(
+            "- Membership discount leakage (not applied): "
+            f"{_money(drivers.get('program_membership_discount_leakage_monthly'))}"
+        )
+    lines.append("")
+
     lines.append("## Fixed Cost Breakdown")
     lines.append(f"- Occupancy (rent/CAM/NNN): {_money(totals.get('occupancy_cost_monthly'))}")
     lines.append(f"- Utilities total: {_money(totals.get('utilities_cost_monthly'))}")

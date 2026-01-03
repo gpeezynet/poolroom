@@ -36,6 +36,17 @@ Internal defaults pending vendor quotes.
 | revenue.bar_only_guests.bar_spend_per_guest | 18 | internal_default | Pending vendor quotes. |
 | revenue.bar_only_guests.food_attach_rate | 0.25 | internal_default | Pending vendor quotes. |
 | revenue.bar_only_guests.food_spend_per_guest | 10 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.active_members | 150 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.monthly_fee | 25 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.discount_leakage_pct | 0.40 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.net_margin_pct | 0.85 | internal_default | Pending vendor quotes. |
+| revenue.programs.leagues.active_league_players_per_month | 120 | internal_default | Pending vendor quotes. |
+| revenue.programs.leagues.league_fee_per_player | 2 | internal_default | Pending vendor quotes. |
+| revenue.programs.leagues.net_margin_pct | 0.80 | internal_default | Pending vendor quotes. |
+| revenue.programs.events.events_per_month | 4 | internal_default | Pending vendor quotes. |
+| revenue.programs.events.avg_event_revenue | 900 | internal_default | Pending vendor quotes. |
+| revenue.programs.events.variable_cost_pct | 0.15 | internal_default | Pending vendor quotes. |
+| revenue.programs.events.net_margin_pct | 0.85 | internal_default | Pending vendor quotes. |
 | modeling.weekdays_per_month | 22 | internal_default | Pending vendor quotes. |
 | modeling.weekend_days_per_month | 8 | internal_default | Pending vendor quotes. |
 | late_night.extra_hours_per_week | 30 | internal_default | Pending vendor quotes. |

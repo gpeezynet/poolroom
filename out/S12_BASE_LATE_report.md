@@ -57,6 +57,12 @@
 - Monthly net: $3,554
 - Annual net: $42,654
 
+## Programs (Non-table Revenue)
+- Membership revenue + contribution: $0 / $0
+- League revenue + contribution: $0 / $0
+- Event revenue + contribution: $0 / $0
+- Total programs contribution: $0
+
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
 - Utilities total: $3,400

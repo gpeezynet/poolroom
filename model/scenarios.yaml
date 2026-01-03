@@ -90,6 +90,46 @@ scenarios:
     utilization_multiplier: 1.15
     spend_multiplier: 1.10
 
+  S12_BASE_PLUS_PROGRAMS:
+    name: "12-table base + programs"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+
+  S12_UPSIDE_PLUS_PROGRAMS:
+    name: "12-table upside + programs"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.15
+    spend_multiplier: 1.10
+    programs_enabled: true
+
   S24_CONSERVATIVE:
     name: "24-table conservative"
     tables: 24

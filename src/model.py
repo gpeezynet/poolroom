@@ -238,6 +238,98 @@ def compute_scenario(
     bar_only_food_sales_monthly = (
         bar_only_guest_count * bar_only_food_attach * bar_only_food_spend
     )
+    programs = revenue.get("programs", {})
+    programs_enabled = bool(scenario.get("programs_enabled", False))
+    program_membership_revenue_monthly = 0.0
+    program_membership_contribution_monthly = 0.0
+    program_membership_discount_leakage_monthly = 0.0
+    program_league_revenue_monthly = 0.0
+    program_league_contribution_monthly = 0.0
+    program_event_revenue_monthly = 0.0
+    program_event_contribution_monthly = 0.0
+    if programs_enabled:
+        memberships = programs.get("memberships", {})
+        active_members = _num(
+            memberships.get("active_members", 0),
+            "revenue.programs.memberships.active_members",
+        )
+        membership_fee = _num(
+            memberships.get("monthly_fee", 0),
+            "revenue.programs.memberships.monthly_fee",
+        )
+        membership_net_margin = _num(
+            memberships.get("net_margin_pct", 0),
+            "revenue.programs.memberships.net_margin_pct",
+        )
+        membership_leakage_pct = _num(
+            memberships.get("discount_leakage_pct", 0),
+            "revenue.programs.memberships.discount_leakage_pct",
+        )
+        program_membership_revenue_monthly = active_members * membership_fee
+        program_membership_contribution_monthly = (
+            program_membership_revenue_monthly * membership_net_margin
+        )
+        program_membership_discount_leakage_monthly = (
+            program_membership_revenue_monthly * membership_leakage_pct
+        )
+
+        leagues = programs.get("leagues", {})
+        league_players = _num(
+            leagues.get("active_league_players_per_month", 0),
+            "revenue.programs.leagues.active_league_players_per_month",
+        )
+        league_fee = _num(
+            leagues.get("league_fee_per_player", 0),
+            "revenue.programs.leagues.league_fee_per_player",
+        )
+        league_net_margin = _num(
+            leagues.get("net_margin_pct", 0),
+            "revenue.programs.leagues.net_margin_pct",
+        )
+        program_league_revenue_monthly = league_players * league_fee
+        program_league_contribution_monthly = (
+            program_league_revenue_monthly * league_net_margin
+        )
+
+        events = programs.get("events", {})
+        events_per_month = _num(
+            events.get("events_per_month", 0),
+            "revenue.programs.events.events_per_month",
+        )
+        avg_event_revenue = _num(
+            events.get("avg_event_revenue", 0),
+            "revenue.programs.events.avg_event_revenue",
+        )
+        event_variable_cost_pct = _num(
+            events.get("variable_cost_pct", 0),
+            "revenue.programs.events.variable_cost_pct",
+        )
+        event_net_margin = _num(
+            events.get("net_margin_pct", 0),
+            "revenue.programs.events.net_margin_pct",
+        )
+        program_event_revenue_monthly = events_per_month * avg_event_revenue
+        event_variable_costs_monthly = (
+            program_event_revenue_monthly * event_variable_cost_pct
+        )
+        program_event_contribution_monthly = (
+            (program_event_revenue_monthly - event_variable_costs_monthly)
+            * event_net_margin
+        )
+
+    program_total_revenue_monthly = (
+        program_membership_revenue_monthly
+        + program_league_revenue_monthly
+        + program_event_revenue_monthly
+    )
+    program_total_contribution_monthly = (
+        program_membership_contribution_monthly
+        + program_league_contribution_monthly
+        + program_event_contribution_monthly
+    )
+    program_variable_costs_monthly = (
+        program_total_revenue_monthly - program_total_contribution_monthly
+    )
     base_table_hours_total = sum(p["metrics"]["table_hours"] for p in periods)
     total_available_table_hours = tables * open_hours_per_day * 30
 
@@ -316,7 +408,10 @@ def compute_scenario(
     total_bar_sales_monthly = bar_revenue + bar_only_bar_sales_monthly
     total_food_sales_monthly = food_revenue + bar_only_food_sales_monthly
     total_revenue = (
-        total_table_sales_monthly + total_bar_sales_monthly + total_food_sales_monthly
+        total_table_sales_monthly
+        + total_bar_sales_monthly
+        + total_food_sales_monthly
+        + program_total_revenue_monthly
     )
 
     cogs = assumptions["cogs"]
@@ -558,7 +653,9 @@ def compute_scenario(
             monthly_debt_service = loan_principal * rate * (1 + rate) ** months / ((1 + rate) ** months - 1)
         annual_debt_service = monthly_debt_service * 12
 
-    variable_costs = total_cogs + labor + processing_fees
+    variable_costs = (
+        total_cogs + labor + processing_fees + program_variable_costs_monthly
+    )
     contribution_margin = total_revenue - variable_costs
     gross_profit_before_fixed = contribution_margin
     required_gross_profit = monthly_fixed_costs + monthly_debt_service
@@ -702,6 +799,14 @@ def compute_scenario(
             "total_table_sales_monthly": total_table_sales_monthly,
             "total_bar_sales_monthly": total_bar_sales_monthly,
             "total_food_sales_monthly": total_food_sales_monthly,
+            "program_membership_revenue_monthly": program_membership_revenue_monthly,
+            "program_membership_contribution_monthly": program_membership_contribution_monthly,
+            "program_league_revenue_monthly": program_league_revenue_monthly,
+            "program_league_contribution_monthly": program_league_contribution_monthly,
+            "program_event_revenue_monthly": program_event_revenue_monthly,
+            "program_event_contribution_monthly": program_event_contribution_monthly,
+            "program_total_revenue_monthly": program_total_revenue_monthly,
+            "program_total_contribution_monthly": program_total_contribution_monthly,
             "total_revenue": total_revenue,
             "bar_cogs": bar_cogs,
             "food_cogs": food_cogs,
@@ -800,6 +905,19 @@ def compute_scenario(
             "late_extra_hours_per_day_capped": late_extra_hours_per_day_capped,
             "late_extra_hours_per_week_capped": extra_hours_per_week_capped,
             "legal_hours_enforced": legal_hours_enforced,
+            "programs_enabled": programs_enabled,
+            "program_membership_active_members": programs.get("memberships", {}).get("active_members", 0),
+            "program_membership_monthly_fee": programs.get("memberships", {}).get("monthly_fee", 0),
+            "program_membership_discount_leakage_pct": programs.get("memberships", {}).get("discount_leakage_pct", 0),
+            "program_membership_net_margin_pct": programs.get("memberships", {}).get("net_margin_pct", 0),
+            "program_league_active_players": programs.get("leagues", {}).get("active_league_players_per_month", 0),
+            "program_league_fee_per_player": programs.get("leagues", {}).get("league_fee_per_player", 0),
+            "program_league_net_margin_pct": programs.get("leagues", {}).get("net_margin_pct", 0),
+            "program_events_per_month": programs.get("events", {}).get("events_per_month", 0),
+            "program_event_avg_revenue": programs.get("events", {}).get("avg_event_revenue", 0),
+            "program_event_variable_cost_pct": programs.get("events", {}).get("variable_cost_pct", 0),
+            "program_event_net_margin_pct": programs.get("events", {}).get("net_margin_pct", 0),
+            "program_membership_discount_leakage_monthly": program_membership_discount_leakage_monthly,
         },
         "periods": periods,
         "warnings": warnings,

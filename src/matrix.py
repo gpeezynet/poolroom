@@ -38,6 +38,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "sales_gap_per_day_for_cash_break_even",
         "bar_only_bar_sales_monthly",
         "bar_only_food_sales_monthly",
+        "program_total_revenue_monthly",
+        "program_total_contribution_monthly",
         "late_incremental_noi",
         "late_incremental_cash_after_debt",
     ]
@@ -77,6 +79,10 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             ),
             "bar_only_bar_sales_monthly": totals.get("bar_only_bar_sales_monthly"),
             "bar_only_food_sales_monthly": totals.get("bar_only_food_sales_monthly"),
+            "program_total_revenue_monthly": totals.get("program_total_revenue_monthly"),
+            "program_total_contribution_monthly": totals.get(
+                "program_total_contribution_monthly"
+            ),
             "late_incremental_noi": late_incremental.get("noi_monthly"),
             "late_incremental_cash_after_debt": late_incremental.get(
                 "cash_after_debt_monthly"
