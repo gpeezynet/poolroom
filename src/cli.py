@@ -8,6 +8,7 @@ from typing import Any, Dict
 import yaml
 
 from .model import compute_scenario
+from .matrix import write_scenario_matrix
 from .report import render_report
 
 
@@ -28,10 +29,12 @@ def run_scenarios(assumptions_path: Path, scenarios_path: Path, out_dir: Path, i
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    results = []
     for scenario_id in ids:
         if scenario_id not in scenarios:
             raise SystemExit(f"Unknown scenario '{scenario_id}'.")
         result = compute_scenario(assumptions, scenario_id, scenarios[scenario_id])
+        results.append(result)
 
         report_path = out_dir / f"{scenario_id}_report.md"
         summary_path = out_dir / f"{scenario_id}_summary.json"
@@ -41,6 +44,7 @@ def run_scenarios(assumptions_path: Path, scenarios_path: Path, out_dir: Path, i
         print(
             f"Generated {report_path.as_posix()} and {summary_path.as_posix()}"
         )
+    write_scenario_matrix(results, out_dir)
 
 
 def build_parser() -> argparse.ArgumentParser:

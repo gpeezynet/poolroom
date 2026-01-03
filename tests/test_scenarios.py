@@ -63,12 +63,45 @@ class ScenarioSmokeTests(unittest.TestCase):
             self.assertIsInstance(dscr, (int, float), f"DSCR is not numeric for {scenario_id}")
             self.assertGreaterEqual(dscr, 0, f"DSCR is negative for {scenario_id}")
             self.assertLessEqual(dscr, 20, f"DSCR is unusually high for {scenario_id}")
+            late_incremental = data.get("late_incremental")
             if "LATE" in scenario_id:
+                self.assertIsNotNone(late_incremental, f"Missing late_incremental for {scenario_id}")
                 for key in (
-                    "late_incremental_noi_monthly",
-                    "late_incremental_cashflow_after_debt_monthly",
+                    "sales_monthly",
+                    "variable_costs_monthly",
+                    "gross_profit_monthly",
+                    "fixed_costs_monthly",
+                    "noi_monthly",
+                    "cash_after_debt_monthly",
+                    "break_even_sales_per_day",
                 ):
-                    self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
+                    self.assertIn(key, late_incremental, f"Missing late_incremental.{key} for {scenario_id}")
+            if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
+                sales = late_incremental["sales_monthly"]
+                variable_costs = late_incremental.get("variable_costs_monthly", 0)
+                gross_profit = late_incremental.get("gross_profit_monthly", 0)
+                fixed_costs = late_incremental.get("fixed_costs_monthly", 0)
+                noi = late_incremental.get("noi_monthly", 0)
+                cash_after_debt = late_incremental.get("cash_after_debt_monthly", 0)
+                incremental_debt = late_incremental.get("incremental_debt_service_monthly", 0)
+                self.assertAlmostEqual(
+                    gross_profit,
+                    sales - variable_costs,
+                    places=6,
+                    msg=f"Late gross profit mismatch for {scenario_id}",
+                )
+                self.assertAlmostEqual(
+                    noi,
+                    gross_profit - fixed_costs,
+                    places=6,
+                    msg=f"Late NOI mismatch for {scenario_id}",
+                )
+                self.assertAlmostEqual(
+                    cash_after_debt,
+                    noi - incremental_debt,
+                    places=6,
+                    msg=f"Late cash-after-debt mismatch for {scenario_id}",
+                )
 
     def test_required_assumptions_are_not_placeholders(self):
         a = load_assumptions()

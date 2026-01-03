@@ -135,26 +135,36 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append("")
 
     if result.get("late_night"):
-        lines.append("## Late-Night Incremental")
+        late_incremental = result.get("late_incremental") or {}
+        lines.append("## Late-Night Incremental (Bridge)")
         lines.append(
-            f"- Incremental sales (monthly): {_money(totals.get('late_incremental_sales_monthly'))}"
+            f"- Incremental sales (monthly): {_money(late_incremental.get('sales_monthly'))}"
         )
         lines.append(
-            f"- Incremental costs (monthly): {_money(totals.get('late_incremental_costs_monthly'))}"
+            "- Incremental variable costs (monthly): "
+            f"{_money(late_incremental.get('variable_costs_monthly'))}"
         )
         lines.append(
-            f"- Incremental NOI (monthly): {_money(totals.get('late_incremental_noi_monthly'))}"
+            "- Incremental gross profit (monthly): "
+            f"{_money(late_incremental.get('gross_profit_monthly'))}"
         )
         lines.append(
-            f"- Incremental cash flow after debt (monthly): "
-            f"{_money(totals.get('late_incremental_cashflow_after_debt_monthly'))}"
+            "- Incremental fixed costs (monthly): "
+            f"{_money(late_incremental.get('fixed_costs_monthly'))}"
         )
-        worth_it = totals.get("late_incremental_cashflow_after_debt_monthly")
-        lines.append(f"- Late-night worth it?: {worth_it is not None and worth_it > 0}")
+        lines.append(
+            f"- Incremental NOI (monthly): {_money(late_incremental.get('noi_monthly'))}"
+        )
+        lines.append(
+            "- Incremental cash flow after debt (monthly): "
+            f"{_money(late_incremental.get('cash_after_debt_monthly'))}"
+        )
         lines.append(
             "- Break-even incremental sales (per day): "
-            f"{_money(totals.get('late_break_even_incremental_sales_per_day'))}"
+            f"{_money(late_incremental.get('break_even_sales_per_day'))}"
         )
+        worth_it = late_incremental.get("cash_after_debt_monthly")
+        lines.append(f"- Late-night worth it?: {worth_it is not None and worth_it > 0}")
         lines.append("")
 
     lines.append("## ROI Metrics")

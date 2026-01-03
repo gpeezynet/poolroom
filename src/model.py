@@ -447,17 +447,80 @@ def compute_scenario(
             if monthly_debt_service > 0:
                 breakeven_revenue_after_debt = (monthly_fixed_costs + monthly_debt_service) / (1 - variable_ratio)
 
-    late_incremental_costs_monthly = late_incremental_labor_cost_monthly
+    late_incremental = None
+    if late_night:
+        late_incremental_variable_costs_monthly = 0.0
+        late_incremental_gross_profit_monthly = None
+        late_incremental_fixed_costs_monthly = late_incremental_labor_cost_monthly
+        late_incremental_noi_monthly = None
+        late_incremental_cash_after_debt_monthly = None
+        late_incremental_debt_service_monthly = 0.0
+        late_break_even_incremental_sales_per_day = None
+
+        if late_incremental_sales_monthly > 0:
+            late_incremental_bar_cogs = late_incremental_bar_revenue * float(
+                cogs["bar_cogs_pct"]["blended_target"]
+            )
+            late_incremental_food_cogs = late_incremental_food_revenue * float(
+                cogs["food_cogs_pct_placeholder"]
+            )
+            late_incremental_processing_fees = (
+                late_incremental_sales_monthly * card_mix_pct * processing_pct
+            )
+            late_incremental_variable_labor = late_incremental_sales_monthly * labor_pct
+            late_incremental_variable_costs_monthly = (
+                late_incremental_bar_cogs
+                + late_incremental_food_cogs
+                + late_incremental_processing_fees
+                + late_incremental_variable_labor
+            )
+            late_incremental_gross_profit_monthly = (
+                late_incremental_sales_monthly - late_incremental_variable_costs_monthly
+            )
+
+        if late_incremental_gross_profit_monthly is not None:
+            late_incremental_noi_monthly = (
+                late_incremental_gross_profit_monthly - late_incremental_fixed_costs_monthly
+            )
+            late_incremental_cash_after_debt_monthly = (
+                late_incremental_noi_monthly - late_incremental_debt_service_monthly
+            )
+            gross_margin_rate = None
+            if late_incremental_sales_monthly > 0:
+                gross_margin_rate = (
+                    late_incremental_gross_profit_monthly / late_incremental_sales_monthly
+                )
+            if gross_margin_rate and gross_margin_rate > 0:
+                late_break_even_incremental_sales_per_day = (
+                    late_incremental_fixed_costs_monthly / gross_margin_rate / 30
+                )
+
+        late_incremental = {
+            "sales_monthly": late_incremental_sales_monthly,
+            "variable_costs_monthly": late_incremental_variable_costs_monthly,
+            "gross_profit_monthly": late_incremental_gross_profit_monthly,
+            "fixed_costs_monthly": late_incremental_fixed_costs_monthly,
+            "noi_monthly": late_incremental_noi_monthly,
+            "cash_after_debt_monthly": late_incremental_cash_after_debt_monthly,
+            "break_even_sales_per_day": late_break_even_incremental_sales_per_day,
+            "incremental_debt_service_monthly": late_incremental_debt_service_monthly,
+        }
+
+    late_incremental_variable_costs_monthly = None
+    late_incremental_gross_profit_monthly = None
+    late_incremental_fixed_costs_monthly = None
     late_incremental_noi_monthly = None
-    late_incremental_cashflow_after_debt_monthly = None
-    late_break_even_incremental_sales_per_day = None
-    if late_night and gross_margin_pct and gross_margin_pct > 0:
-        late_incremental_contribution = late_incremental_sales_monthly * gross_margin_pct
-        late_incremental_noi_monthly = late_incremental_contribution - late_incremental_costs_monthly
-        late_incremental_cashflow_after_debt_monthly = late_incremental_noi_monthly
-        late_break_even_incremental_sales_per_day = (
-            late_incremental_costs_monthly / gross_margin_pct / 30
-        )
+    late_incremental_cash_after_debt_monthly = None
+    late_incremental_break_even_sales_per_day = None
+    late_incremental_debt_service_monthly = 0.0
+    if late_incremental:
+        late_incremental_variable_costs_monthly = late_incremental["variable_costs_monthly"]
+        late_incremental_gross_profit_monthly = late_incremental["gross_profit_monthly"]
+        late_incremental_fixed_costs_monthly = late_incremental["fixed_costs_monthly"]
+        late_incremental_noi_monthly = late_incremental["noi_monthly"]
+        late_incremental_cash_after_debt_monthly = late_incremental["cash_after_debt_monthly"]
+        late_incremental_break_even_sales_per_day = late_incremental["break_even_sales_per_day"]
+        late_incremental_debt_service_monthly = late_incremental["incremental_debt_service_monthly"]
 
     warnings = []
     legal = assumptions["legal_hours"]
@@ -526,16 +589,17 @@ def compute_scenario(
             "cash_flow_after_debt": cash_flow_after_debt,
             "dscr": dscr,
             "late_incremental_sales_monthly": late_incremental_sales_monthly,
-            "late_incremental_costs_monthly": late_incremental_costs_monthly,
+            "late_incremental_costs_monthly": late_incremental_fixed_costs_monthly,
             "late_incremental_noi_monthly": late_incremental_noi_monthly,
-            "late_incremental_cashflow_after_debt_monthly": late_incremental_cashflow_after_debt_monthly,
-            "late_break_even_incremental_sales_per_day": late_break_even_incremental_sales_per_day,
+            "late_incremental_cashflow_after_debt_monthly": late_incremental_cash_after_debt_monthly,
+            "late_break_even_incremental_sales_per_day": late_incremental_break_even_sales_per_day,
         },
         "total_capex": total_capex,
         "down_payment_amount": down_payment_amount,
         "loan_principal": loan_principal,
         "implied_equity": implied_equity,
         "late_night": late_night,
+        "late_incremental": late_incremental,
         "startup_cost": startup_cost,
         "payback_years": payback_years,
         "payback_months": payback_months,

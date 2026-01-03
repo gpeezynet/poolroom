@@ -75,13 +75,15 @@
 - Cash flow after debt: $55,160
 - DSCR: 6.91x (691.5%)
 
-## Late-Night Incremental
+## Late-Night Incremental (Bridge)
 - Incremental sales (monthly): $159,593
-- Incremental costs (monthly): $5,726
-- Incremental NOI (monthly): $88,593
-- Incremental cash flow after debt (monthly): $88,593
+- Incremental variable costs (monthly): $64,842
+- Incremental gross profit (monthly): $94,751
+- Incremental fixed costs (monthly): $5,726
+- Incremental NOI (monthly): $89,024
+- Incremental cash flow after debt (monthly): $89,024
+- Break-even incremental sales (per day): $322
 - Late-night worth it?: True
-- Break-even incremental sales (per day): $323
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
