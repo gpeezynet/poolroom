@@ -10,6 +10,7 @@ import yaml
 from .model import compute_scenario
 from .matrix import write_scenario_matrix
 from .report import render_report
+from .sensitivity import run_sensitivity
 
 
 def load_yaml(path: Path) -> Dict[str, Any]:
@@ -70,6 +71,30 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output directory for reports",
     )
 
+    sensitivity_parser = subparsers.add_parser(
+        "sensitivity", help="Run program driver sensitivity sweep"
+    )
+    sensitivity_parser.add_argument(
+        "--scenario",
+        required=True,
+        help="Scenario ID to sweep (ex: S12_BASE_PLUS_PROGRAMS2)",
+    )
+    sensitivity_parser.add_argument(
+        "--assumptions",
+        default="model/assumptions.yaml",
+        help="Path to assumptions.yaml",
+    )
+    sensitivity_parser.add_argument(
+        "--scenarios",
+        default="model/scenarios.yaml",
+        help="Path to scenarios.yaml",
+    )
+    sensitivity_parser.add_argument(
+        "--out-dir",
+        default="out",
+        help="Output directory for sensitivity results",
+    )
+
     return parser
 
 
@@ -94,6 +119,11 @@ def main() -> None:
             ids = [args.scenario]
 
         run_scenarios(assumptions_path, scenarios_path, out_dir, ids)
+    elif args.command == "sensitivity":
+        assumptions_path = Path(args.assumptions)
+        scenarios_path = Path(args.scenarios)
+        out_dir = Path(args.out_dir)
+        run_sensitivity(assumptions_path, scenarios_path, out_dir, args.scenario)
 
 
 if __name__ == "__main__":

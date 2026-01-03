@@ -7,6 +7,8 @@ import unittest
 
 import yaml
 
+from src.sensitivity import run_sensitivity
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -207,6 +209,30 @@ class ScenarioSmokeTests(unittest.TestCase):
 
     def test_s24_outputs(self):
         self._assert_outputs("S24")
+
+    def test_lockup_programs2_outputs(self):
+        for scenario_id in (
+            "S12_BASE_LATE_LOCKUP_PLUS_PROGRAMS2",
+            "S12_UPSIDE_LATE_LOCKUP_PLUS_PROGRAMS2",
+            "S24_BASE_LATE_LOCKUP_PLUS_PROGRAMS2",
+            "S24_UPSIDE_LATE_LOCKUP_PLUS_PROGRAMS2",
+        ):
+            self._assert_outputs(scenario_id)
+
+    def test_program_sensitivity_outputs(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            out_dir = Path(tmpdir)
+            run_sensitivity(
+                ROOT / "model" / "assumptions.yaml",
+                ROOT / "model" / "scenarios.yaml",
+                out_dir,
+                "S12_BASE_PLUS_PROGRAMS2",
+            )
+            csv_path = out_dir / "PROGRAM_SENSITIVITY.csv"
+            md_path = out_dir / "PROGRAM_SENSITIVITY.md"
+            self.assertTrue(csv_path.exists(), "Missing PROGRAM_SENSITIVITY.csv")
+            self.assertTrue(md_path.exists(), "Missing PROGRAM_SENSITIVITY.md")
+            self.assertTrue(md_path.read_text(encoding="utf-8").strip())
 
 
 if __name__ == "__main__":
