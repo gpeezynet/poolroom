@@ -47,6 +47,12 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "program_net_contribution_monthly",
         "program_total_revenue_monthly",
         "program_total_contribution_monthly",
+        "capex_total",
+        "total_project_cost",
+        "equity_required_at_close",
+        "loan_amount",
+        "total_cash_required_to_open",
+        "runway_months",
         "late_incremental_noi",
         "late_incremental_cash_after_debt",
     ]
@@ -111,6 +117,12 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             "program_total_contribution_monthly": totals.get(
                 "program_total_contribution_monthly"
             ),
+            "capex_total": totals.get("capex_total"),
+            "total_project_cost": totals.get("total_project_cost"),
+            "equity_required_at_close": totals.get("equity_required_at_close"),
+            "loan_amount": totals.get("loan_amount"),
+            "total_cash_required_to_open": totals.get("total_cash_required_to_open"),
+            "runway_months": totals.get("runway_months"),
             "late_incremental_noi": late_incremental.get("noi_monthly"),
             "late_incremental_cash_after_debt": late_incremental.get(
                 "cash_after_debt_monthly"

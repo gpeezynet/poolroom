@@ -26,6 +26,23 @@ utilities:
   trash_per_month_s24: 400
 
 capex:
+  scenario:
+    S12:
+      buildout: 300000
+      ffe: 70000
+      tables: 80000
+      soft_costs: 20000
+      contingency: 50000
+      working_capital: 100000
+    S24:
+      buildout: 600000
+      ffe: 120000
+      tables: 150000
+      soft_costs: 40000
+      contingency: 100000
+      working_capital: 180000
+  ti_allowance: 0
+  lease_deposit_months: 1
   s12_buildout: 250000
   s24_buildout: 400000
   s12_tables_and_lights: 90000

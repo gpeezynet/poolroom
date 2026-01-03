@@ -224,10 +224,33 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append("")
 
     lines.append("## CAPEX & Financing")
-    lines.append(f"- Total capex: {_money(result.get('total_capex'))}")
-    lines.append(f"- Down payment (assumed): {_money(result.get('down_payment_amount'))}")
-    lines.append(f"- Loan amount (assumed): {_money(result.get('loan_principal'))}")
-    lines.append(f"- Implied equity: {_money(result.get('implied_equity'))}")
+    lines.append(f"- CAPEX total (incl. working capital): {_money(totals.get('capex_total'))}")
+    lines.append(f"- Tenant improvement allowance: {_money(totals.get('ti_allowance'))}")
+    lines.append(f"- Total project cost (net TI): {_money(totals.get('total_project_cost'))}")
+    lines.append(f"- Equity required at close: {_money(totals.get('equity_required_at_close'))}")
+    lines.append(f"- Loan amount (modeled): {_money(totals.get('loan_amount'))}")
+    lines.append(
+        "- Lease deposit (months / amount): "
+        f"{totals.get('lease_deposit_months', 0):.1f} / "
+        f"{_money(totals.get('lease_deposit_amount'))}"
+    )
+    lines.append(
+        f"- Total cash required to open: {_money(totals.get('total_cash_required_to_open'))}"
+    )
+    lines.append(
+        "- Working capital / runway months: "
+        f"{_money(totals.get('working_capital'))} / "
+        f"{totals.get('runway_months', 0):.1f}"
+    )
+    lines.append("")
+
+    lines.append("## Underwriting Summary")
+    lines.append(f"- Total project cost: {_money(totals.get('total_project_cost'))}")
+    lines.append(f"- Equity required: {_money(totals.get('equity_required_at_close'))}")
+    lines.append(
+        f"- Total cash required to open: {_money(totals.get('total_cash_required_to_open'))}"
+    )
+    lines.append(f"- Runway months: {totals.get('runway_months', 0):.1f}")
     lines.append("")
 
     lines.append("## Debt & Coverage")

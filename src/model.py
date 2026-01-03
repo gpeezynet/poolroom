@@ -786,26 +786,73 @@ def compute_scenario(
         payback_months = startup_cost / monthly_net if monthly_net > 0 else None
 
     capex = assumptions.get("capex", {})
-    s12_buildout = _num(capex.get("s12_buildout", 0), "capex.s12_buildout")
-    s24_buildout = _num(capex.get("s24_buildout", 0), "capex.s24_buildout")
-    s12_tables_and_lights = _num(capex.get("s12_tables_and_lights", 0), "capex.s12_tables_and_lights")
-    s24_tables_and_lights = _num(capex.get("s24_tables_and_lights", 0), "capex.s24_tables_and_lights")
-    s12_bar_and_ff_e = _num(capex.get("s12_bar_and_ff_e", 0), "capex.s12_bar_and_ff_e")
-    s24_bar_and_ff_e = _num(capex.get("s24_bar_and_ff_e", 0), "capex.s24_bar_and_ff_e")
-    s12_kitchen_lite = _num(capex.get("s12_kitchen_lite", 0), "capex.s12_kitchen_lite")
-    s24_kitchen_lite = _num(capex.get("s24_kitchen_lite", 0), "capex.s24_kitchen_lite")
-    s12_soft_cost_pct = _num(capex.get("s12_soft_cost_pct", 0), "capex.s12_soft_cost_pct")
-    s24_soft_cost_pct = _num(capex.get("s24_soft_cost_pct", 0), "capex.s24_soft_cost_pct")
-    working_capital = _num(capex.get("opening_working_capital", 0), "capex.opening_working_capital")
+    capex_scenarios = capex.get("scenario", {})
+    scenario_key = "S12" if tables <= 12 else "S24"
+    capex_line = capex_scenarios.get(scenario_key, {}) if isinstance(capex_scenarios, dict) else {}
 
-    buildout = _select_by_tables(tables, s12_buildout, s24_buildout)
-    tables_and_lights = _select_by_tables(tables, s12_tables_and_lights, s24_tables_and_lights)
-    bar_and_ff_e = _select_by_tables(tables, s12_bar_and_ff_e, s24_bar_and_ff_e)
-    kitchen_lite = _select_by_tables(tables, s12_kitchen_lite, s24_kitchen_lite)
-    soft_cost_pct = _select_by_tables(tables, s12_soft_cost_pct, s24_soft_cost_pct)
-    hard_costs = buildout + tables_and_lights + bar_and_ff_e + kitchen_lite
-    soft_costs = hard_costs * soft_cost_pct
-    total_capex = hard_costs + soft_costs + working_capital
+    if capex_line:
+        buildout = _num(
+            capex_line.get("buildout", 0), f"capex.scenario.{scenario_key}.buildout"
+        )
+        ffe = _num(capex_line.get("ffe", 0), f"capex.scenario.{scenario_key}.ffe")
+        tables_capex = _num(
+            capex_line.get("tables", 0), f"capex.scenario.{scenario_key}.tables"
+        )
+        soft_costs = _num(
+            capex_line.get("soft_costs", 0),
+            f"capex.scenario.{scenario_key}.soft_costs",
+        )
+        contingency = _num(
+            capex_line.get("contingency", 0),
+            f"capex.scenario.{scenario_key}.contingency",
+        )
+        working_capital = _num(
+            capex_line.get("working_capital", 0),
+            f"capex.scenario.{scenario_key}.working_capital",
+        )
+        capex_total = (
+            buildout + ffe + tables_capex + soft_costs + contingency + working_capital
+        )
+    else:
+        s12_buildout = _num(capex.get("s12_buildout", 0), "capex.s12_buildout")
+        s24_buildout = _num(capex.get("s24_buildout", 0), "capex.s24_buildout")
+        s12_tables_and_lights = _num(capex.get("s12_tables_and_lights", 0), "capex.s12_tables_and_lights")
+        s24_tables_and_lights = _num(capex.get("s24_tables_and_lights", 0), "capex.s24_tables_and_lights")
+        s12_bar_and_ff_e = _num(capex.get("s12_bar_and_ff_e", 0), "capex.s12_bar_and_ff_e")
+        s24_bar_and_ff_e = _num(capex.get("s24_bar_and_ff_e", 0), "capex.s24_bar_and_ff_e")
+        s12_kitchen_lite = _num(capex.get("s12_kitchen_lite", 0), "capex.s12_kitchen_lite")
+        s24_kitchen_lite = _num(capex.get("s24_kitchen_lite", 0), "capex.s24_kitchen_lite")
+        s12_soft_cost_pct = _num(capex.get("s12_soft_cost_pct", 0), "capex.s12_soft_cost_pct")
+        s24_soft_cost_pct = _num(capex.get("s24_soft_cost_pct", 0), "capex.s24_soft_cost_pct")
+        working_capital = _num(capex.get("opening_working_capital", 0), "capex.opening_working_capital")
+
+        buildout = _select_by_tables(tables, s12_buildout, s24_buildout)
+        tables_and_lights = _select_by_tables(tables, s12_tables_and_lights, s24_tables_and_lights)
+        bar_and_ff_e = _select_by_tables(tables, s12_bar_and_ff_e, s24_bar_and_ff_e)
+        kitchen_lite = _select_by_tables(tables, s12_kitchen_lite, s24_kitchen_lite)
+        soft_cost_pct = _select_by_tables(tables, s12_soft_cost_pct, s24_soft_cost_pct)
+        hard_costs = buildout + tables_and_lights + bar_and_ff_e + kitchen_lite
+        soft_costs = hard_costs * soft_cost_pct
+        ffe = bar_and_ff_e + kitchen_lite
+        tables_capex = tables_and_lights
+        contingency = 0.0
+        capex_total = hard_costs + soft_costs + working_capital
+
+    ti_allowance_value = capex.get("ti_allowance", 0)
+    if isinstance(ti_allowance_value, dict):
+        ti_allowance_value = ti_allowance_value.get(scenario_key, 0)
+    ti_allowance = _num(ti_allowance_value, "capex.ti_allowance")
+
+    lease_deposit_months_value = capex.get("lease_deposit_months", 0)
+    if isinstance(lease_deposit_months_value, dict):
+        lease_deposit_months_value = lease_deposit_months_value.get(scenario_key, 0)
+    lease_deposit_months = _num(
+        lease_deposit_months_value, "capex.lease_deposit_months"
+    )
+
+    total_project_cost = max(capex_total - ti_allowance, 0)
+    lease_deposit_amount = occupancy_cost_monthly * lease_deposit_months
+    total_capex = capex_total
 
     financing = assumptions.get("financing", {})
     loan_amount = _num(financing.get("loan_amount", 0), "financing.loan_amount")
@@ -813,9 +860,13 @@ def compute_scenario(
     term_years = _num(financing.get("term_years", 0), "financing.term_years")
     down_payment_pct = _num(financing.get("down_payment_pct", 0), "financing.down_payment_pct")
 
-    down_payment_amount = total_capex * down_payment_pct
-    loan_principal = loan_amount if loan_amount > 0 else max(total_capex - down_payment_amount, 0)
-    implied_equity = total_capex - loan_principal
+    equity_required_at_close = total_project_cost * down_payment_pct
+    loan_principal = max(total_project_cost - equity_required_at_close, 0)
+    if loan_amount > 0:
+        loan_principal = min(loan_principal, loan_amount)
+        equity_required_at_close = total_project_cost - loan_principal
+    total_cash_required_to_open = equity_required_at_close + lease_deposit_amount
+    implied_equity = total_project_cost - loan_principal
 
     monthly_debt_service = 0.0
     annual_debt_service = 0.0
@@ -844,6 +895,8 @@ def compute_scenario(
     if annual_debt_service > 0:
         dscr = max((noi * 12) / annual_debt_service, 0)
     cash_flow_after_debt = noi - monthly_debt_service
+    monthly_cash_burn_estimate = max(-cash_flow_after_debt, 0)
+    runway_months = working_capital / max(1, monthly_cash_burn_estimate)
 
     breakeven_revenue = None
     breakeven_revenue_after_debt = None
@@ -1033,6 +1086,16 @@ def compute_scenario(
             "noi": noi,
             "cash_flow_after_debt": cash_flow_after_debt,
             "dscr": dscr,
+            "capex_total": capex_total,
+            "total_project_cost": total_project_cost,
+            "ti_allowance": ti_allowance,
+            "lease_deposit_months": lease_deposit_months,
+            "lease_deposit_amount": lease_deposit_amount,
+            "equity_required_at_close": equity_required_at_close,
+            "loan_amount": loan_principal,
+            "total_cash_required_to_open": total_cash_required_to_open,
+            "working_capital": working_capital,
+            "runway_months": runway_months,
             "late_incremental_sales_monthly": late_incremental_sales_monthly,
             "late_incremental_costs_monthly": late_incremental_fixed_costs_monthly,
             "late_incremental_noi_monthly": late_incremental_noi_monthly,
@@ -1040,8 +1103,17 @@ def compute_scenario(
             "late_break_even_incremental_sales_per_day": late_incremental_break_even_sales_per_day,
         },
         "total_capex": total_capex,
-        "down_payment_amount": down_payment_amount,
+        "capex_total": capex_total,
+        "total_project_cost": total_project_cost,
+        "ti_allowance": ti_allowance,
+        "lease_deposit_months": lease_deposit_months,
+        "lease_deposit_amount": lease_deposit_amount,
+        "equity_required_at_close": equity_required_at_close,
         "loan_principal": loan_principal,
+        "loan_amount": loan_principal,
+        "total_cash_required_to_open": total_cash_required_to_open,
+        "working_capital": working_capital,
+        "runway_months": runway_months,
         "implied_equity": implied_equity,
         "late_night": late_night,
         "late_bar_fraction": late_bar_fraction,

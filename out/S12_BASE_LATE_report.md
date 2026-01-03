@@ -92,32 +92,42 @@
 - Fixed costs total: $84,830
 
 ## CAPEX & Financing
-- Total capex: $522,000
-- Down payment (assumed): $104,400
-- Loan amount (assumed): $650,000
-- Implied equity: $-128,000
+- CAPEX total (incl. working capital): $620,000
+- Tenant improvement allowance: $0
+- Total project cost (net TI): $620,000
+- Equity required at close: $124,000
+- Loan amount (modeled): $496,000
+- Lease deposit (months / amount): 1.0 / $18,000
+- Total cash required to open: $142,000
+- Working capital / runway months: $100,000 / 19.4
+
+## Underwriting Summary
+- Total project cost: $620,000
+- Equity required: $124,000
+- Total cash required to open: $142,000
+- Runway months: 19.4
 
 ## Debt & Coverage
-- Monthly debt service: $9,326
+- Monthly debt service: $7,116
 - NOI (monthly): $1,956
-- Cash flow after debt: $-7,369
-- DSCR: 0.21x (21.0%)
+- Cash flow after debt: $-5,160
+- DSCR: 0.27x (27.5%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-7,369 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.08x
-- Required additional sales (per day): $421
+- Cash gap (monthly): $-5,160 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.06x
+- Required additional sales (per day): $295
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $1,309 |
-| Utilization -10% | $-16,048 |
-| Spend +10% | $-1,838 |
-| Spend -10% | $-12,901 |
-| Fixed costs +10% | $-15,852 |
-| Fixed costs -10% | $1,114 |
+| Utilization +10% | $3,519 |
+| Utilization -10% | $-13,839 |
+| Spend +10% | $371 |
+| Spend -10% | $-10,691 |
+| Fixed costs +10% | $-13,643 |
+| Fixed costs -10% | $3,323 |
 
 ## Late-Night Incremental (Bridge)
 - Incremental sales (monthly): $37,238
@@ -138,7 +148,7 @@
 - Gross margin (after variable costs): 58.3%
 - Break-even sales (monthly): $145,416
 - Break-even sales (per day, operating): $4,847
-- Break-even sales (per day, after debt): $5,380
+- Break-even sales (per day, after debt): $5,254
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

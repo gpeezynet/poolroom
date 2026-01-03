@@ -92,32 +92,42 @@
 - Fixed costs total: $87,523
 
 ## CAPEX & Financing
-- Total capex: $522,000
-- Down payment (assumed): $104,400
-- Loan amount (assumed): $650,000
-- Implied equity: $-128,000
+- CAPEX total (incl. working capital): $620,000
+- Tenant improvement allowance: $0
+- Total project cost (net TI): $620,000
+- Equity required at close: $124,000
+- Loan amount (modeled): $496,000
+- Lease deposit (months / amount): 1.0 / $18,000
+- Total cash required to open: $142,000
+- Working capital / runway months: $100,000 / 100000.0
+
+## Underwriting Summary
+- Total project cost: $620,000
+- Equity required: $124,000
+- Total cash required to open: $142,000
+- Runway months: 100000.0
 
 ## Debt & Coverage
-- Monthly debt service: $9,326
+- Monthly debt service: $7,116
 - NOI (monthly): $18,905
-- Cash flow after debt: $9,580
-- DSCR: 2.03x (202.7%)
+- Cash flow after debt: $11,789
+- DSCR: 2.66x (265.7%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $9,580 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 0.91x
+- Cash gap (monthly): $11,789 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.89x
 - Required additional sales (per day): $0
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $20,223 |
-| Utilization -10% | $-1,063 |
-| Spend +10% | $15,818 |
-| Spend -10% | $3,341 |
-| Fixed costs +10% | $827 |
-| Fixed costs -10% | $18,332 |
+| Utilization +10% | $22,432 |
+| Utilization -10% | $1,146 |
+| Spend +10% | $18,028 |
+| Spend -10% | $5,551 |
+| Fixed costs +10% | $3,037 |
+| Fixed costs -10% | $20,542 |
 
 ## Late-Night Incremental (Bridge)
 - Incremental sales (monthly): $38,050
@@ -138,7 +148,7 @@
 - Gross margin (after variable costs): 57.8%
 - Break-even sales (monthly): $151,411
 - Break-even sales (per day, operating): $5,047
-- Break-even sales (per day, after debt): $5,585
+- Break-even sales (per day, after debt): $5,457
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

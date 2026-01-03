@@ -92,10 +92,20 @@
 - Fixed costs total: $134,974
 
 ## CAPEX & Financing
-- Total capex: $824,500
-- Down payment (assumed): $164,900
-- Loan amount (assumed): $650,000
-- Implied equity: $174,500
+- CAPEX total (incl. working capital): $1,190,000
+- Tenant improvement allowance: $0
+- Total project cost (net TI): $1,190,000
+- Equity required at close: $540,000
+- Loan amount (modeled): $650,000
+- Lease deposit (months / amount): 1.0 / $32,000
+- Total cash required to open: $572,000
+- Working capital / runway months: $180,000 / 180000.0
+
+## Underwriting Summary
+- Total project cost: $1,190,000
+- Equity required: $540,000
+- Total cash required to open: $572,000
+- Runway months: 180000.0
 
 ## Debt & Coverage
 - Monthly debt service: $9,326

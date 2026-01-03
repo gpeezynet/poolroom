@@ -89,32 +89,42 @@
 - Fixed costs total: $79,103
 
 ## CAPEX & Financing
-- Total capex: $522,000
-- Down payment (assumed): $104,400
-- Loan amount (assumed): $650,000
-- Implied equity: $-128,000
+- CAPEX total (incl. working capital): $620,000
+- Tenant improvement allowance: $0
+- Total project cost (net TI): $620,000
+- Equity required at close: $124,000
+- Loan amount (modeled): $496,000
+- Lease deposit (months / amount): 1.0 / $18,000
+- Total cash required to open: $142,000
+- Working capital / runway months: $100,000 / 10.6
+
+## Underwriting Summary
+- Total project cost: $620,000
+- Equity required: $124,000
+- Total cash required to open: $142,000
+- Runway months: 10.6
 
 ## Debt & Coverage
-- Monthly debt service: $9,326
+- Monthly debt service: $7,116
 - NOI (monthly): $-2,289
-- Cash flow after debt: $-11,615
+- Cash flow after debt: $-9,405
 - DSCR: 0.00x (0.0%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-11,615 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.15x
-- Required additional sales (per day): $670
+- Cash gap (monthly): $-9,405 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.12x
+- Required additional sales (per day): $542
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $-3,933 |
-| Utilization -10% | $-19,296 |
-| Spend +10% | $-6,660 |
-| Spend -10% | $-16,569 |
-| Fixed costs +10% | $-19,525 |
-| Fixed costs -10% | $-3,704 |
+| Utilization +10% | $-1,724 |
+| Utilization -10% | $-17,087 |
+| Spend +10% | $-4,450 |
+| Spend -10% | $-14,360 |
+| Fixed costs +10% | $-17,315 |
+| Fixed costs -10% | $-1,495 |
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
@@ -125,7 +135,7 @@
 - Gross margin (after variable costs): 57.8%
 - Break-even sales (monthly): $136,845
 - Break-even sales (per day, operating): $4,562
-- Break-even sales (per day, after debt): $5,099
+- Break-even sales (per day, after debt): $4,972
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

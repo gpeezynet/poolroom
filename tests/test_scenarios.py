@@ -80,6 +80,12 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "program_uplift_spend_multiplier",
                 "program_incremental_bar_only_guests_monthly",
                 "program_incremental_table_hours_sold_monthly",
+                "capex_total",
+                "total_project_cost",
+                "equity_required_at_close",
+                "loan_amount",
+                "total_cash_required_to_open",
+                "runway_months",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
@@ -169,6 +175,29 @@ class ScenarioSmokeTests(unittest.TestCase):
                     0,
                     f"Program labor costs should be positive for {scenario_id}",
                 )
+
+            capex_total = totals.get("capex_total", 0)
+            total_project_cost = totals.get("total_project_cost", 0)
+            ti_allowance = totals.get("ti_allowance", 0)
+            equity_required = totals.get("equity_required_at_close", 0)
+            loan_amount = totals.get("loan_amount", 0)
+            self.assertAlmostEqual(
+                total_project_cost,
+                max(capex_total - ti_allowance, 0),
+                places=6,
+                msg=f"Total project cost mismatch for {scenario_id}",
+            )
+            self.assertAlmostEqual(
+                total_project_cost,
+                equity_required + loan_amount,
+                places=6,
+                msg=f"Equity + loan mismatch for {scenario_id}",
+            )
+            self.assertGreaterEqual(
+                totals.get("total_cash_required_to_open", 0),
+                equity_required,
+                f"Total cash required should cover equity for {scenario_id}",
+            )
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
                 sales = late_incremental["sales_monthly"]
                 variable_costs = late_incremental.get("variable_costs_monthly", 0)
@@ -209,6 +238,23 @@ class ScenarioSmokeTests(unittest.TestCase):
             "marketing.monthly_budget",
             "maintenance.annual_budget_12_tables.total_high",
             "maintenance.annual_budget_24_tables.total_high",
+            "capex.scenario.S12.buildout",
+            "capex.scenario.S12.ffe",
+            "capex.scenario.S12.tables",
+            "capex.scenario.S12.soft_costs",
+            "capex.scenario.S12.contingency",
+            "capex.scenario.S12.working_capital",
+            "capex.scenario.S24.buildout",
+            "capex.scenario.S24.ffe",
+            "capex.scenario.S24.tables",
+            "capex.scenario.S24.soft_costs",
+            "capex.scenario.S24.contingency",
+            "capex.scenario.S24.working_capital",
+            "capex.ti_allowance",
+            "capex.lease_deposit_months",
+            "financing.interest_rate",
+            "financing.term_years",
+            "financing.down_payment_pct",
         ]
         for p in required_paths:
             v = get_path(a, p)
