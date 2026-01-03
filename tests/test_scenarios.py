@@ -59,6 +59,11 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "cash_gap_monthly",
                 "required_utilization_multiplier_for_cash_break_even",
                 "sales_gap_per_day_for_cash_break_even",
+                "bar_only_bar_sales_monthly",
+                "bar_only_food_sales_monthly",
+                "total_table_sales_monthly",
+                "total_bar_sales_monthly",
+                "total_food_sales_monthly",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
@@ -77,8 +82,27 @@ class ScenarioSmokeTests(unittest.TestCase):
                     "noi_monthly",
                     "cash_after_debt_monthly",
                     "break_even_sales_per_day",
+                    "bar_sales_monthly",
+                    "food_sales_monthly",
                 ):
                     self.assertIn(key, late_incremental, f"Missing late_incremental.{key} for {scenario_id}")
+            if "LOCKUP" in scenario_id:
+                self.assertIsNotNone(late_incremental, f"Missing late_incremental for {scenario_id}")
+                self.assertGreater(
+                    late_incremental.get("sales_monthly", 0), 0, f"No late sales for {scenario_id}"
+                )
+                self.assertAlmostEqual(
+                    late_incremental.get("bar_sales_monthly", 0),
+                    0,
+                    places=6,
+                    msg=f"Late bar sales should be zero for {scenario_id}",
+                )
+                self.assertAlmostEqual(
+                    late_incremental.get("food_sales_monthly", 0),
+                    0,
+                    places=6,
+                    msg=f"Late food sales should be zero for {scenario_id}",
+                )
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
                 sales = late_incremental["sales_monthly"]
                 variable_costs = late_incremental.get("variable_costs_monthly", 0)

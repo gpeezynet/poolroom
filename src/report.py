@@ -22,6 +22,7 @@ def _dscr(value: float | None) -> str:
 
 def render_report(result: Dict[str, Any]) -> str:
     totals = result["totals"]
+    drivers = result.get("revenue_drivers", {})
     lines = []
     lines.append(f"# ROI Report: {result['scenario_id']} - {result['scenario_name']}")
     lines.append("")
@@ -34,9 +35,25 @@ def render_report(result: Dict[str, Any]) -> str:
         f"- Rent/CAM: ${result['rent_per_sf']:.2f}/sf/yr, ${result['cam_per_sf']:.2f}/sf/yr"
     )
     lines.append(f"- Estimated guests per month: {result['total_guests']:.0f}")
+    lines.append(
+        "- Bar-only guests per day (weekday/weekend): "
+        f"{drivers.get('bar_only_weekday_guests_per_day', 0):.0f} / "
+        f"{drivers.get('bar_only_weekend_guests_per_day', 0):.0f}"
+    )
+    lines.append(
+        "- Bar-only spend + food attach: "
+        f"{_money(drivers.get('bar_only_bar_spend_per_guest'))} bar, "
+        f"{_pct(drivers.get('bar_only_food_attach_rate'))} @ "
+        f"{_money(drivers.get('bar_only_food_spend_per_guest'))} food"
+    )
+    if result.get("late_night"):
+        lines.append(
+            "- Late bar/food fractions: "
+            f"{result.get('late_bar_fraction', 1.0):.2f} / "
+            f"{result.get('late_food_fraction', 1.0):.2f}"
+        )
     lines.append("")
 
-    drivers = result.get("revenue_drivers", {})
     lines.append("## Revenue Drivers")
     lines.append(
         "- Table rates (offpeak/prime/late): "
@@ -72,9 +89,15 @@ def render_report(result: Dict[str, Any]) -> str:
 
     lines.append("## Monthly P&L")
     lines.append(f"- Table revenue: {_money(totals['table_revenue'])}")
-    lines.append(f"- Bar revenue: {_money(totals['bar_revenue'])}")
-    lines.append(f"- Food revenue: {_money(totals['food_revenue'])}")
-    lines.append(f"- Total revenue: {_money(totals['total_revenue'])}")
+    lines.append(f"- Bar revenue (table-driven): {_money(totals['bar_revenue'])}")
+    lines.append(f"- Food revenue (table-driven): {_money(totals['food_revenue'])}")
+    lines.append(
+        f"- Bar-only bar revenue: {_money(totals.get('bar_only_bar_sales_monthly'))}"
+    )
+    lines.append(
+        f"- Bar-only food revenue: {_money(totals.get('bar_only_food_sales_monthly'))}"
+    )
+    lines.append(f"- Total monthly sales: {_money(totals['total_revenue'])}")
     lines.append("")
     lines.append(f"- Bar COGS: {_money(totals['bar_cogs'])}")
     lines.append(f"- Food COGS: {_money(totals['food_cogs'])}")
@@ -206,6 +229,15 @@ def render_report(result: Dict[str, Any]) -> str:
         lines.append(
             f"- Incremental sales (monthly): {_money(late_incremental.get('sales_monthly'))}"
         )
+        if (
+            result.get("late_bar_fraction", 1.0) != 1.0
+            or result.get("late_food_fraction", 1.0) != 1.0
+        ):
+            lines.append(
+                "- Late bar/food fractions: "
+                f"{result.get('late_bar_fraction', 1.0):.2f} / "
+                f"{result.get('late_food_fraction', 1.0):.2f}"
+            )
         lines.append(
             "- Incremental variable costs (monthly): "
             f"{_money(late_incremental.get('variable_costs_monthly'))}"

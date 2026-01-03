@@ -66,6 +66,12 @@ def compute_scenario(
     weeks_per_month = float(modeling["weeks_per_month"])
     weekdays_per_week = float(modeling["weekdays_per_week"])
     weekend_days_per_week = float(modeling["weekend_days_per_week"])
+    weekdays_per_month = float(
+        modeling.get("weekdays_per_month", weeks_per_month * weekdays_per_week)
+    )
+    weekend_days_per_month = float(
+        modeling.get("weekend_days_per_month", weeks_per_month * weekend_days_per_week)
+    )
     labor_weeks_per_month = 4.333
 
     revenue = assumptions["revenue"]
@@ -103,6 +109,27 @@ def compute_scenario(
     avg_bar_spend = float(revenue["avg_bar_spend_per_guest"])
     food_attach_rate = float(revenue["food_attach_rate"])
     avg_food_spend = float(revenue["avg_food_spend_per_guest"])
+    bar_only = revenue.get("bar_only_guests", {})
+    bar_only_weekday_guests = _num(
+        bar_only.get("weekday_guests_per_day", 0),
+        "revenue.bar_only_guests.weekday_guests_per_day",
+    )
+    bar_only_weekend_guests = _num(
+        bar_only.get("weekend_guests_per_day", 0),
+        "revenue.bar_only_guests.weekend_guests_per_day",
+    )
+    bar_only_bar_spend = _num(
+        bar_only.get("bar_spend_per_guest", 0),
+        "revenue.bar_only_guests.bar_spend_per_guest",
+    )
+    bar_only_food_attach = _num(
+        bar_only.get("food_attach_rate", 0),
+        "revenue.bar_only_guests.food_attach_rate",
+    )
+    bar_only_food_spend = _num(
+        bar_only.get("food_spend_per_guest", 0),
+        "revenue.bar_only_guests.food_spend_per_guest",
+    )
 
     pricing_style = scenario.get(
         "pricing_style", modeling.get("table_pricing_style_default", "hourly")
@@ -168,10 +195,26 @@ def compute_scenario(
     bar_revenue = sum(p["bar_revenue"] for p in periods)
     food_revenue = sum(p["food_revenue"] for p in periods)
     total_guests = sum(p["metrics"]["guests"] for p in periods)
+    bar_only_guest_count = (
+        bar_only_weekday_guests * weekdays_per_month
+        + bar_only_weekend_guests * weekend_days_per_month
+    )
+    bar_only_bar_sales_monthly = bar_only_guest_count * bar_only_bar_spend
+    bar_only_food_sales_monthly = (
+        bar_only_guest_count * bar_only_food_attach * bar_only_food_spend
+    )
     base_table_hours_total = sum(p["metrics"]["table_hours"] for p in periods)
     total_available_table_hours = tables * open_hours_per_day * 30
 
     late_settings = assumptions.get("late_night", {})
+    late_bar_fraction = _num(
+        scenario.get("late_bar_fraction", late_settings.get("late_bar_fraction", 1.0)),
+        "late_night.late_bar_fraction",
+    )
+    late_food_fraction = _num(
+        scenario.get("late_food_fraction", late_settings.get("late_food_fraction", 1.0)),
+        "late_night.late_food_fraction",
+    )
     late_incremental_table_revenue = 0.0
     late_incremental_bar_revenue = 0.0
     late_incremental_food_revenue = 0.0
@@ -202,10 +245,18 @@ def compute_scenario(
         late_incremental_guests = late_incremental_table_hours * avg_guests_per_table_hour
         late_incremental_table_revenue = late_incremental_table_hours * table_rate_late
         late_incremental_bar_revenue = (
-            late_incremental_guests * bar_attach_rate * avg_bar_spend * spend_multiplier_late
+            late_incremental_guests
+            * bar_attach_rate
+            * avg_bar_spend
+            * spend_multiplier_late
+            * late_bar_fraction
         )
         late_incremental_food_revenue = (
-            late_incremental_guests * food_attach_rate * avg_food_spend * spend_multiplier_late
+            late_incremental_guests
+            * food_attach_rate
+            * avg_food_spend
+            * spend_multiplier_late
+            * late_food_fraction
         )
         late_incremental_sales_monthly = (
             late_incremental_table_revenue
@@ -217,11 +268,16 @@ def compute_scenario(
         food_revenue += late_incremental_food_revenue
         total_guests += late_incremental_guests
 
-    total_revenue = table_revenue + bar_revenue + food_revenue
+    total_table_sales_monthly = table_revenue
+    total_bar_sales_monthly = bar_revenue + bar_only_bar_sales_monthly
+    total_food_sales_monthly = food_revenue + bar_only_food_sales_monthly
+    total_revenue = (
+        total_table_sales_monthly + total_bar_sales_monthly + total_food_sales_monthly
+    )
 
     cogs = assumptions["cogs"]
-    bar_cogs = bar_revenue * float(cogs["bar_cogs_pct"]["blended_target"])
-    food_cogs = food_revenue * float(cogs["food_cogs_pct_placeholder"])
+    bar_cogs = total_bar_sales_monthly * float(cogs["bar_cogs_pct"]["blended_target"])
+    food_cogs = total_food_sales_monthly * float(cogs["food_cogs_pct_placeholder"])
 
     labor_pct = float(assumptions["labor"]["target_pct_of_sales"]["default"])
     labor = total_revenue * labor_pct
@@ -547,6 +603,9 @@ def compute_scenario(
             "cash_after_debt_monthly": late_incremental_cash_after_debt_monthly,
             "break_even_sales_per_day": late_break_even_incremental_sales_per_day,
             "incremental_debt_service_monthly": late_incremental_debt_service_monthly,
+            "table_sales_monthly": late_incremental_table_revenue,
+            "bar_sales_monthly": late_incremental_bar_revenue,
+            "food_sales_monthly": late_incremental_food_revenue,
         }
 
     late_incremental_variable_costs_monthly = None
@@ -594,6 +653,11 @@ def compute_scenario(
             "table_revenue": table_revenue,
             "bar_revenue": bar_revenue,
             "food_revenue": food_revenue,
+            "bar_only_bar_sales_monthly": bar_only_bar_sales_monthly,
+            "bar_only_food_sales_monthly": bar_only_food_sales_monthly,
+            "total_table_sales_monthly": total_table_sales_monthly,
+            "total_bar_sales_monthly": total_bar_sales_monthly,
+            "total_food_sales_monthly": total_food_sales_monthly,
             "total_revenue": total_revenue,
             "bar_cogs": bar_cogs,
             "food_cogs": food_cogs,
@@ -649,6 +713,8 @@ def compute_scenario(
         "loan_principal": loan_principal,
         "implied_equity": implied_equity,
         "late_night": late_night,
+        "late_bar_fraction": late_bar_fraction,
+        "late_food_fraction": late_food_fraction,
         "late_incremental": late_incremental,
         "startup_cost": startup_cost,
         "payback_years": payback_years,
@@ -677,6 +743,13 @@ def compute_scenario(
             "avg_food_spend_per_guest": avg_food_spend,
             "utilization_multiplier": utilization_multiplier,
             "spend_multiplier": spend_multiplier,
+            "bar_only_weekday_guests_per_day": bar_only_weekday_guests,
+            "bar_only_weekend_guests_per_day": bar_only_weekend_guests,
+            "bar_only_bar_spend_per_guest": bar_only_bar_spend,
+            "bar_only_food_attach_rate": bar_only_food_attach,
+            "bar_only_food_spend_per_guest": bar_only_food_spend,
+            "bar_only_weekdays_per_month": weekdays_per_month,
+            "bar_only_weekend_days_per_month": weekend_days_per_month,
         },
         "periods": periods,
         "warnings": warnings,

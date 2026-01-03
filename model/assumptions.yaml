@@ -42,6 +42,8 @@ late_night:
   extra_hours_per_week: 30
   utilization_multiplier_late: 0.70
   spend_multiplier_late: 1.10
+  late_bar_fraction: 1.0
+  late_food_fraction: 1.0
   extra_security_hours_per_week: 30
   extra_floor_hours_per_week: 20
   extra_bartender_hours_per_week: 20
@@ -145,6 +147,12 @@ revenue:
   food_attach_rate: 0.35
   avg_food_spend_per_guest: 10
   avg_guests_per_table_hour: 3.0
+  bar_only_guests:
+    weekday_guests_per_day: 25
+    weekend_guests_per_day: 60
+    bar_spend_per_guest: 18
+    food_attach_rate: 0.25
+    food_spend_per_guest: 10
   ramp_months:
     - { month: 1, factor: 0.35 }
     - { month: 3, factor: 0.60 }
@@ -413,6 +421,8 @@ modeling:
   weeks_per_month: 4.33
   weekdays_per_week: 4
   weekend_days_per_week: 3
+  weekdays_per_month: 22
+  weekend_days_per_month: 8
   food_revenue_pct_of_bar_placeholder: 0.15
   other_opex_per_month_placeholder: 1200
   table_pricing_style_default: "hourly"

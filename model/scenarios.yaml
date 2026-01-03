@@ -266,3 +266,91 @@ scenarios:
     cam_tier: "mid"
     utilization_multiplier: 1.15
     spend_multiplier: 1.10
+
+  S12_BASE_LATE_LOCKUP:
+    name: "12-table base late-night lockup"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    late_night: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    late_bar_fraction: 0.0
+    late_food_fraction: 0.0
+
+  S12_UPSIDE_LATE_LOCKUP:
+    name: "12-table upside late-night lockup"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    late_night: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.15
+    spend_multiplier: 1.10
+    late_bar_fraction: 0.0
+    late_food_fraction: 0.0
+
+  S24_BASE_LATE_LOCKUP:
+    name: "24-table base late-night lockup"
+    tables: 24
+    size_sf:
+      low: 12000
+      high: 20000
+      default: 15000
+    pricing_style: "hourly"
+    late_night_mode: true
+    late_night: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 670000
+      likely: 1190000
+      high: 1920000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    late_bar_fraction: 0.0
+    late_food_fraction: 0.0
+
+  S24_UPSIDE_LATE_LOCKUP:
+    name: "24-table upside late-night lockup"
+    tables: 24
+    size_sf:
+      low: 12000
+      high: 20000
+      default: 15000
+    pricing_style: "hourly"
+    late_night_mode: true
+    late_night: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 670000
+      likely: 1190000
+      high: 1920000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.15
+    spend_multiplier: 1.10
+    late_bar_fraction: 0.0
+    late_food_fraction: 0.0

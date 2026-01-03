@@ -24,6 +24,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "is_late",
         "utilization_multiplier",
         "spend_multiplier",
+        "late_bar_fraction",
+        "late_food_fraction",
         "monthly_sales",
         "monthly_fixed_costs",
         "monthly_noi",
@@ -34,6 +36,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "cash_gap_monthly",
         "required_utilization_multiplier_for_cash_break_even",
         "sales_gap_per_day_for_cash_break_even",
+        "bar_only_bar_sales_monthly",
+        "bar_only_food_sales_monthly",
         "late_incremental_noi",
         "late_incremental_cash_after_debt",
     ]
@@ -55,6 +59,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             "is_late": bool(result.get("late_night")),
             "utilization_multiplier": drivers.get("utilization_multiplier"),
             "spend_multiplier": drivers.get("spend_multiplier"),
+            "late_bar_fraction": result.get("late_bar_fraction"),
+            "late_food_fraction": result.get("late_food_fraction"),
             "monthly_sales": totals.get("total_revenue"),
             "monthly_fixed_costs": totals.get("monthly_fixed_costs"),
             "monthly_noi": totals.get("noi"),
@@ -69,6 +75,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             "sales_gap_per_day_for_cash_break_even": totals.get(
                 "sales_gap_per_day_for_cash_break_even"
             ),
+            "bar_only_bar_sales_monthly": totals.get("bar_only_bar_sales_monthly"),
+            "bar_only_food_sales_monthly": totals.get("bar_only_food_sales_monthly"),
             "late_incremental_noi": late_incremental.get("noi_monthly"),
             "late_incremental_cash_after_debt": late_incremental.get(
                 "cash_after_debt_monthly"

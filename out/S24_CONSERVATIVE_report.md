@@ -6,6 +6,8 @@
 - Pricing style: hourly
 - Rent/CAM: $18.00/sf/yr, $4.00/sf/yr
 - Estimated guests per month: 6734
+- Bar-only guests per day (weekday/weekend): 25 / 60
+- Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
@@ -17,13 +19,15 @@
 
 ## Monthly P&L
 - Table revenue: $36,247
-- Bar revenue: $76,364
-- Food revenue: $21,212
-- Total revenue: $133,823
+- Bar revenue (table-driven): $76,364
+- Food revenue (table-driven): $21,212
+- Bar-only bar revenue: $23,929
+- Bar-only food revenue: $3,324
+- Total monthly sales: $161,076
 
-- Bar COGS: $15,273
-- Food COGS: $6,364
-- Labor: $29,441
+- Bar COGS: $20,059
+- Food COGS: $7,361
+- Labor: $35,437
 - Rent: $24,000
 - CAM: $5,333
 - Property tax/insurance (NNN): $2,667
@@ -31,7 +35,7 @@
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
-- Payment processing: $3,372
+- Payment processing: $4,059
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -40,10 +44,10 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $185,429
+- Total expenses: $197,895
 
-- Monthly net: $-51,606
-- Annual net: $-619,273
+- Monthly net: $-36,819
+- Annual net: $-441,824
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $32,000
@@ -71,25 +75,25 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $-51,606
-- Cash flow after debt: $-60,932
+- NOI (monthly): $-36,819
+- Cash flow after debt: $-46,144
 - DSCR: 0.00x (0.0%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-60,932 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.77x
-- Required additional sales (per day): $3,424
-- Notes: Required utilization > 1.50 (very aggressive)
+- Cash gap (monthly): $-46,144 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.49x
+- Required additional sales (per day): $2,631
+- Notes: Required utilization > 1.25 (aggressive)
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $-52,994 |
-| Utilization -10% | $-68,869 |
-| Spend +10% | $-55,144 |
-| Spend -10% | $-66,719 |
-| Fixed costs +10% | $-74,030 |
-| Fixed costs -10% | $-47,834 |
+| Utilization +10% | $-36,728 |
+| Utilization -10% | $-55,560 |
+| Spend +10% | $-40,440 |
+| Spend -10% | $-51,848 |
+| Fixed costs +10% | $-59,242 |
+| Fixed costs -10% | $-33,046 |
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
@@ -97,10 +101,10 @@
 
 ## Break-even Snapshots
 - Monthly fixed costs: $130,979
-- Gross margin (after variable costs): 59.3%
-- Break-even sales (monthly): $220,831
-- Break-even sales (per day, operating): $7,361
-- Break-even sales (per day, after debt): $7,885
+- Gross margin (after variable costs): 58.5%
+- Break-even sales (monthly): $224,060
+- Break-even sales (per day, operating): $7,469
+- Break-even sales (per day, after debt): $8,000
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.
