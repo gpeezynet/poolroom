@@ -24,6 +24,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "is_late",
         "utilization_multiplier",
         "spend_multiplier",
+        "program_uplift_utilization_multiplier",
+        "program_uplift_spend_multiplier",
         "late_bar_fraction",
         "late_food_fraction",
         "monthly_sales",
@@ -38,6 +40,8 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "sales_gap_per_day_for_cash_break_even",
         "bar_only_bar_sales_monthly",
         "bar_only_food_sales_monthly",
+        "program_incremental_table_hours_sold_monthly",
+        "program_incremental_bar_only_guests_monthly",
         "program_total_revenue_monthly",
         "program_total_contribution_monthly",
         "late_incremental_noi",
@@ -61,6 +65,12 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             "is_late": bool(result.get("late_night")),
             "utilization_multiplier": drivers.get("utilization_multiplier"),
             "spend_multiplier": drivers.get("spend_multiplier"),
+            "program_uplift_utilization_multiplier": totals.get(
+                "program_uplift_utilization_multiplier"
+            ),
+            "program_uplift_spend_multiplier": totals.get(
+                "program_uplift_spend_multiplier"
+            ),
             "late_bar_fraction": result.get("late_bar_fraction"),
             "late_food_fraction": result.get("late_food_fraction"),
             "monthly_sales": totals.get("total_revenue"),
@@ -79,6 +89,12 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             ),
             "bar_only_bar_sales_monthly": totals.get("bar_only_bar_sales_monthly"),
             "bar_only_food_sales_monthly": totals.get("bar_only_food_sales_monthly"),
+            "program_incremental_table_hours_sold_monthly": totals.get(
+                "program_incremental_table_hours_sold_monthly"
+            ),
+            "program_incremental_bar_only_guests_monthly": totals.get(
+                "program_incremental_bar_only_guests_monthly"
+            ),
             "program_total_revenue_monthly": totals.get("program_total_revenue_monthly"),
             "program_total_contribution_monthly": totals.get(
                 "program_total_contribution_monthly"

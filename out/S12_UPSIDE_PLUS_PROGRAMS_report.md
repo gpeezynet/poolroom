@@ -61,6 +61,12 @@
 - Total programs contribution: $5,980
 - Membership discount leakage (not applied): $1,500
 
+## Programs Impact
+- Program-driven table hours (monthly): 0.0
+- Program-driven bar-only guests (monthly): 0
+- Membership utilization uplift: 0.0%
+- Membership spend uplift: 0.0%
+
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
 - Utilities total: $3,400

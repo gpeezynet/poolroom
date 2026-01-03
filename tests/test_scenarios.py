@@ -69,6 +69,10 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "program_event_revenue_monthly",
                 "program_total_revenue_monthly",
                 "program_total_contribution_monthly",
+                "program_uplift_utilization_multiplier",
+                "program_uplift_spend_multiplier",
+                "program_incremental_bar_only_guests_monthly",
+                "program_incremental_table_hours_sold_monthly",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
@@ -76,6 +80,19 @@ class ScenarioSmokeTests(unittest.TestCase):
             self.assertIsInstance(dscr, (int, float), f"DSCR is not numeric for {scenario_id}")
             self.assertGreaterEqual(dscr, 0, f"DSCR is negative for {scenario_id}")
             self.assertLessEqual(dscr, 20, f"DSCR is unusually high for {scenario_id}")
+            drivers = data.get("revenue_drivers", {})
+            open_hours = drivers.get("open_hours_per_day_modeled")
+            periods = data.get("periods", [])
+            if open_hours is not None and periods:
+                total_table_hours = sum(
+                    p.get("metrics", {}).get("table_hours", 0) for p in periods
+                )
+                max_table_hours = data.get("tables", 0) * open_hours * 30
+                self.assertLessEqual(
+                    total_table_hours,
+                    max_table_hours + 1e-6,
+                    f"Table hours exceed cap for {scenario_id}",
+                )
             late_incremental = data.get("late_incremental")
             if "LATE" in scenario_id:
                 self.assertIsNotNone(late_incremental, f"Missing late_incremental for {scenario_id}")
@@ -91,7 +108,6 @@ class ScenarioSmokeTests(unittest.TestCase):
                     "food_sales_monthly",
                 ):
                     self.assertIn(key, late_incremental, f"Missing late_incremental.{key} for {scenario_id}")
-                drivers = data.get("revenue_drivers", {})
                 legal_max = drivers.get("legal_max_open_hours_per_day")
                 modeled_open = drivers.get("open_hours_per_day_modeled")
                 self.assertIsNotNone(legal_max, f"Missing legal_max_open_hours_per_day for {scenario_id}")
@@ -134,6 +150,12 @@ class ScenarioSmokeTests(unittest.TestCase):
                     totals.get("program_total_revenue_monthly", 0),
                     0,
                     f"Programs should be active for {scenario_id}",
+                )
+            if "PLUS_PROGRAMS2" in scenario_id:
+                self.assertTrue(
+                    totals.get("program_incremental_table_hours_sold_monthly", 0) > 0
+                    or totals.get("program_incremental_bar_only_guests_monthly", 0) > 0,
+                    f"Program drivers should add demand for {scenario_id}",
                 )
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
                 sales = late_incremental["sales_monthly"]

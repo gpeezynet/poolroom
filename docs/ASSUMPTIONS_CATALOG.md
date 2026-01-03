@@ -47,6 +47,14 @@ Internal defaults pending vendor quotes.
 | revenue.programs.events.avg_event_revenue | 900 | internal_default | Pending vendor quotes. |
 | revenue.programs.events.variable_cost_pct | 0.15 | internal_default | Pending vendor quotes. |
 | revenue.programs.events.net_margin_pct | 0.85 | internal_default | Pending vendor quotes. |
+| program_drivers.leagues.league_nights_per_week | 3 | internal_default | Pending vendor quotes. |
+| program_drivers.leagues.extra_table_hours_per_table_per_league_night | 0.75 | internal_default | Pending vendor quotes. |
+| program_drivers.leagues.extra_bar_only_guests_per_league_night | 20 | internal_default | Pending vendor quotes. |
+| program_drivers.events.events_per_month | 4 | internal_default | Pending vendor quotes. |
+| program_drivers.events.extra_bar_only_guests_per_event | 80 | internal_default | Pending vendor quotes. |
+| program_drivers.events.extra_table_hours_per_table_per_event_day | 0.40 | internal_default | Pending vendor quotes. |
+| program_drivers.memberships.retention_utilization_uplift | 0.05 | internal_default | Pending vendor quotes. |
+| program_drivers.memberships.spend_uplift | 0.03 | internal_default | Pending vendor quotes. |
 | modeling.weekdays_per_month | 22 | internal_default | Pending vendor quotes. |
 | modeling.weekend_days_per_month | 8 | internal_default | Pending vendor quotes. |
 | late_night.extra_hours_per_week | 30 | internal_default | Pending vendor quotes. |

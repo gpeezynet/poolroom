@@ -173,8 +173,27 @@ def compute_scenario(
     wristband_price = float(table_pricing.get("per_person_wristband_high", 6))
     wristband_count_method = modeling.get("wristband_count_method", "core_only")
 
+    programs = revenue.get("programs", {})
+    programs_enabled = bool(scenario.get("programs_enabled", False))
+    programs_driver_mode = bool(scenario.get("programs_driver_mode", False))
+    program_drivers = assumptions.get("program_drivers", {})
+    program_uplift_utilization_multiplier = 0.0
+    program_uplift_spend_multiplier = 0.0
+
     utilization_multiplier = float(scenario.get("utilization_multiplier", 1.0))
     spend_multiplier = float(scenario.get("spend_multiplier", 1.0))
+    if programs_enabled and programs_driver_mode:
+        membership_drivers = program_drivers.get("memberships", {})
+        program_uplift_utilization_multiplier = _num(
+            membership_drivers.get("retention_utilization_uplift", 0),
+            "program_drivers.memberships.retention_utilization_uplift",
+        )
+        program_uplift_spend_multiplier = _num(
+            membership_drivers.get("spend_uplift", 0),
+            "program_drivers.memberships.spend_uplift",
+        )
+        utilization_multiplier *= 1 + program_uplift_utilization_multiplier
+        spend_multiplier *= 1 + program_uplift_spend_multiplier
     avg_bar_spend *= spend_multiplier
     avg_food_spend *= spend_multiplier
 
@@ -226,6 +245,88 @@ def compute_scenario(
                 }
             )
 
+    program_incremental_table_hours_sold_monthly = 0.0
+    program_incremental_bar_only_guests_monthly = 0.0
+    if programs_enabled and programs_driver_mode:
+        leagues_drivers = program_drivers.get("leagues", {})
+        league_nights_per_week = _num(
+            leagues_drivers.get("league_nights_per_week", 0),
+            "program_drivers.leagues.league_nights_per_week",
+        )
+        extra_table_hours_per_table_per_league_night = _num(
+            leagues_drivers.get("extra_table_hours_per_table_per_league_night", 0),
+            "program_drivers.leagues.extra_table_hours_per_table_per_league_night",
+        )
+        extra_bar_only_guests_per_league_night = _num(
+            leagues_drivers.get("extra_bar_only_guests_per_league_night", 0),
+            "program_drivers.leagues.extra_bar_only_guests_per_league_night",
+        )
+        events_drivers = program_drivers.get("events", {})
+        events_driver_per_month = _num(
+            events_drivers.get("events_per_month", 0),
+            "program_drivers.events.events_per_month",
+        )
+        extra_bar_only_guests_per_event = _num(
+            events_drivers.get("extra_bar_only_guests_per_event", 0),
+            "program_drivers.events.extra_bar_only_guests_per_event",
+        )
+        extra_table_hours_per_table_per_event_day = _num(
+            events_drivers.get("extra_table_hours_per_table_per_event_day", 0),
+            "program_drivers.events.extra_table_hours_per_table_per_event_day",
+        )
+
+        league_nights_per_month = league_nights_per_week * 4.33
+        requested_incremental_table_hours = tables * (
+            league_nights_per_month * extra_table_hours_per_table_per_league_night
+            + events_driver_per_month * extra_table_hours_per_table_per_event_day
+        )
+        program_incremental_bar_only_guests_monthly = (
+            league_nights_per_month * extra_bar_only_guests_per_league_night
+            + events_driver_per_month * extra_bar_only_guests_per_event
+        )
+
+        weekday_core_period = None
+        for period in periods:
+            if period["day_type"] == "weekday" and period["period"] == "core":
+                weekday_core_period = period
+                break
+        if weekday_core_period and requested_incremental_table_hours > 0:
+            cap_days = 0.0
+            if modeled_days_per_month > 0:
+                cap_days = 30.0 * (weekday_days_per_month / modeled_days_per_month)
+            max_table_hours_weekday_core = (
+                tables * open_hours_per_day * cap_days * core_share
+            )
+            available_hours = max(
+                max_table_hours_weekday_core - weekday_core_period["metrics"]["table_hours"],
+                0.0,
+            )
+            program_incremental_table_hours_sold_monthly = min(
+                requested_incremental_table_hours, available_hours
+            )
+            if program_incremental_table_hours_sold_monthly > 0:
+                added_guests = (
+                    program_incremental_table_hours_sold_monthly
+                    * avg_guests_per_table_hour
+                )
+                weekday_core_period["metrics"]["table_hours"] += (
+                    program_incremental_table_hours_sold_monthly
+                )
+                weekday_core_period["metrics"]["guests"] += added_guests
+                if pricing_style == "hourly":
+                    added_table_revenue = (
+                        program_incremental_table_hours_sold_monthly * table_rate_offpeak
+                    )
+                else:
+                    added_table_revenue = added_guests * wristband_price
+                weekday_core_period["table_revenue"] += added_table_revenue
+                weekday_core_period["bar_revenue"] += (
+                    added_guests * bar_attach_rate * avg_bar_spend
+                )
+                weekday_core_period["food_revenue"] += (
+                    added_guests * food_attach_rate * avg_food_spend
+                )
+
     table_revenue = sum(p["table_revenue"] for p in periods)
     bar_revenue = sum(p["bar_revenue"] for p in periods)
     food_revenue = sum(p["food_revenue"] for p in periods)
@@ -233,13 +334,12 @@ def compute_scenario(
     bar_only_guest_count = (
         bar_only_weekday_guests * bar_only_weekdays_per_month
         + bar_only_weekend_guests * bar_only_weekend_days_per_month
+        + program_incremental_bar_only_guests_monthly
     )
     bar_only_bar_sales_monthly = bar_only_guest_count * bar_only_bar_spend
     bar_only_food_sales_monthly = (
         bar_only_guest_count * bar_only_food_attach * bar_only_food_spend
     )
-    programs = revenue.get("programs", {})
-    programs_enabled = bool(scenario.get("programs_enabled", False))
     program_membership_revenue_monthly = 0.0
     program_membership_contribution_monthly = 0.0
     program_membership_discount_leakage_monthly = 0.0
@@ -807,6 +907,10 @@ def compute_scenario(
             "program_event_contribution_monthly": program_event_contribution_monthly,
             "program_total_revenue_monthly": program_total_revenue_monthly,
             "program_total_contribution_monthly": program_total_contribution_monthly,
+            "program_uplift_utilization_multiplier": program_uplift_utilization_multiplier,
+            "program_uplift_spend_multiplier": program_uplift_spend_multiplier,
+            "program_incremental_bar_only_guests_monthly": program_incremental_bar_only_guests_monthly,
+            "program_incremental_table_hours_sold_monthly": program_incremental_table_hours_sold_monthly,
             "total_revenue": total_revenue,
             "bar_cogs": bar_cogs,
             "food_cogs": food_cogs,
@@ -906,6 +1010,7 @@ def compute_scenario(
             "late_extra_hours_per_week_capped": extra_hours_per_week_capped,
             "legal_hours_enforced": legal_hours_enforced,
             "programs_enabled": programs_enabled,
+            "programs_driver_mode": programs_driver_mode,
             "program_membership_active_members": programs.get("memberships", {}).get("active_members", 0),
             "program_membership_monthly_fee": programs.get("memberships", {}).get("monthly_fee", 0),
             "program_membership_discount_leakage_pct": programs.get("memberships", {}).get("discount_leakage_pct", 0),
@@ -918,6 +1023,10 @@ def compute_scenario(
             "program_event_variable_cost_pct": programs.get("events", {}).get("variable_cost_pct", 0),
             "program_event_net_margin_pct": programs.get("events", {}).get("net_margin_pct", 0),
             "program_membership_discount_leakage_monthly": program_membership_discount_leakage_monthly,
+            "program_uplift_utilization_multiplier": program_uplift_utilization_multiplier,
+            "program_uplift_spend_multiplier": program_uplift_spend_multiplier,
+            "program_incremental_bar_only_guests_monthly": program_incremental_bar_only_guests_monthly,
+            "program_incremental_table_hours_sold_monthly": program_incremental_table_hours_sold_monthly,
         },
         "periods": periods,
         "warnings": warnings,

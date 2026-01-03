@@ -173,6 +173,25 @@ def render_report(result: Dict[str, Any]) -> str:
         )
     lines.append("")
 
+    lines.append("## Programs Impact")
+    lines.append(
+        "- Program-driven table hours (monthly): "
+        f"{totals.get('program_incremental_table_hours_sold_monthly', 0):.1f}"
+    )
+    lines.append(
+        "- Program-driven bar-only guests (monthly): "
+        f"{totals.get('program_incremental_bar_only_guests_monthly', 0):.0f}"
+    )
+    lines.append(
+        "- Membership utilization uplift: "
+        f"{_pct(drivers.get('program_uplift_utilization_multiplier', 0))}"
+    )
+    lines.append(
+        "- Membership spend uplift: "
+        f"{_pct(drivers.get('program_uplift_spend_multiplier', 0))}"
+    )
+    lines.append("")
+
     lines.append("## Fixed Cost Breakdown")
     lines.append(f"- Occupancy (rent/CAM/NNN): {_money(totals.get('occupancy_cost_monthly'))}")
     lines.append(f"- Utilities total: {_money(totals.get('utilities_cost_monthly'))}")

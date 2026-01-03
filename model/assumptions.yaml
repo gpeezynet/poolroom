@@ -218,6 +218,19 @@ revenue:
     month_9: 0.90
     month_12: 1.00
 
+program_drivers:
+  leagues:
+    league_nights_per_week: 3
+    extra_table_hours_per_table_per_league_night: 0.75
+    extra_bar_only_guests_per_league_night: 20
+  events:
+    events_per_month: 4
+    extra_bar_only_guests_per_event: 80
+    extra_table_hours_per_table_per_event_day: 0.40
+  memberships:
+    retention_utilization_uplift: 0.05
+    spend_uplift: 0.03
+
 hours:
   standard_open_hours_per_day: 14
   late_extra_hours_per_day: 6
