@@ -12,7 +12,7 @@ from .report import render_report
 
 
 def load_yaml(path: Path) -> Dict[str, Any]:
-    with path.open("r", encoding="utf-8") as handle:
+    with path.open("r", encoding="utf-8-sig") as handle:
         return yaml.safe_load(handle)
 
 
