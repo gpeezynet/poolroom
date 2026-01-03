@@ -76,6 +76,7 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Labor: {_money(totals['labor'])}")
     lines.append(f"- Rent: {_money(totals['rent'])}")
     lines.append(f"- CAM: {_money(totals['cam'])}")
+    lines.append(f"- Property tax/insurance (NNN): {_money(totals.get('property_tax_insurance'))}")
     lines.append(f"- Utilities: {_money(totals['utilities'])}")
     lines.append(f"- Insurance: {_money(totals['insurance'])}")
     lines.append(f"- Security: {_money(totals['security'])}")
@@ -95,6 +96,38 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Annual net: {_money(totals['annual_net'])}")
     lines.append("")
 
+    lines.append("## Fixed Cost Breakdown")
+    lines.append(f"- Occupancy (rent/CAM/NNN): {_money(totals.get('occupancy_cost_monthly'))}")
+    lines.append(f"- Utilities total: {_money(totals.get('utilities_cost_monthly'))}")
+    lines.append(f"- Insurance: {_money(totals.get('insurance'))}")
+    lines.append("- Labor: variable (not included in fixed costs)")
+    lines.append(f"- Marketing: {_money(totals.get('marketing'))}")
+    lines.append(f"- Music licensing: {_money(totals.get('music_licensing'))}")
+    lines.append(f"- Security monitoring: {_money(totals.get('security'))}")
+    lines.append(f"- POS software: {_money(totals.get('pos_software'))}")
+    lines.append(f"- HVAC service: {_money(totals.get('hvac_service'))}")
+    lines.append(f"- HVAC filters: {_money(totals.get('hvac_filters'))}")
+    lines.append(f"- HVAC reserve: {_money(totals.get('hvac_reserve'))}")
+    lines.append(f"- Maintenance reserve: {_money(totals.get('maintenance_reserve'))}")
+    lines.append(f"- Licenses & fees: {_money(totals.get('licenses_fees'))}")
+    lines.append(f"- Other opex (misc): {_money(totals.get('other_opex'))}")
+    lines.append(f"- Fixed costs total: {_money(totals.get('monthly_fixed_costs'))}")
+    lines.append("")
+
+    lines.append("## CAPEX & Financing")
+    lines.append(f"- Total capex: {_money(result.get('total_capex'))}")
+    lines.append(f"- Down payment (assumed): {_money(result.get('down_payment_amount'))}")
+    lines.append(f"- Loan amount (assumed): {_money(result.get('loan_principal'))}")
+    lines.append(f"- Implied equity: {_money(result.get('implied_equity'))}")
+    lines.append("")
+
+    lines.append("## Debt & Coverage")
+    lines.append(f"- Monthly debt service: {_money(totals.get('monthly_debt_service'))}")
+    lines.append(f"- NOI (monthly): {_money(totals.get('noi'))}")
+    lines.append(f"- Cash flow after debt: {_money(totals.get('cash_flow_after_debt'))}")
+    lines.append(f"- DSCR: {_pct(totals.get('dscr'))}")
+    lines.append("")
+
     lines.append("## ROI Metrics")
     lines.append(f"- Startup cost (likely): {_money(result['startup_cost'])}")
     lines.append(f"- Payback period: {result['payback_years']:.2f} years" if result["payback_years"] is not None else "- Payback period: n/a")
@@ -102,13 +135,16 @@ def render_report(result: Dict[str, Any]) -> str:
 
     breakeven_monthly = totals.get("breakeven_revenue")
     breakeven_daily = breakeven_monthly / 30 if breakeven_monthly is not None else None
+    breakeven_after_debt = totals.get("breakeven_revenue_after_debt")
+    breakeven_after_debt_daily = breakeven_after_debt / 30 if breakeven_after_debt is not None else None
     lines.append("## Break-even Snapshots")
     lines.append(f"- Monthly fixed costs: {_money(totals.get('fixed_costs'))}")
     lines.append(
         f"- Gross margin (after variable costs): {_pct(totals.get('gross_margin_pct'))}"
     )
     lines.append(f"- Break-even sales (monthly): {_money(breakeven_monthly)}")
-    lines.append(f"- Break-even sales (per day): {_money(breakeven_daily)}")
+    lines.append(f"- Break-even sales (per day, operating): {_money(breakeven_daily)}")
+    lines.append(f"- Break-even sales (per day, after debt): {_money(breakeven_after_debt_daily)}")
     lines.append("")
 
     lines.append("## Compliance Warnings")

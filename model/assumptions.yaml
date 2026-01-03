@@ -7,6 +7,37 @@ meta:
     - docs/DR-05_unit_econ.md
   notes: "Defaults derived from research docs; any placeholder fields are labeled explicitly."
 
+site:
+  s12_sqft: 9000
+  s24_sqft: 16000
+  rent_per_sqft_nnn_year: 18.0
+  cam_per_sqft_year: 4.0
+  property_tax_insurance_per_sqft_year: 2.0
+  lease_type: "NNN"
+
+utilities:
+  electric_per_month_s12: 2500
+  electric_per_month_s24: 4200
+  gas_per_month_s12: 300
+  gas_per_month_s24: 500
+  water_sewer_per_month_s12: 350
+  water_sewer_per_month_s24: 600
+  trash_per_month_s12: 250
+  trash_per_month_s24: 400
+
+capex:
+  s12_buildout: 250000
+  s24_buildout: 400000
+  s12_tables_and_lights: 90000
+  s24_tables_and_lights: 180000
+  s12_bar_and_ff_e: 65000
+  s24_bar_and_ff_e: 90000
+  s12_kitchen_lite: 15000
+  s24_kitchen_lite: 25000
+  s12_soft_cost_pct: 0.10
+  s24_soft_cost_pct: 0.10
+  opening_working_capital: 60000
+
 facility:
   rent_per_sf_yr:
     low: 12

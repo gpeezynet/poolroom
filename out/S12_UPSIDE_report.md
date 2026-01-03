@@ -4,7 +4,7 @@
 - Tables: 12
 - Size: 8000 sf
 - Pricing style: hourly
-- Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
+- Rent/CAM: $18.00/sf/yr, $4.00/sf/yr
 - Estimated guests per month: 4840
 
 ## Revenue Drivers
@@ -24,9 +24,10 @@
 - Bar COGS: $13,417
 - Food COGS: $5,590
 - Labor: $24,589
-- Rent: $12,333
-- CAM: $2,333
-- Utilities: $2,500
+- Rent: $13,500
+- CAM: $3,000
+- Property tax/insurance (NNN): $1,500
+- Utilities: $3,400
 - Insurance: $500
 - Security: $1,732
 - POS software: $180
@@ -39,20 +40,50 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $69,317
+- Total expenses: $73,551
 
-- Monthly net: $42,453
-- Annual net: $509,439
+- Monthly net: $38,220
+- Annual net: $458,639
+
+## Fixed Cost Breakdown
+- Occupancy (rent/CAM/NNN): $18,000
+- Utilities total: $3,400
+- Insurance: $500
+- Labor: variable (not included in fixed costs)
+- Marketing: $750
+- Music licensing: $204
+- Security monitoring: $1,732
+- POS software: $180
+- HVAC service: $100
+- HVAC filters: $100
+- HVAC reserve: $167
+- Maintenance reserve: $708
+- Licenses & fees: $96
+- Other opex (misc): $1,200
+- Fixed costs total: $27,137
+
+## CAPEX & Financing
+- Total capex: $522,000
+- Down payment (assumed): $104,400
+- Loan amount (assumed): $650,000
+- Implied equity: $-128,000
+
+## Debt & Coverage
+- Monthly debt service: $9,326
+- NOI (monthly): $38,220
+- Cash flow after debt: $28,894
+- DSCR: 409.8%
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 1.22 years
+- Payback period: 1.35 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $22,904
+- Monthly fixed costs: $27,137
 - Gross margin (after variable costs): 58.5%
-- Break-even sales (monthly): $39,169
-- Break-even sales (per day): $1,306
+- Break-even sales (monthly): $46,409
+- Break-even sales (per day, operating): $1,547
+- Break-even sales (per day, after debt): $2,079
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

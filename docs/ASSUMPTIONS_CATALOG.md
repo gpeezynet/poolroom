@@ -4,6 +4,31 @@ Internal defaults pending vendor quotes.
 
 | Assumption Key | Value | Status | Notes |
 | --- | --- | --- | --- |
+| site.s12_sqft | 9000 | internal_default | Pending vendor quotes. |
+| site.s24_sqft | 16000 | internal_default | Pending vendor quotes. |
+| site.rent_per_sqft_nnn_year | 18.0 | internal_default | Pending vendor quotes. |
+| site.cam_per_sqft_year | 4.0 | internal_default | Pending vendor quotes. |
+| site.property_tax_insurance_per_sqft_year | 2.0 | internal_default | Pending vendor quotes. |
+| site.lease_type | NNN | internal_default | Pending vendor quotes. |
+| utilities.electric_per_month_s12 | 2500 | internal_default | Pending vendor quotes. |
+| utilities.electric_per_month_s24 | 4200 | internal_default | Pending vendor quotes. |
+| utilities.gas_per_month_s12 | 300 | internal_default | Pending vendor quotes. |
+| utilities.gas_per_month_s24 | 500 | internal_default | Pending vendor quotes. |
+| utilities.water_sewer_per_month_s12 | 350 | internal_default | Pending vendor quotes. |
+| utilities.water_sewer_per_month_s24 | 600 | internal_default | Pending vendor quotes. |
+| utilities.trash_per_month_s12 | 250 | internal_default | Pending vendor quotes. |
+| utilities.trash_per_month_s24 | 400 | internal_default | Pending vendor quotes. |
+| capex.s12_buildout | 250000 | internal_default | Pending vendor quotes. |
+| capex.s24_buildout | 400000 | internal_default | Pending vendor quotes. |
+| capex.s12_tables_and_lights | 90000 | internal_default | Pending vendor quotes. |
+| capex.s24_tables_and_lights | 180000 | internal_default | Pending vendor quotes. |
+| capex.s12_bar_and_ff_e | 65000 | internal_default | Pending vendor quotes. |
+| capex.s24_bar_and_ff_e | 90000 | internal_default | Pending vendor quotes. |
+| capex.s12_kitchen_lite | 15000 | internal_default | Pending vendor quotes. |
+| capex.s24_kitchen_lite | 25000 | internal_default | Pending vendor quotes. |
+| capex.s12_soft_cost_pct | 0.10 | internal_default | Pending vendor quotes. |
+| capex.s24_soft_cost_pct | 0.10 | internal_default | Pending vendor quotes. |
+| capex.opening_working_capital | 60000 | internal_default | Pending vendor quotes. |
 | revenue.table_hourly_rate_offpeak | 12 | internal_default | Pending vendor quotes. |
 | revenue.table_hourly_rate_prime | 16 | internal_default | Pending vendor quotes. |
 | revenue.table_hourly_rate_late | 20 | internal_default | Pending vendor quotes. |

@@ -48,6 +48,16 @@ class ScenarioSmokeTests(unittest.TestCase):
             self.assertTrue(report.read_text(encoding="utf-8").strip())
             data = json.loads(summary.read_text(encoding="utf-8"))
             self.assertEqual(data.get("scenario_id"), scenario_id)
+            totals = data.get("totals", {})
+            for key in (
+                "monthly_fixed_costs",
+                "occupancy_cost_monthly",
+                "utilities_cost_monthly",
+                "monthly_debt_service",
+                "dscr",
+            ):
+                self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
+            self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
 
     def test_required_assumptions_are_not_placeholders(self):
         a = load_assumptions()
