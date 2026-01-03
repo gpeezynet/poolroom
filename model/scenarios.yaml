@@ -1,4 +1,4 @@
-﻿scenarios:
+scenarios:
   S12:
     name: "12-table opening model"
     tables: 12
