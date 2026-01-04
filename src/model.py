@@ -344,37 +344,87 @@ def compute_scenario(
     bar_only_food_sales_monthly = (
         bar_only_guest_count * bar_only_food_attach * bar_only_food_spend
     )
+    top_memberships = assumptions.get("memberships", {})
+    if not isinstance(top_memberships, dict):
+        top_memberships = {}
+    program_memberships = programs.get("memberships", {})
+    if not isinstance(program_memberships, dict):
+        program_memberships = {}
+    membership_active_members = 0.0
+    membership_fee = 0.0
+    membership_net_margin = 0.0
+    membership_discount_pct = 0.0
+    membership_visits_per_month = 0.0
+    membership_discountable_share = 0.0
     program_membership_revenue_monthly = 0.0
     program_membership_contribution_monthly = 0.0
-    program_membership_discount_leakage_monthly = 0.0
+    program_membership_discount_cost_monthly = 0.0
+    program_membership_net_contribution_monthly = 0.0
+    program_membership_net_after_discount_monthly = 0.0
+    program_membership_break_even_visits_per_month = None
+    program_membership_break_even_avg_sales_per_visit = None
+    program_membership_discount_method = "none"
+    program_membership_estimated_share_of_guests = 0.0
+    program_membership_avg_sales_per_visit = 0.0
     program_league_revenue_monthly = 0.0
     program_league_contribution_monthly = 0.0
     program_event_revenue_monthly = 0.0
     program_event_contribution_monthly = 0.0
+    def _membership_value(key: str, fallback: Any = 0) -> Any:
+        if key in program_memberships:
+            return program_memberships[key]
+        if key in top_memberships:
+            return top_memberships[key]
+        return fallback
+
     if programs_enabled:
-        memberships = programs.get("memberships", {})
-        active_members = _num(
-            memberships.get("active_members", 0),
+        target_member_count = _num(
+            top_memberships.get("target_member_count", 0),
+            "memberships.target_member_count",
+        )
+        membership_active_members = _num(
+            _membership_value("active_members", target_member_count),
             "revenue.programs.memberships.active_members",
         )
         membership_fee = _num(
-            memberships.get("monthly_fee", 0),
+            _membership_value("monthly_fee", top_memberships.get("monthly_fee", 0)),
             "revenue.programs.memberships.monthly_fee",
         )
+        if membership_fee <= 0:
+            annual_fee = _num(
+                _membership_value("annual_fee", top_memberships.get("annual_fee", 0)),
+                "memberships.annual_fee",
+            )
+            if annual_fee > 0:
+                membership_fee = annual_fee / 12
         membership_net_margin = _num(
-            memberships.get("net_margin_pct", 0),
+            _membership_value("net_margin_pct", top_memberships.get("net_margin_pct", 0)),
             "revenue.programs.memberships.net_margin_pct",
         )
-        membership_leakage_pct = _num(
-            memberships.get("discount_leakage_pct", 0),
-            "revenue.programs.memberships.discount_leakage_pct",
+        membership_discount_pct = _num(
+            _membership_value("discount_pct", top_memberships.get("discount_pct", 0)),
+            "revenue.programs.memberships.discount_pct",
         )
-        program_membership_revenue_monthly = active_members * membership_fee
+        membership_visits_per_month = _num(
+            _membership_value(
+                "member_visits_per_month",
+                top_memberships.get("member_visits_per_month", 0),
+            ),
+            "revenue.programs.memberships.member_visits_per_month",
+        )
+        membership_discountable_share = _num(
+            _membership_value(
+                "discountable_sales_share",
+                top_memberships.get("discountable_sales_share", 0),
+            ),
+            "revenue.programs.memberships.discountable_sales_share",
+        )
+        program_membership_revenue_monthly = membership_active_members * membership_fee
         program_membership_contribution_monthly = (
             program_membership_revenue_monthly * membership_net_margin
         )
-        program_membership_discount_leakage_monthly = (
-            program_membership_revenue_monthly * membership_leakage_pct
+        program_membership_net_contribution_monthly = (
+            program_membership_contribution_monthly
         )
 
         leagues = programs.get("leagues", {})
@@ -511,11 +561,76 @@ def compute_scenario(
     total_table_sales_monthly = table_revenue
     total_bar_sales_monthly = bar_revenue + bar_only_bar_sales_monthly
     total_food_sales_monthly = food_revenue + bar_only_food_sales_monthly
+    if programs_enabled:
+        eligible_sales = (
+            total_table_sales_monthly + total_bar_sales_monthly + total_food_sales_monthly
+        )
+        total_guest_visits = total_guests + bar_only_guest_count
+        member_visits = membership_active_members * membership_visits_per_month
+        member_visits_capped = 0.0
+        avg_sales_per_visit = 0.0
+        if total_guest_visits > 0:
+            member_visits_capped = min(member_visits, total_guest_visits)
+            avg_sales_per_visit = eligible_sales / max(total_guest_visits, 1)
+            program_membership_avg_sales_per_visit = avg_sales_per_visit
+            program_membership_estimated_share_of_guests = min(
+                member_visits_capped / total_guest_visits, 1.0
+            )
+
+        can_use_discount_method = (
+            membership_discount_pct > 0
+            and membership_visits_per_month > 0
+            and membership_discountable_share > 0
+        )
+        if can_use_discount_method:
+            program_membership_discount_method = "discount_pct_on_member_visits"
+            member_sales_estimate = member_visits_capped * avg_sales_per_visit
+            discountable_sales = member_sales_estimate * membership_discountable_share
+            program_membership_discount_cost_monthly = (
+                discountable_sales * membership_discount_pct
+            )
+        else:
+            legacy_pct = None
+            if "discount_leakage_pct" in program_memberships:
+                legacy_pct = program_memberships.get("discount_leakage_pct")
+            elif "discount_leakage_pct" in top_memberships:
+                legacy_pct = top_memberships.get("discount_leakage_pct")
+            if legacy_pct is not None:
+                legacy_pct_value = _num(
+                    legacy_pct, "revenue.programs.memberships.discount_leakage_pct"
+                )
+                if legacy_pct_value > 0:
+                    program_membership_discount_method = (
+                        "legacy_pct_of_membership_revenue"
+                    )
+                    program_membership_discount_cost_monthly = (
+                        program_membership_revenue_monthly * legacy_pct_value
+                    )
+
+        discount_denom = (
+            membership_active_members
+            * membership_visits_per_month
+            * membership_discountable_share
+            * membership_discount_pct
+        )
+        if discount_denom > 0:
+            program_membership_break_even_avg_sales_per_visit = (
+                program_membership_contribution_monthly / discount_denom
+            )
+
+    program_membership_net_after_discount_monthly = (
+        program_membership_contribution_monthly - program_membership_discount_cost_monthly
+    )
+    program_membership_net_contribution_monthly = (
+        program_membership_net_after_discount_monthly
+    )
+
     total_revenue = (
         total_table_sales_monthly
         + total_bar_sales_monthly
         + total_food_sales_monthly
         + program_total_revenue_monthly
+        - program_membership_discount_cost_monthly
     )
 
     cogs = assumptions["cogs"]
@@ -639,6 +754,7 @@ def compute_scenario(
         program_total_contribution_monthly
         - program_incremental_labor_cost_monthly
         - program_incremental_security_cost_monthly
+        - program_membership_discount_cost_monthly
     )
 
     site = assumptions.get("site", {})
@@ -1062,6 +1178,11 @@ def compute_scenario(
             "total_food_sales_monthly": total_food_sales_monthly,
             "program_membership_revenue_monthly": program_membership_revenue_monthly,
             "program_membership_contribution_monthly": program_membership_contribution_monthly,
+            "program_membership_discount_cost_monthly": program_membership_discount_cost_monthly,
+            "program_membership_net_contribution_monthly": program_membership_net_contribution_monthly,
+            "program_membership_net_after_discount_monthly": program_membership_net_after_discount_monthly,
+            "program_membership_break_even_avg_sales_per_visit": program_membership_break_even_avg_sales_per_visit,
+            "program_membership_break_even_visits_per_month": program_membership_break_even_visits_per_month,
             "program_league_revenue_monthly": program_league_revenue_monthly,
             "program_league_contribution_monthly": program_league_contribution_monthly,
             "program_event_revenue_monthly": program_event_revenue_monthly,
@@ -1203,10 +1324,13 @@ def compute_scenario(
             "utilities_hours_multiplier": utilities_hours_multiplier,
             "programs_enabled": programs_enabled,
             "programs_driver_mode": programs_driver_mode,
-            "program_membership_active_members": programs.get("memberships", {}).get("active_members", 0),
-            "program_membership_monthly_fee": programs.get("memberships", {}).get("monthly_fee", 0),
-            "program_membership_discount_leakage_pct": programs.get("memberships", {}).get("discount_leakage_pct", 0),
-            "program_membership_net_margin_pct": programs.get("memberships", {}).get("net_margin_pct", 0),
+            "program_membership_active_members": membership_active_members,
+            "program_membership_monthly_fee": membership_fee,
+            "program_membership_net_margin_pct": membership_net_margin,
+            "program_membership_discount_pct": membership_discount_pct,
+            "program_membership_member_visits_per_month": membership_visits_per_month,
+            "program_membership_visits_per_month": membership_visits_per_month,
+            "program_membership_discountable_sales_share": membership_discountable_share,
             "program_league_active_players": programs.get("leagues", {}).get("active_league_players_per_month", 0),
             "program_league_fee_per_player": programs.get("leagues", {}).get("league_fee_per_player", 0),
             "program_league_net_margin_pct": programs.get("leagues", {}).get("net_margin_pct", 0),
@@ -1214,7 +1338,11 @@ def compute_scenario(
             "program_event_avg_revenue": programs.get("events", {}).get("avg_event_revenue", 0),
             "program_event_variable_cost_pct": programs.get("events", {}).get("variable_cost_pct", 0),
             "program_event_net_margin_pct": programs.get("events", {}).get("net_margin_pct", 0),
-            "program_membership_discount_leakage_monthly": program_membership_discount_leakage_monthly,
+            "program_membership_avg_spend_per_visit": program_membership_avg_sales_per_visit,
+            "program_membership_discount_cost_monthly": program_membership_discount_cost_monthly,
+            "program_membership_discount_method": program_membership_discount_method,
+            "program_membership_estimated_share_of_guests": program_membership_estimated_share_of_guests,
+            "program_membership_break_even_avg_sales_per_visit": program_membership_break_even_avg_sales_per_visit,
             "program_uplift_utilization_multiplier": program_uplift_utilization_multiplier,
             "program_uplift_spend_multiplier": program_uplift_spend_multiplier,
             "program_incremental_bar_only_guests_monthly": program_incremental_bar_only_guests_monthly,

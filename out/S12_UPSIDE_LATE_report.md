@@ -61,10 +61,11 @@
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $0 / $0
+- Membership discount cost (applied to revenue): $0 (disc 0.0%, visits/mo 0.00, discountable share 0.0%, estimated share of guests 0.0%, method none)
+- Membership net after discounts: $0
 - League revenue + contribution: $0 / $0
 - Event revenue + contribution: $0 / $0
 - Total programs contribution: $0
-- Membership discount leakage (not applied): $0
 
 ## Programs Impact
 - Program-driven table hours (monthly): 0.0

@@ -29,11 +29,11 @@
 - Food revenue (table-driven): $34,806
 - Bar-only bar revenue: $28,976
 - Bar-only food revenue: $4,024
-- Total monthly sales: $251,542
+- Total monthly sales: $251,152
 
 - Bar COGS: $30,856
 - Food COGS: $11,649
-- Labor: $55,339
+- Labor: $55,253
 - Rent: $33,333
 - CAM: $6,667
 - Property tax/insurance (NNN): $2,667
@@ -42,7 +42,7 @@
 - Insurance: $500
 - Security: $0
 - POS software: $180
-- Payment processing: $6,339
+- Payment processing: $6,329
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -51,17 +51,19 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $248,424
+- Total expenses: $248,329
 
-- Monthly net: $3,118
-- Annual net: $37,413
+- Monthly net: $2,824
+- Annual net: $33,882
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $3,750 / $3,188
+- Membership discount cost (applied to revenue): $390 (disc 10.0%, visits/mo 2.00, discountable share 60.0%, estimated share of guests 2.7%, method discount_pct_on_member_visits)
+- Membership net after discounts: $2,798
+- Membership discount break-even avg sales/visit: $177
 - League revenue + contribution: $240 / $192
 - Event revenue + contribution: $3,600 / $2,601
 - Total programs contribution: $5,980
-- Membership discount leakage (not applied): $1,500
 
 ## Programs Impact
 - Program-driven table hours (monthly): 272.2
@@ -70,7 +72,7 @@
 - Membership spend uplift: 3.0%
 - Program incremental labor cost (monthly): $1,505
 - Program incremental security cost (monthly): $1,189
-- Program net contribution (monthly): $3,287
+- Program net contribution (monthly): $2,897
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $42,667
@@ -93,9 +95,9 @@
 ## Lease Impact
 | lease_band | occupancy_cost | cash_after_debt | dscr |
 | --- | --- | --- | --- |
-| low | $21,333 | $16,183 | 2.74x |
-| mid | $32,000 | $4,183 | 1.45x |
-| high | $42,667 | $-7,817 | 0.16x |
+| low | $21,333 | $15,888 | 2.70x |
+| mid | $32,000 | $3,888 | 1.42x |
+| high | $42,667 | $-8,112 | 0.13x |
 | GOOD delta vs BASE | $-10,667 | $12,000 | 1.29x |
 | BAD delta vs BASE | $10,667 | $-12,000 | -1.29x |
 
@@ -113,46 +115,46 @@
 - Loan amount (modeled): $650,000
 - Lease deposit (months / amount): 1.0 / $42,667
 - Total cash required to open: $582,667
-- Working capital / runway months: $180,000 / 23.0
+- Working capital / runway months: $180,000 / 22.2
 
 ## Underwriting Summary
 - Total project cost: $1,190,000
 - Equity required: $540,000
 - Total cash required to open: $582,667
-- Runway months: 23.0
+- Runway months: 22.2
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $1,508
-- Cash flow after debt: $-7,817
-- DSCR: 0.16x (16.2%)
+- NOI (monthly): $1,214
+- Cash flow after debt: $-8,112
+- DSCR: 0.13x (13.0%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-7,817 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.05x
-- Required additional sales (per day): $450
+- Cash gap (monthly): $-8,112 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.06x
+- Required additional sales (per day): $467
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $6,758 |
-| Utilization -10% | $-22,392 |
-| Spend +10% | $1,460 |
-| Spend -10% | $-17,094 |
-| Fixed costs +10% | $-22,241 |
-| Fixed costs -10% | $6,607 |
+| Utilization +10% | $6,434 |
+| Utilization -10% | $-22,657 |
+| Spend +10% | $1,161 |
+| Spend -10% | $-17,384 |
+| Fixed costs +10% | $-22,536 |
+| Fixed costs -10% | $6,312 |
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
-- Payback period: 31.81 years
+- Payback period: 35.12 years
 
 ## Break-even Snapshots
 - Monthly fixed costs: $144,241
 - Gross margin (after variable costs): 57.9%
-- Break-even sales (monthly): $248,939
-- Break-even sales (per day, operating): $8,298
-- Break-even sales (per day, after debt): $8,834
+- Break-even sales (monthly): $249,056
+- Break-even sales (per day, operating): $8,302
+- Break-even sales (per day, after debt): $8,839
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

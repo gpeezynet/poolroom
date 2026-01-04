@@ -74,6 +74,10 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "program_event_revenue_monthly",
                 "program_total_revenue_monthly",
                 "program_total_contribution_monthly",
+                "program_membership_discount_cost_monthly",
+                "program_membership_net_contribution_monthly",
+                "program_membership_net_after_discount_monthly",
+                "program_membership_break_even_avg_sales_per_visit",
                 "program_incremental_labor_cost_monthly",
                 "program_incremental_security_cost_monthly",
                 "program_net_contribution_monthly",
@@ -224,6 +228,8 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "cam_monthly",
                 "utilities_monthly",
                 "total_occupancy_cost_monthly",
+                "program_membership_discount_pct",
+                "program_membership_discount_cost_monthly",
             ):
                 self.assertIn(col, header, f"Missing matrix column {col} for {scenario_id}")
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
@@ -293,6 +299,11 @@ class ScenarioSmokeTests(unittest.TestCase):
             "facility.utilities_per_sqft_year.high",
             "facility.utilities_hours_multiplier.core",
             "facility.utilities_hours_multiplier.late",
+            "revenue.programs.memberships.discount_pct",
+            "revenue.programs.memberships.member_visits_per_month",
+            "revenue.programs.memberships.discountable_sales_share",
+            "memberships.member_visits_per_month",
+            "memberships.discountable_sales_share",
             "financing.interest_rate",
             "financing.term_years",
             "financing.down_payment_pct",
@@ -386,6 +397,63 @@ class ScenarioSmokeTests(unittest.TestCase):
             result_contract["totals"].get("semi_fixed_labor_monthly", 0),
             result_in_house["totals"].get("semi_fixed_labor_monthly", 0),
             "Contract mode should not double-count security labor hours",
+        )
+
+    def test_membership_discount_cost_applies_to_revenue(self):
+        assumptions = load_assumptions()
+        scenarios = yaml.safe_load(
+            (ROOT / "model" / "scenarios.yaml").read_text(encoding="utf-8-sig")
+        )["scenarios"]
+        scenario = copy.deepcopy(scenarios["S12_BASE"])
+        scenario["programs_enabled"] = True
+
+        revenue_programs = assumptions.setdefault("revenue", {}).setdefault("programs", {})
+        membership_programs = revenue_programs.setdefault("memberships", {})
+        top_memberships = assumptions.setdefault("memberships", {})
+
+        membership_programs.update(
+            {
+                "active_members": 50,
+                "monthly_fee": 25,
+                "net_margin_pct": 0.85,
+                "member_visits_per_month": 2.0,
+                "discountable_sales_share": 0.60,
+            }
+        )
+        top_memberships.update(
+            {
+                "target_member_count": 50,
+                "monthly_fee": 25,
+                "discount_pct": 0.0,
+                "member_visits_per_month": 2.0,
+                "discountable_sales_share": 0.60,
+            }
+        )
+
+        membership_programs["discount_pct"] = 0.0
+        result_no_discount = compute_scenario(assumptions, "S12_BASE", scenario)
+
+        assumptions_with_discount = copy.deepcopy(assumptions)
+        assumptions_with_discount["memberships"]["discount_pct"] = 0.10
+        assumptions_with_discount["revenue"]["programs"]["memberships"]["discount_pct"] = 0.10
+        result_with_discount = compute_scenario(
+            assumptions_with_discount, "S12_BASE", scenario
+        )
+
+        self.assertGreater(
+            result_with_discount["totals"].get("program_membership_discount_cost_monthly", 0),
+            0,
+            "Membership discount cost should be positive with discount pct",
+        )
+        self.assertLess(
+            result_with_discount["totals"].get("total_revenue", 0),
+            result_no_discount["totals"].get("total_revenue", 0),
+            "Discount cost should reduce total revenue",
+        )
+        self.assertEqual(
+            result_with_discount["revenue_drivers"].get("program_membership_discount_method"),
+            "discount_pct_on_member_visits",
+            "Discount method should use member visits model when inputs are present",
         )
 
 

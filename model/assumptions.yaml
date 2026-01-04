@@ -192,8 +192,10 @@ revenue:
     memberships:
       active_members: 150
       monthly_fee: 25
-      discount_leakage_pct: 0.40
       net_margin_pct: 0.85
+      discount_pct: 0.10
+      member_visits_per_month: 2.0
+      discountable_sales_share: 0.60
     leagues:
       active_league_players_per_month: 120
       league_fee_per_player: 2
@@ -464,6 +466,8 @@ memberships:
   monthly_fee: 25 # DR-15_memberships
   discount_pct: 0.10 # DR-15_memberships
   target_member_count: 150 # DR-15_memberships
+  member_visits_per_month: 2.0
+  discountable_sales_share: 0.60
 
 equipment_procurement:
   table_cost_per_unit: 6000 # DR-16_equipment_procurement

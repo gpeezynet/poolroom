@@ -65,8 +65,10 @@ Internal defaults pending vendor quotes.
 | revenue.bar_only_guests.food_spend_per_guest | 10 | internal_default | Pending vendor quotes. |
 | revenue.programs.memberships.active_members | 150 | internal_default | Pending vendor quotes. |
 | revenue.programs.memberships.monthly_fee | 25 | internal_default | Pending vendor quotes. |
-| revenue.programs.memberships.discount_leakage_pct | 0.40 | internal_default | Pending vendor quotes. |
 | revenue.programs.memberships.net_margin_pct | 0.85 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.discount_pct | 0.10 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.member_visits_per_month | 2.0 | internal_default | Pending vendor quotes. |
+| revenue.programs.memberships.discountable_sales_share | 0.60 | internal_default | Pending vendor quotes. |
 | revenue.programs.leagues.active_league_players_per_month | 120 | internal_default | Pending vendor quotes. |
 | revenue.programs.leagues.league_fee_per_player | 2 | internal_default | Pending vendor quotes. |
 | revenue.programs.leagues.net_margin_pct | 0.80 | internal_default | Pending vendor quotes. |
@@ -164,6 +166,8 @@ Internal defaults pending vendor quotes.
 | memberships.monthly_fee | 25 | internal_default | Pending vendor quotes. |
 | memberships.discount_pct | 0.10 | internal_default | Pending vendor quotes. |
 | memberships.target_member_count | 150 | internal_default | Pending vendor quotes. |
+| memberships.member_visits_per_month | 2.0 | internal_default | Pending vendor quotes. |
+| memberships.discountable_sales_share | 0.60 | internal_default | Pending vendor quotes. |
 | equipment_procurement.table_cost_per_unit | 6000 | internal_default | Pending vendor quotes. |
 | equipment_procurement.table_install_per_unit | 500 | internal_default | Pending vendor quotes. |
 | equipment_procurement.table_light_per_unit | 200 | internal_default | Pending vendor quotes. |

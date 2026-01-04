@@ -14,6 +14,11 @@ def _pct(value: float | None) -> str:
         return "n/a"
     return f"{value * 100:.1f}%"
 
+def _num(value: float | None, fmt: str = "{:.2f}") -> str:
+    if value is None:
+        return "n/a"
+    return fmt.format(value)
+
 
 def _dscr(value: float | None) -> str:
     if value is None:
@@ -160,6 +165,33 @@ def render_report(
         f"{_money(totals.get('program_membership_revenue_monthly'))} / "
         f"{_money(totals.get('program_membership_contribution_monthly'))}"
     )
+    membership_discount_pct = drivers.get("program_membership_discount_pct")
+    membership_visits = drivers.get(
+        "program_membership_member_visits_per_month",
+        drivers.get("program_membership_visits_per_month"),
+    )
+    membership_discountable_share = drivers.get("program_membership_discountable_sales_share")
+    membership_estimated_share = drivers.get("program_membership_estimated_share_of_guests")
+    membership_discount_method = drivers.get("program_membership_discount_method", "none")
+    lines.append(
+        "- Membership discount cost (applied to revenue): "
+        f"{_money(totals.get('program_membership_discount_cost_monthly'))} "
+        f"(disc {_pct(membership_discount_pct)}, "
+        f"visits/mo {_num(membership_visits)}, "
+        f"discountable share {_pct(membership_discountable_share)}, "
+        f"estimated share of guests {_pct(membership_estimated_share)}, "
+        f"method {membership_discount_method})"
+    )
+    lines.append(
+        "- Membership net after discounts: "
+        f"{_money(totals.get('program_membership_net_after_discount_monthly'))}"
+    )
+    break_even_avg_sales = totals.get("program_membership_break_even_avg_sales_per_visit")
+    if break_even_avg_sales is not None:
+        lines.append(
+            "- Membership discount break-even avg sales/visit: "
+            f"{_money(break_even_avg_sales)}"
+        )
     lines.append(
         "- League revenue + contribution: "
         f"{_money(totals.get('program_league_revenue_monthly'))} / "
@@ -173,11 +205,6 @@ def render_report(
     lines.append(
         f"- Total programs contribution: {_money(totals.get('program_total_contribution_monthly'))}"
     )
-    if drivers.get("program_membership_discount_leakage_pct", 0):
-        lines.append(
-            "- Membership discount leakage (not applied): "
-            f"{_money(drivers.get('program_membership_discount_leakage_monthly'))}"
-        )
     lines.append("")
 
     lines.append("## Programs Impact")

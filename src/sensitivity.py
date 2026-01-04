@@ -30,36 +30,53 @@ def run_sensitivity(
     league_nights_options = [0, 1, 2, 3, 4, 5]
     events_per_month_options = [0, 2, 4, 6, 8]
     retention_uplift_options = [0.00, 0.03, 0.05, 0.07]
+    active_members_options = [0, 50, 150, 300]
+    discount_pct_options = [0.00, 0.05, 0.10, 0.15]
 
     rows: List[Dict[str, Any]] = []
     for league_nights in league_nights_options:
         for events_per_month in events_per_month_options:
             for retention_uplift in retention_uplift_options:
-                sweep_assumptions = copy.deepcopy(assumptions)
-                program_drivers = sweep_assumptions.setdefault("program_drivers", {})
-                leagues = program_drivers.setdefault("leagues", {})
-                events = program_drivers.setdefault("events", {})
-                memberships = program_drivers.setdefault("memberships", {})
+                for active_members in active_members_options:
+                    for discount_pct in discount_pct_options:
+                        sweep_assumptions = copy.deepcopy(assumptions)
+                        program_drivers = sweep_assumptions.setdefault("program_drivers", {})
+                        leagues = program_drivers.setdefault("leagues", {})
+                        events = program_drivers.setdefault("events", {})
+                        memberships = program_drivers.setdefault("memberships", {})
 
-                leagues["league_nights_per_week"] = league_nights
-                events["events_per_month"] = events_per_month
-                memberships["retention_utilization_uplift"] = retention_uplift
+                        leagues["league_nights_per_week"] = league_nights
+                        events["events_per_month"] = events_per_month
+                        memberships["retention_utilization_uplift"] = retention_uplift
 
-                result = compute_scenario(sweep_assumptions, scenario_id, scenario)
-                totals = result.get("totals", {})
-                rows.append(
-                    {
-                        "scenario_id": scenario_id,
-                        "league_nights_per_week": league_nights,
-                        "events_per_month": events_per_month,
-                        "retention_utilization_uplift": retention_uplift,
-                        "cash_after_debt": totals.get("cash_flow_after_debt"),
-                        "dscr": totals.get("dscr"),
-                        "required_utilization_multiplier_for_cash_break_even": totals.get(
-                            "required_utilization_multiplier_for_cash_break_even"
-                        ),
-                    }
-                )
+                        memberships = sweep_assumptions.setdefault("memberships", {})
+                        memberships["target_member_count"] = active_members
+                        memberships["discount_pct"] = discount_pct
+
+                        revenue_programs = sweep_assumptions.setdefault("revenue", {}).setdefault(
+                            "programs", {}
+                        )
+                        membership_programs = revenue_programs.setdefault("memberships", {})
+                        membership_programs["active_members"] = active_members
+                        membership_programs["discount_pct"] = discount_pct
+
+                        result = compute_scenario(sweep_assumptions, scenario_id, scenario)
+                        totals = result.get("totals", {})
+                        rows.append(
+                            {
+                                "scenario_id": scenario_id,
+                                "league_nights_per_week": league_nights,
+                                "events_per_month": events_per_month,
+                                "retention_utilization_uplift": retention_uplift,
+                                "membership_active_members": active_members,
+                                "membership_discount_pct": discount_pct,
+                                "cash_after_debt": totals.get("cash_flow_after_debt"),
+                                "dscr": totals.get("dscr"),
+                                "required_utilization_multiplier_for_cash_break_even": totals.get(
+                                    "required_utilization_multiplier_for_cash_break_even"
+                                ),
+                            }
+                        )
 
     out_dir.mkdir(parents=True, exist_ok=True)
     csv_path = out_dir / "PROGRAM_SENSITIVITY.csv"
@@ -70,6 +87,8 @@ def run_sensitivity(
         "league_nights_per_week",
         "events_per_month",
         "retention_utilization_uplift",
+        "membership_active_members",
+        "membership_discount_pct",
         "cash_after_debt",
         "dscr",
         "required_utilization_multiplier_for_cash_break_even",
@@ -101,8 +120,8 @@ def run_sensitivity(
         f"- Combos: {len(rows)}",
         "",
         "## Best Cash After Debt (Top 10)",
-        "| league_nights_per_week | events_per_month | retention_utilization_uplift | cash_after_debt | dscr | required_utilization_multiplier_for_cash_break_even |",
-        "| --- | --- | --- | --- | --- | --- |",
+        "| league_nights_per_week | events_per_month | retention_utilization_uplift | membership_active_members | membership_discount_pct | cash_after_debt | dscr | required_utilization_multiplier_for_cash_break_even |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for row in best_rows:
         md_lines.append(
@@ -113,6 +132,8 @@ def run_sensitivity(
                     "league_nights_per_week",
                     "events_per_month",
                     "retention_utilization_uplift",
+                    "membership_active_members",
+                    "membership_discount_pct",
                     "cash_after_debt",
                     "dscr",
                     "required_utilization_multiplier_for_cash_break_even",

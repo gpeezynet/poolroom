@@ -47,6 +47,14 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
         "bar_only_food_sales_monthly",
         "program_incremental_table_hours_sold_monthly",
         "program_incremental_bar_only_guests_monthly",
+        "program_membership_active_members",
+        "program_membership_monthly_fee",
+        "program_membership_discount_pct",
+        "program_membership_member_visits_per_month",
+        "program_membership_discountable_sales_share",
+        "program_membership_discount_cost_monthly",
+        "program_membership_net_after_discount_monthly",
+        "program_membership_break_even_avg_sales_per_visit",
         "program_incremental_labor_cost_monthly",
         "program_incremental_security_cost_monthly",
         "program_net_contribution_monthly",
@@ -113,6 +121,29 @@ def write_scenario_matrix(results: List[Dict[str, Any]], out_dir: Path) -> None:
             ),
             "program_incremental_bar_only_guests_monthly": totals.get(
                 "program_incremental_bar_only_guests_monthly"
+            ),
+            "program_membership_active_members": drivers.get(
+                "program_membership_active_members"
+            ),
+            "program_membership_monthly_fee": drivers.get("program_membership_monthly_fee"),
+            "program_membership_discount_pct": drivers.get(
+                "program_membership_discount_pct"
+            ),
+            "program_membership_member_visits_per_month": drivers.get(
+                "program_membership_member_visits_per_month",
+                drivers.get("program_membership_visits_per_month"),
+            ),
+            "program_membership_discountable_sales_share": drivers.get(
+                "program_membership_discountable_sales_share"
+            ),
+            "program_membership_discount_cost_monthly": totals.get(
+                "program_membership_discount_cost_monthly"
+            ),
+            "program_membership_net_after_discount_monthly": totals.get(
+                "program_membership_net_after_discount_monthly"
+            ),
+            "program_membership_break_even_avg_sales_per_visit": totals.get(
+                "program_membership_break_even_avg_sales_per_visit"
             ),
             "program_incremental_labor_cost_monthly": totals.get(
                 "program_incremental_labor_cost_monthly"
