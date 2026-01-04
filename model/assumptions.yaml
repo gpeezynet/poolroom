@@ -316,18 +316,18 @@ labor:
     manager: 25
     bartender: 18
     barback: 14
-    floor: 14
+    floor: 6
     kitchen: 16
     security: 18
     cleaner: 13
   s12_schedule:
-    manager_hours_per_week: 45
-    bartender_hours_per_week: 160
-    barback_hours_per_week: 80
-    floor_hours_per_week: 160
-    kitchen_hours_per_week: 80
-    security_hours_per_week: 120
-    cleaner_hours_per_week: 20
+    manager_hours_per_week: 0
+    bartender_hours_per_week: 60
+    barback_hours_per_week: 16
+    floor_hours_per_week: 36
+    kitchen_hours_per_week: 0
+    security_hours_per_week: 0
+    cleaner_hours_per_week: 10
   s24_schedule:
     manager_hours_per_week: 55
     bartender_hours_per_week: 260
@@ -495,6 +495,31 @@ ops_binder:
   sop_update_cadence_months: 3 # DR-20_ops_binder
   compliance_audit_frequency_per_year: 4 # DR-20_ops_binder
   checklist_count: 25 # DR-20_ops_binder
+
+demand:
+  method: utilization
+  # method: week_reality
+
+week_reality:
+  weeks_per_month: 4.333
+  dow_to_type:
+    mon: slow
+    tue: slow
+    wed: slow
+    thu: warm
+    fri: hot
+    sat: hot
+    sun: slow
+  day_types:
+    slow:
+      target_total_sales_per_day: 1200
+      bar_only_guests: 10
+    warm:
+      target_total_sales_per_day: 2500
+      bar_only_guests: 25
+    hot:
+      target_total_sales_per_day: 5000
+      bar_only_guests: 60
 
 modeling:
   weeks_per_month: 4.33

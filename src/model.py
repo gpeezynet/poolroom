@@ -73,6 +73,10 @@ def compute_scenario(
         return hours + minutes / 60
 
     modeling = assumptions["modeling"]
+    demand = assumptions.get("demand", {})
+    demand_method = str(demand.get("method", "utilization")).lower()
+    if demand_method not in ("utilization", "week_reality"):
+        demand_method = "utilization"
     weeks_per_month = float(modeling["weeks_per_month"])
     weekdays_per_week = float(modeling["weekdays_per_week"])
     weekend_days_per_week = float(modeling["weekend_days_per_week"])
@@ -196,6 +200,49 @@ def compute_scenario(
         spend_multiplier *= 1 + program_uplift_spend_multiplier
     avg_bar_spend *= spend_multiplier
     avg_food_spend *= spend_multiplier
+
+    def _baseline_day_metrics(hours_per_table_day: float, core_rate: float) -> Dict[str, float]:
+        day_table_revenue = 0.0
+        day_bar_revenue = 0.0
+        day_food_revenue = 0.0
+        day_table_hours = 0.0
+        day_guests = 0.0
+        for period_name, share, rate in (
+            ("core", core_share, core_rate),
+            ("late", late_share, table_rate_late),
+        ):
+            max_table_hours_day = tables * open_hours_per_day * share
+            metrics = _period_metrics(
+                tables=tables,
+                hours_per_table=hours_per_table_day * share,
+                avg_guests_per_table_hour=avg_guests_per_table_hour,
+                days_per_month=1.0,
+                utilization_multiplier=utilization_multiplier,
+                max_table_hours=max_table_hours_day,
+            )
+            if pricing_style == "hourly":
+                table_revenue = metrics["table_hours"] * rate
+            else:
+                guests_for_revenue = metrics["guests"]
+                if wristband_count_method == "core_only" and period_name != "core":
+                    guests_for_revenue = 0.0
+                table_revenue = guests_for_revenue * wristband_price
+
+            bar_revenue = metrics["guests"] * bar_attach_rate * avg_bar_spend
+            food_revenue = metrics["guests"] * food_attach_rate * avg_food_spend
+
+            day_table_revenue += table_revenue
+            day_bar_revenue += bar_revenue
+            day_food_revenue += food_revenue
+            day_table_hours += metrics["table_hours"]
+            day_guests += metrics["guests"]
+        return {
+            "table_revenue": day_table_revenue,
+            "bar_revenue": day_bar_revenue,
+            "food_revenue": day_food_revenue,
+            "table_hours": day_table_hours,
+            "guests": day_guests,
+        }
 
     weekday_days_per_month = weeks_per_month * weekdays_per_week
     weekend_days_per_month = weeks_per_month * weekend_days_per_week
@@ -335,6 +382,7 @@ def compute_scenario(
     bar_revenue = sum(p["bar_revenue"] for p in periods)
     food_revenue = sum(p["food_revenue"] for p in periods)
     total_guests = sum(p["metrics"]["guests"] for p in periods)
+    table_hours_total = sum(p["metrics"]["table_hours"] for p in periods)
     bar_only_guest_count = (
         bar_only_weekday_guests * bar_only_weekdays_per_month
         + bar_only_weekend_guests * bar_only_weekend_days_per_month
@@ -344,6 +392,134 @@ def compute_scenario(
     bar_only_food_sales_monthly = (
         bar_only_guest_count * bar_only_food_attach * bar_only_food_spend
     )
+    day_sales_by_dow = None
+    day_sales_min = None
+    day_sales_max = None
+    week_sales_total = None
+    day_types_by_dow = None
+    capacity_violation = False
+    capacity_overage_hours = None
+    week_reality_weeks_per_month = None
+    if demand_method == "week_reality":
+        week_reality = assumptions.get("week_reality", {})
+        week_reality_weeks_per_month = _num(
+            week_reality.get("weeks_per_month", weeks_per_month),
+            "week_reality.weeks_per_month",
+        )
+        dow_to_type = week_reality.get("dow_to_type", {})
+        day_types = week_reality.get("day_types", {})
+        dows = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+        weekend_dows = {"fri", "sat", "sun"}
+        day_sales_by_dow = {}
+        day_types_by_dow = {}
+        week_table_revenue = 0.0
+        week_bar_revenue = 0.0
+        week_food_revenue = 0.0
+        week_bar_only_bar_revenue = 0.0
+        week_bar_only_food_revenue = 0.0
+        week_table_hours = 0.0
+        week_table_guests = 0.0
+        week_bar_only_guests = 0.0
+
+        for dow in dows:
+            day_type = dow_to_type.get(dow)
+            if day_type is None:
+                raise ValueError(f"week_reality.dow_to_type missing {dow}")
+            day_types_by_dow[dow] = day_type
+            day_config = day_types.get(day_type)
+            if not isinstance(day_config, dict):
+                raise ValueError(f"week_reality.day_types.{day_type} missing")
+
+            target_sales = _num(
+                day_config.get("target_total_sales_per_day", 0),
+                f"week_reality.day_types.{day_type}.target_total_sales_per_day",
+            )
+            bar_only_guests = _num(
+                day_config.get("bar_only_guests", 0),
+                f"week_reality.day_types.{day_type}.bar_only_guests",
+            )
+            hours_per_table_day = (
+                avg_hours_weekend if dow in weekend_dows else avg_hours_weekday
+            )
+            core_rate = table_rate_prime if dow in weekend_dows else table_rate_offpeak
+            baseline = _baseline_day_metrics(hours_per_table_day, core_rate)
+            bar_only_bar_baseline = bar_only_guests * bar_only_bar_spend
+            bar_only_food_baseline = (
+                bar_only_guests * bar_only_food_attach * bar_only_food_spend
+            )
+            baseline_day_total = (
+                baseline["table_revenue"]
+                + baseline["bar_revenue"]
+                + baseline["food_revenue"]
+                + bar_only_bar_baseline
+                + bar_only_food_baseline
+            )
+            scale = target_sales / baseline_day_total if baseline_day_total > 0 else 0.0
+
+            table_revenue_day = baseline["table_revenue"] * scale
+            bar_revenue_day = baseline["bar_revenue"] * scale
+            food_revenue_day = baseline["food_revenue"] * scale
+            bar_only_bar_day = bar_only_bar_baseline * scale
+            bar_only_food_day = bar_only_food_baseline * scale
+            table_hours_day = baseline["table_hours"] * scale
+            guests_day = baseline["guests"] * scale
+            bar_only_guests_scaled = bar_only_guests * scale
+
+            day_total = (
+                table_revenue_day
+                + bar_revenue_day
+                + food_revenue_day
+                + bar_only_bar_day
+                + bar_only_food_day
+            )
+            day_sales_by_dow[dow] = day_total
+
+            week_table_revenue += table_revenue_day
+            week_bar_revenue += bar_revenue_day
+            week_food_revenue += food_revenue_day
+            week_bar_only_bar_revenue += bar_only_bar_day
+            week_bar_only_food_revenue += bar_only_food_day
+            week_table_hours += table_hours_day
+            week_table_guests += guests_day
+            week_bar_only_guests += bar_only_guests_scaled
+
+        day_sales_values = list(day_sales_by_dow.values())
+        if day_sales_values:
+            day_sales_min = min(day_sales_values)
+            day_sales_max = max(day_sales_values)
+            week_sales_total = sum(day_sales_values)
+
+        table_revenue = week_table_revenue * week_reality_weeks_per_month
+        bar_revenue = week_bar_revenue * week_reality_weeks_per_month
+        food_revenue = week_food_revenue * week_reality_weeks_per_month
+        bar_only_bar_sales_monthly = (
+            week_bar_only_bar_revenue * week_reality_weeks_per_month
+            + program_incremental_bar_only_guests_monthly * bar_only_bar_spend
+        )
+        bar_only_food_sales_monthly = (
+            week_bar_only_food_revenue * week_reality_weeks_per_month
+            + program_incremental_bar_only_guests_monthly
+            * bar_only_food_attach
+            * bar_only_food_spend
+        )
+        total_guests = week_table_guests * week_reality_weeks_per_month
+        table_hours_total = week_table_hours * week_reality_weeks_per_month
+        bar_only_guest_count = (
+            week_bar_only_guests * week_reality_weeks_per_month
+            + program_incremental_bar_only_guests_monthly
+        )
+
+        avg_table_price_per_hour = (
+            table_revenue / table_hours_total if table_hours_total > 0 else 0.0
+        )
+        implied_table_hours_sold = (
+            table_revenue / avg_table_price_per_hour if avg_table_price_per_hour > 0 else 0.0
+        )
+        days_per_month = week_reality_weeks_per_month * 7
+        available_table_hours = tables * open_hours_per_day * days_per_month
+        if implied_table_hours_sold > available_table_hours:
+            capacity_violation = True
+            capacity_overage_hours = implied_table_hours_sold - available_table_hours
     top_memberships = assumptions.get("memberships", {})
     if not isinstance(top_memberships, dict):
         top_memberships = {}
@@ -484,7 +660,7 @@ def compute_scenario(
     program_variable_costs_monthly = (
         program_total_revenue_monthly - program_total_contribution_monthly
     )
-    base_table_hours_total = sum(p["metrics"]["table_hours"] for p in periods)
+    base_table_hours_total = table_hours_total
     total_available_table_hours = tables * open_hours_per_day * 30
 
     late_settings = assumptions.get("late_night", {})
@@ -638,7 +814,6 @@ def compute_scenario(
     food_cogs = total_food_sales_monthly * float(cogs["food_cogs_pct_placeholder"])
 
     labor_pct = float(assumptions["labor"]["target_pct_of_sales"]["default"])
-    labor = total_revenue * labor_pct
     labor_assumptions = assumptions.get("labor", {})
     burden_pct = float(labor_assumptions.get("burden_pct", 0))
     rates = labor_assumptions.get("rates", {})
@@ -756,6 +931,18 @@ def compute_scenario(
         - program_incremental_security_cost_monthly
         - program_membership_discount_cost_monthly
     )
+
+    baseline_labor_in_fixed = (
+        semi_fixed_labor_monthly
+        + program_incremental_labor_cost_monthly
+        + program_incremental_security_cost_monthly
+    )
+    labor_target_total_monthly = total_revenue * labor_pct
+    variable_labor_monthly = max(
+        0.0, labor_target_total_monthly - baseline_labor_in_fixed
+    )
+    labor = variable_labor_monthly
+    labor_total_monthly = baseline_labor_in_fixed + variable_labor_monthly
 
     site = assumptions.get("site", {})
     facility = assumptions.get("facility", {})
@@ -1084,7 +1271,11 @@ def compute_scenario(
             late_incremental_processing_fees = (
                 late_incremental_sales_monthly * card_mix_pct * processing_pct
             )
-            late_incremental_variable_labor = late_incremental_sales_monthly * labor_pct
+            late_incremental_variable_labor = max(
+                0.0,
+                late_incremental_sales_monthly * labor_pct
+                - late_incremental_labor_cost_monthly,
+            )
             late_incremental_variable_costs_monthly = (
                 late_incremental_bar_cogs
                 + late_incremental_food_cogs
@@ -1167,6 +1358,15 @@ def compute_scenario(
         "size_sf": size_sf,
         "pricing_style": pricing_style,
         "wristband_count_method": wristband_count_method,
+        "demand_method": demand_method,
+        "day_sales_by_dow": day_sales_by_dow,
+        "day_sales_min": day_sales_min,
+        "day_sales_max": day_sales_max,
+        "week_sales_total": week_sales_total,
+        "day_types_by_dow": day_types_by_dow,
+        "capacity_violation": capacity_violation,
+        "capacity_overage_hours": capacity_overage_hours,
+        "week_reality_weeks_per_month": week_reality_weeks_per_month,
         "totals": {
             "table_revenue": table_revenue,
             "bar_revenue": bar_revenue,
@@ -1204,6 +1404,9 @@ def compute_scenario(
             "gross_profit_before_fixed": gross_profit_before_fixed,
             "labor": labor,
             "semi_fixed_labor_monthly": semi_fixed_labor_monthly,
+            "variable_labor_monthly": variable_labor_monthly,
+            "labor_target_total_monthly": labor_target_total_monthly,
+            "labor_total_monthly": labor_total_monthly,
             "rent": rent,
             "rent_monthly": rent,
             "cam": cam,
@@ -1304,6 +1507,7 @@ def compute_scenario(
             "avg_food_spend_per_guest": avg_food_spend,
             "utilization_multiplier": utilization_multiplier,
             "spend_multiplier": spend_multiplier,
+            "weeks_per_month": weeks_per_month,
             "bar_only_weekday_guests_per_day": bar_only_weekday_guests,
             "bar_only_weekend_guests_per_day": bar_only_weekend_guests,
             "bar_only_bar_spend_per_guest": bar_only_bar_spend,

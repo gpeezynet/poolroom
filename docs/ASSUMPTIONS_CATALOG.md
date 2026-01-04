@@ -105,17 +105,17 @@ Internal defaults pending vendor quotes.
 | labor.rates.manager | 25 | internal_default | Pending vendor quotes. |
 | labor.rates.bartender | 18 | internal_default | Pending vendor quotes. |
 | labor.rates.barback | 14 | internal_default | Pending vendor quotes. |
-| labor.rates.floor | 14 | internal_default | Pending vendor quotes. |
+| labor.rates.floor | 6 | internal_default | Pending vendor quotes. |
 | labor.rates.kitchen | 16 | internal_default | Pending vendor quotes. |
 | labor.rates.security | 18 | internal_default | Pending vendor quotes. |
 | labor.rates.cleaner | 13 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.manager_hours_per_week | 45 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.bartender_hours_per_week | 160 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.barback_hours_per_week | 80 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.floor_hours_per_week | 160 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.kitchen_hours_per_week | 80 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.security_hours_per_week | 120 | internal_default | Pending vendor quotes. |
-| labor.s12_schedule.cleaner_hours_per_week | 20 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.manager_hours_per_week | 0 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.bartender_hours_per_week | 60 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.barback_hours_per_week | 16 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.floor_hours_per_week | 36 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.kitchen_hours_per_week | 0 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.security_hours_per_week | 0 | internal_default | Pending vendor quotes. |
+| labor.s12_schedule.cleaner_hours_per_week | 10 | internal_default | Pending vendor quotes. |
 | labor.s24_schedule.manager_hours_per_week | 55 | internal_default | Pending vendor quotes. |
 | labor.s24_schedule.bartender_hours_per_week | 260 | internal_default | Pending vendor quotes. |
 | labor.s24_schedule.barback_hours_per_week | 140 | internal_default | Pending vendor quotes. |
@@ -187,3 +187,9 @@ Internal defaults pending vendor quotes.
 | ops_binder.sop_update_cadence_months | 3 | internal_default | Pending vendor quotes. |
 | ops_binder.compliance_audit_frequency_per_year | 4 | internal_default | Pending vendor quotes. |
 | ops_binder.checklist_count | 25 | internal_default | Pending vendor quotes. |
+## Labor
+
+- Owner-operator manager in S12: labor.s12_schedule.manager_hours_per_week = 0.
+- Servers only on hot nights (Fri/Sat): labor.s12_schedule.floor_hours_per_week = 36.
+- Security covered by barback in S12: labor.s12_schedule.security_hours_per_week = 0.
+- Labor math: baseline schedule labor is fixed; variable labor tops up to the target pct of sales.

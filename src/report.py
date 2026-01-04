@@ -31,6 +31,20 @@ def render_report(
 ) -> str:
     totals = result["totals"]
     drivers = result.get("revenue_drivers", {})
+    cash_after_debt_monthly = totals.get("cash_flow_after_debt")
+    working_capital = totals.get("working_capital")
+    weeks_per_month = drivers.get("weeks_per_month", 4.333)
+    runway_display = "n/a"
+    if cash_after_debt_monthly is not None and working_capital is not None:
+        if cash_after_debt_monthly >= 0:
+            runway_display = "n/a (cashflow positive)"
+        else:
+            runway = (
+                working_capital / abs(cash_after_debt_monthly)
+                if cash_after_debt_monthly
+                else 0.0
+            )
+            runway_display = f"{runway:.1f}"
     lines = []
     lines.append(f"# ROI Report: {result['scenario_id']} - {result['scenario_name']}")
     lines.append("")
@@ -119,6 +133,34 @@ def render_report(
     )
     lines.append("")
 
+    if result.get("demand_method") == "week_reality":
+        day_sales_by_dow = result.get("day_sales_by_dow") or {}
+        day_types_by_dow = result.get("day_types_by_dow") or {}
+        lines.append("## Weekly Reality Pattern")
+        for key, label in (
+            ("mon", "Mon"),
+            ("tue", "Tue"),
+            ("wed", "Wed"),
+            ("thu", "Thu"),
+            ("fri", "Fri"),
+            ("sat", "Sat"),
+            ("sun", "Sun"),
+        ):
+            day_type = day_types_by_dow.get(key, "n/a")
+            lines.append(
+                f"- {label} ({day_type}): {_money(day_sales_by_dow.get(key))}"
+            )
+        lines.append(
+            "- Modeled day sales range: "
+            f"{_money(result.get('day_sales_min'))} - {_money(result.get('day_sales_max'))}"
+        )
+        if result.get("capacity_violation"):
+            lines.append(
+                "- WARNING: Implied table hours exceed capacity by "
+                f"{_num(result.get('capacity_overage_hours'), '{:.1f}')} hours/month"
+            )
+        lines.append("")
+
     lines.append("## Monthly P&L")
     lines.append(f"- Table revenue: {_money(totals['table_revenue'])}")
     lines.append(f"- Bar revenue (table-driven): {_money(totals['bar_revenue'])}")
@@ -133,7 +175,11 @@ def render_report(
     lines.append("")
     lines.append(f"- Bar COGS: {_money(totals['bar_cogs'])}")
     lines.append(f"- Food COGS: {_money(totals['food_cogs'])}")
-    lines.append(f"- Labor: {_money(totals['labor'])}")
+    lines.append(f"- Labor (top-up): {_money(totals.get('variable_labor_monthly'))}")
+    lines.append(
+        f"- Labor (schedule baseline): {_money(totals.get('semi_fixed_labor_monthly'))}"
+    )
+    lines.append(f"- Labor (total): {_money(totals.get('labor_total_monthly'))}")
     lines.append(f"- Rent: {_money(totals['rent'])}")
     lines.append(f"- CAM: {_money(totals['cam'])}")
     lines.append(f"- Property tax/insurance (NNN): {_money(totals.get('property_tax_insurance'))}")
@@ -243,7 +289,11 @@ def render_report(
     lines.append(f"- Utilities total: {_money(totals.get('utilities_cost_monthly'))}")
     lines.append(f"- Insurance: {_money(totals.get('insurance'))}")
     lines.append(f"- Baseline labor (schedule): {_money(totals.get('semi_fixed_labor_monthly'))}")
-    lines.append("- Variable labor: percent of sales (not in fixed costs)")
+    lines.append("- Variable labor (top-up): max(0, labor_pct*sales - baseline labor)")
+    lines.append("- Variable labor (monthly): "
+                 f"{_money(totals.get('variable_labor_monthly'))}")
+    lines.append("- Total labor (monthly): "
+                 f"{_money(totals.get('labor_total_monthly'))}")
     lines.append(f"- Marketing: {_money(totals.get('marketing'))}")
     lines.append(f"- Music licensing: {_money(totals.get('music_licensing'))}")
     lines.append(f"- Security monitoring: {_money(totals.get('security'))}")
@@ -357,8 +407,7 @@ def render_report(
     )
     lines.append(
         "- Working capital / runway months: "
-        f"{_money(totals.get('working_capital'))} / "
-        f"{totals.get('runway_months', 0):.1f}"
+        f"{_money(working_capital)} / {runway_display}"
     )
     lines.append("")
 
@@ -368,7 +417,7 @@ def render_report(
     lines.append(
         f"- Total cash required to open: {_money(totals.get('total_cash_required_to_open'))}"
     )
-    lines.append(f"- Runway months: {totals.get('runway_months', 0):.1f}")
+    lines.append(f"- Runway months: {runway_display}")
     lines.append("")
 
     lines.append("## Debt & Coverage")
@@ -378,11 +427,30 @@ def render_report(
     lines.append(f"- DSCR: {_dscr(totals.get('dscr'))}")
     lines.append("")
 
+    if cash_after_debt_monthly is not None:
+        lines.append("## Works Check")
+        works = cash_after_debt_monthly >= 0
+        lines.append(f"- Works? {'YES' if works else 'NO'}")
+        per_week = None
+        per_day = None
+        if isinstance(weeks_per_month, (int, float)) and weeks_per_month > 0:
+            per_week = abs(cash_after_debt_monthly) / weeks_per_month
+            per_day = abs(cash_after_debt_monthly) / (weeks_per_month * 7)
+        if works:
+            lines.append(f"- Surplus per week: {_money(per_week)}")
+            lines.append(f"- Surplus per day avg: {_money(per_day)}")
+        else:
+            lines.append(f"- Shortfall per week: {_money(per_week)}")
+            lines.append(f"- Shortfall per day avg: {_money(per_day)}")
+        lines.append("")
+
     lines.append("## What Must Be True (Targets)")
-    cash_gap = totals.get("cash_gap_monthly")
     required_util = totals.get("required_utilization_multiplier_for_cash_break_even")
     required_sales_day = totals.get("sales_gap_per_day_for_cash_break_even")
-    lines.append(f"- Cash gap (monthly): {_money(cash_gap)} (negative means shortfall)")
+    lines.append(
+        "- Cash after debt (monthly): "
+        f"{_money(cash_after_debt_monthly)} (negative means shortfall)"
+    )
     if required_util is None:
         lines.append("- Required utilization multiplier (cash break-even): n/a")
     else:
