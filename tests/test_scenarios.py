@@ -9,6 +9,7 @@ import unittest
 import yaml
 
 from src.sensitivity import run_sensitivity
+from src.report import render_report
 from src.model import compute_scenario
 
 
@@ -321,6 +322,24 @@ class ScenarioSmokeTests(unittest.TestCase):
             "S24_BASE_PLUS_PROGRAMS2_BAD_LEASE",
         ):
             self._assert_outputs(scenario_id)
+
+    def test_lease_impact_section(self):
+        assumptions = load_assumptions()
+        scenarios = yaml.safe_load(
+            (ROOT / "model" / "scenarios.yaml").read_text(encoding="utf-8-sig")
+        )["scenarios"]
+        scenario_ids = [
+            "S12_BASE_PLUS_PROGRAMS2_GOOD_LEASE",
+            "S12_BASE_PLUS_PROGRAMS2_BASE_LEASE",
+            "S12_BASE_PLUS_PROGRAMS2_BAD_LEASE",
+        ]
+        results = {
+            scenario_id: compute_scenario(assumptions, scenario_id, scenarios[scenario_id])
+            for scenario_id in scenario_ids
+        }
+        report = render_report(results[scenario_ids[0]], results)
+        self.assertIn("## Lease Impact", report)
+        self.assertIn("delta vs BASE", report)
 
     def test_program_sensitivity_outputs(self):
         with tempfile.TemporaryDirectory() as tmpdir:

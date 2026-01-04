@@ -37,10 +37,14 @@ def run_scenarios(assumptions_path: Path, scenarios_path: Path, out_dir: Path, i
         result = compute_scenario(assumptions, scenario_id, scenarios[scenario_id])
         results.append(result)
 
+    results_by_id = {result["scenario_id"]: result for result in results}
+
+    for result in results:
+        scenario_id = result["scenario_id"]
         report_path = out_dir / f"{scenario_id}_report.md"
         summary_path = out_dir / f"{scenario_id}_summary.json"
 
-        report_path.write_text(render_report(result), encoding="utf-8")
+        report_path.write_text(render_report(result, results_by_id), encoding="utf-8")
         write_json(summary_path, result)
         print(
             f"Generated {report_path.as_posix()} and {summary_path.as_posix()}"

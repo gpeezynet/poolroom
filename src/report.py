@@ -20,7 +20,10 @@ def _dscr(value: float | None) -> str:
         return "n/a"
     return f"{value:.2f}x ({_pct(value)})"
 
-def render_report(result: Dict[str, Any]) -> str:
+def render_report(
+    result: Dict[str, Any],
+    all_results: Dict[str, Dict[str, Any]] | None = None,
+) -> str:
     totals = result["totals"]
     drivers = result.get("revenue_drivers", {})
     lines = []
@@ -226,6 +229,90 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- Other opex (misc): {_money(totals.get('other_opex'))}")
     lines.append(f"- Fixed costs total: {_money(totals.get('monthly_fixed_costs'))}")
     lines.append("")
+
+    lease_impact_rows = None
+    if all_results:
+        scenario_id = result.get("scenario_id", "")
+        base_id = scenario_id
+        for suffix in ("_GOOD_LEASE", "_BASE_LEASE", "_BAD_LEASE"):
+            if scenario_id.endswith(suffix):
+                base_id = scenario_id[: -len(suffix)]
+                break
+        base_key = f"{base_id}_BASE_LEASE"
+        good_key = f"{base_id}_GOOD_LEASE"
+        bad_key = f"{base_id}_BAD_LEASE"
+        if base_key in all_results and (good_key in all_results or bad_key in all_results):
+            lease_impact_rows = {
+                "base": all_results.get(base_key),
+                "good": all_results.get(good_key),
+                "bad": all_results.get(bad_key),
+            }
+
+    if lease_impact_rows:
+        def _dscr_short(value: float | None) -> str:
+            if value is None:
+                return "n/a"
+            return f"{value:.2f}x"
+
+        def _row(label: str, payload: Dict[str, Any]) -> str:
+            totals_row = payload.get("totals", {})
+            return (
+                f"| {label} | {_money(totals_row.get('total_occupancy_cost_monthly'))} | "
+                f"{_money(totals_row.get('cash_flow_after_debt'))} | "
+                f"{_dscr_short(totals_row.get('dscr'))} |"
+            )
+
+        lines.append("## Lease Impact")
+        lines.append("| lease_band | occupancy_cost | cash_after_debt | dscr |")
+        lines.append("| --- | --- | --- | --- |")
+
+        for label, key in (("GOOD", "good"), ("BASE", "base"), ("BAD", "bad")):
+            row_result = lease_impact_rows.get(key)
+            if row_result:
+                lease_band = row_result.get("revenue_drivers", {}).get(
+                    "lease_band", label.lower()
+                )
+                lines.append(_row(lease_band, row_result))
+
+        base_totals = lease_impact_rows["base"]["totals"]
+        for label, key in (("GOOD", "good"), ("BAD", "bad")):
+            row_result = lease_impact_rows.get(key)
+            if not row_result:
+                continue
+            totals_row = row_result.get("totals", {})
+            base_occupancy = base_totals.get("total_occupancy_cost_monthly") or 0
+            base_cash = base_totals.get("cash_flow_after_debt") or 0
+            base_dscr = base_totals.get("dscr") or 0
+            lines.append(
+                f"| {label} delta vs BASE | "
+                f"{_money((totals_row.get('total_occupancy_cost_monthly') or 0) - base_occupancy)} | "
+                f"{_money((totals_row.get('cash_flow_after_debt') or 0) - base_cash)} | "
+                f"{_dscr_short((totals_row.get('dscr') or 0) - base_dscr)} |"
+            )
+
+        rent_cam_util_rows = []
+        for label, key in (("GOOD", "good"), ("BASE", "base"), ("BAD", "bad")):
+            row_result = lease_impact_rows.get(key)
+            if not row_result:
+                continue
+            totals_row = row_result.get("totals", {})
+            rent_val = totals_row.get("rent_monthly")
+            cam_val = totals_row.get("cam_monthly")
+            util_val = totals_row.get("utilities_monthly")
+            if rent_val is None and cam_val is None and util_val is None:
+                continue
+            lease_band = row_result.get("revenue_drivers", {}).get(
+                "lease_band", label.lower()
+            )
+            rent_cam_util_rows.append(
+                f"| {lease_band} | {_money(rent_val)} | {_money(cam_val)} | {_money(util_val)} |"
+            )
+        if rent_cam_util_rows:
+            lines.append("")
+            lines.append("| lease_band | rent | cam | utilities |")
+            lines.append("| --- | --- | --- | --- |")
+            lines.extend(rent_cam_util_rows)
+        lines.append("")
 
     lines.append("## CAPEX & Financing")
     lines.append(f"- CAPEX total (incl. working capital): {_money(totals.get('capex_total'))}")

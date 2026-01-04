@@ -90,6 +90,21 @@
 - Other opex (misc): $1,200
 - Fixed costs total: $120,241
 
+## Lease Impact
+| lease_band | occupancy_cost | cash_after_debt | dscr |
+| --- | --- | --- | --- |
+| low | $21,333 | $16,183 | 2.74x |
+| mid | $32,000 | $4,183 | 1.45x |
+| high | $42,667 | $-7,817 | 0.16x |
+| GOOD delta vs BASE | $-10,667 | $12,000 | 1.29x |
+| BAD delta vs BASE | $10,667 | $-12,000 | -1.29x |
+
+| lease_band | rent | cam | utilities |
+| --- | --- | --- | --- |
+| low | $16,000 | $2,667 | $4,667 |
+| mid | $24,667 | $4,667 | $6,000 |
+| high | $33,333 | $6,667 | $7,333 |
+
 ## CAPEX & Financing
 - CAPEX total (incl. working capital): $1,190,000
 - Tenant improvement allowance: $0
