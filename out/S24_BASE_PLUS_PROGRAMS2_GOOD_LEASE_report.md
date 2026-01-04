@@ -33,7 +33,7 @@
 
 - Bar COGS: $30,856
 - Food COGS: $11,649
-- Labor: $55,253
+- Labor: $0
 - Rent: $16,000
 - CAM: $2,667
 - Property tax/insurance (NNN): $2,667
@@ -51,10 +51,10 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $224,329
+- Total expenses: $158,605
 
-- Monthly net: $26,824
-- Annual net: $321,882
+- Monthly net: $92,547
+- Annual net: $1,110,567
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $3,750 / $3,188
@@ -70,16 +70,18 @@
 - Program-driven bar-only guests (monthly): 580
 - Membership utilization uplift: 5.0%
 - Membership spend uplift: 3.0%
-- Program incremental labor cost (monthly): $1,505
+- Program incremental labor cost (monthly): $1,128
 - Program incremental security cost (monthly): $1,189
-- Program net contribution (monthly): $2,897
+- Program net contribution (monthly): $3,273
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $21,333
 - Utilities total: $4,667
 - Insurance: $500
-- Baseline labor (schedule): $86,795
-- Variable labor: percent of sales (not in fixed costs)
+- Baseline labor (schedule): $76,701
+- Variable labor (top-up): max(0, labor_pct*sales - baseline labor)
+- Variable labor (monthly): $0
+- Total labor (monthly): $79,018
 - Marketing: $750
 - Music licensing: $204
 - Security monitoring: $0
@@ -90,14 +92,14 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Fixed costs total: $120,241
+- Fixed costs total: $109,771
 
 ## Lease Impact
 | lease_band | occupancy_cost | cash_after_debt | dscr |
 | --- | --- | --- | --- |
-| low | $21,333 | $15,888 | 2.70x |
-| mid | $32,000 | $3,888 | 1.42x |
-| high | $42,667 | $-8,112 | 0.13x |
+| low | $21,333 | $81,612 | 9.75x |
+| mid | $32,000 | $69,612 | 8.46x |
+| high | $42,667 | $57,612 | 7.18x |
 | GOOD delta vs BASE | $-10,667 | $12,000 | 1.29x |
 | BAD delta vs BASE | $10,667 | $-12,000 | -1.29x |
 
@@ -125,36 +127,36 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $25,214
-- Cash flow after debt: $15,888
-- DSCR: 2.70x (270.4%)
+- NOI (monthly): $90,938
+- Cash flow after debt: $81,612
+- DSCR: 9.75x (975.1%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $15,888 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 0.89x
+- Cash gap (monthly): $81,612 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.59x
 - Required additional sales (per day): $0
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $30,434 |
-| Utilization -10% | $1,343 |
-| Spend +10% | $25,161 |
-| Spend -10% | $6,616 |
-| Fixed costs +10% | $3,864 |
-| Fixed costs -10% | $27,912 |
+| Utilization +10% | $101,683 |
+| Utilization -10% | $61,541 |
+| Spend +10% | $94,407 |
+| Spend -10% | $68,817 |
+| Fixed costs +10% | $70,635 |
+| Fixed costs -10% | $92,589 |
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
-- Payback period: 3.70 years
+- Payback period: 1.07 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $120,241
-- Gross margin (after variable costs): 57.9%
-- Break-even sales (monthly): $207,616
-- Break-even sales (per day, operating): $6,921
-- Break-even sales (per day, after debt): $7,457
+- Monthly fixed costs: $109,771
+- Gross margin (after variable costs): 79.9%
+- Break-even sales (monthly): $137,359
+- Break-even sales (per day, operating): $4,579
+- Break-even sales (per day, after debt): $4,968
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

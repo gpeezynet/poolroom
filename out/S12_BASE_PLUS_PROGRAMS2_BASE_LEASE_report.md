@@ -33,7 +33,7 @@
 
 - Bar COGS: $18,326
 - Food COGS: $6,428
-- Labor: $32,049
+- Labor: $21,725
 - Rent: $13,875
 - CAM: $2,625
 - Property tax/insurance (NNN): $1,500
@@ -51,10 +51,10 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $142,246
+- Total expenses: $85,855
 
-- Monthly net: $3,433
-- Annual net: $41,195
+- Monthly net: $59,824
+- Annual net: $717,891
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $3,750 / $3,188
@@ -70,16 +70,18 @@
 - Program-driven bar-only guests (monthly): 580
 - Membership utilization uplift: 5.0%
 - Membership spend uplift: 3.0%
-- Program incremental labor cost (monthly): $1,505
+- Program incremental labor cost (monthly): $1,128
 - Program incremental security cost (monthly): $1,189
-- Program net contribution (monthly): $2,900
+- Program net contribution (monthly): $3,276
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
 - Utilities total: $3,375
 - Insurance: $500
-- Baseline labor (schedule): $53,698
-- Variable labor: percent of sales (not in fixed costs)
+- Baseline labor (schedule): $8,007
+- Variable labor (top-up): max(0, labor_pct*sales - baseline labor)
+- Variable labor (monthly): $21,725
+- Total labor (monthly): $32,049
 - Marketing: $750
 - Music licensing: $204
 - Security monitoring: $0
@@ -90,16 +92,16 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Fixed costs total: $81,772
+- Fixed costs total: $35,705
 
 ## Lease Impact
 | lease_band | occupancy_cost | cash_after_debt | dscr |
 | --- | --- | --- | --- |
-| low | $12,000 | $1,457 | 1.20x |
-| mid | $18,000 | $-5,293 | 0.26x |
-| high | $24,000 | $-12,043 | 0.00x |
+| low | $12,000 | $57,849 | 9.13x |
+| mid | $18,000 | $51,099 | 8.18x |
+| high | $24,000 | $44,349 | 7.23x |
 | GOOD delta vs BASE | $-6,000 | $6,750 | 0.95x |
-| BAD delta vs BASE | $6,000 | $-6,750 | -0.26x |
+| BAD delta vs BASE | $6,000 | $-6,750 | -0.95x |
 
 | lease_band | rent | cam | utilities |
 | --- | --- | --- | --- |
@@ -115,46 +117,46 @@
 - Loan amount (modeled): $496,000
 - Lease deposit (months / amount): 1.0 / $18,000
 - Total cash required to open: $142,000
-- Working capital / runway months: $100,000 / 18.9
+- Working capital / runway months: $100,000 / 100000.0
 
 ## Underwriting Summary
 - Total project cost: $620,000
 - Equity required: $124,000
 - Total cash required to open: $142,000
-- Runway months: 18.9
+- Runway months: 100000.0
 
 ## Debt & Coverage
 - Monthly debt service: $7,116
-- NOI (monthly): $1,823
-- Cash flow after debt: $-5,293
-- DSCR: 0.26x (25.6%)
+- NOI (monthly): $58,215
+- Cash flow after debt: $51,099
+- DSCR: 8.18x (818.1%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-5,293 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.06x
-- Required additional sales (per day): $307
+- Cash gap (monthly): $51,099 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.46x
+- Required additional sales (per day): $0
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $3,067 |
-| Utilization -10% | $-13,652 |
-| Spend +10% | $-699 |
-| Spend -10% | $-9,887 |
-| Fixed costs +10% | $-13,470 |
-| Fixed costs -10% | $2,884 |
+| Utilization +10% | $60,491 |
+| Utilization -10% | $41,707 |
+| Spend +10% | $56,260 |
+| Spend -10% | $45,937 |
+| Fixed costs +10% | $47,528 |
+| Fixed costs -10% | $54,669 |
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 15.05 years
+- Payback period: 0.86 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $81,772
-- Gross margin (after variable costs): 57.4%
-- Break-even sales (monthly): $142,502
-- Break-even sales (per day, operating): $4,750
-- Break-even sales (per day, after debt): $5,163
+- Monthly fixed costs: $35,705
+- Gross margin (after variable costs): 64.5%
+- Break-even sales (monthly): $55,382
+- Break-even sales (per day, operating): $1,846
+- Break-even sales (per day, after debt): $2,214
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

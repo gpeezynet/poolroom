@@ -33,7 +33,7 @@
 
 - Bar COGS: $30,856
 - Food COGS: $11,649
-- Labor: $55,253
+- Labor: $0
 - Rent: $33,333
 - CAM: $6,667
 - Property tax/insurance (NNN): $2,667
@@ -51,10 +51,10 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $248,329
+- Total expenses: $182,605
 
-- Monthly net: $2,824
-- Annual net: $33,882
+- Monthly net: $68,547
+- Annual net: $822,567
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $3,750 / $3,188
@@ -70,16 +70,18 @@
 - Program-driven bar-only guests (monthly): 580
 - Membership utilization uplift: 5.0%
 - Membership spend uplift: 3.0%
-- Program incremental labor cost (monthly): $1,505
+- Program incremental labor cost (monthly): $1,128
 - Program incremental security cost (monthly): $1,189
-- Program net contribution (monthly): $2,897
+- Program net contribution (monthly): $3,273
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $42,667
 - Utilities total: $7,333
 - Insurance: $500
-- Baseline labor (schedule): $86,795
-- Variable labor: percent of sales (not in fixed costs)
+- Baseline labor (schedule): $76,701
+- Variable labor (top-up): max(0, labor_pct*sales - baseline labor)
+- Variable labor (monthly): $0
+- Total labor (monthly): $79,018
 - Marketing: $750
 - Music licensing: $204
 - Security monitoring: $0
@@ -90,14 +92,14 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Fixed costs total: $144,241
+- Fixed costs total: $133,771
 
 ## Lease Impact
 | lease_band | occupancy_cost | cash_after_debt | dscr |
 | --- | --- | --- | --- |
-| low | $21,333 | $15,888 | 2.70x |
-| mid | $32,000 | $3,888 | 1.42x |
-| high | $42,667 | $-8,112 | 0.13x |
+| low | $21,333 | $81,612 | 9.75x |
+| mid | $32,000 | $69,612 | 8.46x |
+| high | $42,667 | $57,612 | 7.18x |
 | GOOD delta vs BASE | $-10,667 | $12,000 | 1.29x |
 | BAD delta vs BASE | $10,667 | $-12,000 | -1.29x |
 
@@ -115,46 +117,46 @@
 - Loan amount (modeled): $650,000
 - Lease deposit (months / amount): 1.0 / $42,667
 - Total cash required to open: $582,667
-- Working capital / runway months: $180,000 / 22.2
+- Working capital / runway months: $180,000 / 180000.0
 
 ## Underwriting Summary
 - Total project cost: $1,190,000
 - Equity required: $540,000
 - Total cash required to open: $582,667
-- Runway months: 22.2
+- Runway months: 180000.0
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $1,214
-- Cash flow after debt: $-8,112
-- DSCR: 0.13x (13.0%)
+- NOI (monthly): $66,938
+- Cash flow after debt: $57,612
+- DSCR: 7.18x (717.8%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-8,112 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.06x
-- Required additional sales (per day): $467
+- Cash gap (monthly): $57,612 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.71x
+- Required additional sales (per day): $0
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $6,434 |
-| Utilization -10% | $-22,657 |
-| Spend +10% | $1,161 |
-| Spend -10% | $-17,384 |
-| Fixed costs +10% | $-22,536 |
-| Fixed costs -10% | $6,312 |
+| Utilization +10% | $77,683 |
+| Utilization -10% | $37,541 |
+| Spend +10% | $70,407 |
+| Spend -10% | $44,817 |
+| Fixed costs +10% | $44,235 |
+| Fixed costs -10% | $70,989 |
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
-- Payback period: 35.12 years
+- Payback period: 1.45 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $144,241
-- Gross margin (after variable costs): 57.9%
-- Break-even sales (monthly): $249,056
-- Break-even sales (per day, operating): $8,302
-- Break-even sales (per day, after debt): $8,839
+- Monthly fixed costs: $133,771
+- Gross margin (after variable costs): 79.9%
+- Break-even sales (monthly): $167,391
+- Break-even sales (per day, operating): $5,580
+- Break-even sales (per day, after debt): $5,969
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

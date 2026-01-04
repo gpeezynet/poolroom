@@ -33,7 +33,7 @@
 
 - Bar COGS: $18,981
 - Food COGS: $7,136
-- Labor: $34,086
+- Labor: $0
 - Rent: $24,667
 - CAM: $4,667
 - Property tax/insurance (NNN): $2,667
@@ -51,10 +51,10 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $193,655
+- Total expenses: $149,475
 
-- Monthly net: $-38,717
-- Annual net: $-464,604
+- Monthly net: $5,464
+- Annual net: $65,563
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $0 / $0
@@ -77,8 +77,10 @@
 - Occupancy (rent/CAM/NNN): $32,000
 - Utilities total: $6,000
 - Insurance: $500
-- Baseline labor (schedule): $86,795
-- Variable labor: percent of sales (not in fixed costs)
+- Baseline labor (schedule): $76,701
+- Variable labor (top-up): max(0, labor_pct*sales - baseline labor)
+- Variable labor (monthly): $0
+- Total labor (monthly): $76,701
 - Marketing: $750
 - Music licensing: $204
 - Security monitoring: $0
@@ -89,7 +91,7 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Fixed costs total: $129,547
+- Fixed costs total: $119,453
 
 ## CAPEX & Financing
 - CAPEX total (incl. working capital): $1,190,000
@@ -99,46 +101,46 @@
 - Loan amount (modeled): $650,000
 - Lease deposit (months / amount): 1.0 / $32,000
 - Total cash required to open: $572,000
-- Working capital / runway months: $180,000 / 3.7
+- Working capital / runway months: $180,000 / 46.6
 
 ## Underwriting Summary
 - Total project cost: $1,190,000
 - Equity required: $540,000
 - Total cash required to open: $572,000
-- Runway months: 3.7
+- Runway months: 46.6
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $-38,717
-- Cash flow after debt: $-48,043
-- DSCR: 0.00x (0.0%)
+- NOI (monthly): $5,464
+- Cash flow after debt: $-3,862
+- DSCR: 0.59x (58.6%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-48,043 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.53x
-- Required additional sales (per day): $2,732
-- Notes: Required utilization > 1.50 (very aggressive)
+- Cash gap (monthly): $-3,862 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.03x
+- Required additional sales (per day): $160
+- Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $-38,960 |
-| Utilization -10% | $-57,126 |
-| Spend +10% | $-42,322 |
-| Spend -10% | $-53,763 |
-| Fixed costs +10% | $-60,997 |
-| Fixed costs -10% | $-35,088 |
+| Utilization +10% | $8,630 |
+| Utilization -10% | $-16,354 |
+| Spend +10% | $4,005 |
+| Spend -10% | $-11,729 |
+| Fixed costs +10% | $-15,807 |
+| Fixed costs -10% | $8,083 |
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
-- Payback period: n/a
+- Payback period: 18.15 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $129,547
-- Gross margin (after variable costs): 58.6%
-- Break-even sales (monthly): $220,981
-- Break-even sales (per day, operating): $7,366
-- Break-even sales (per day, after debt): $7,896
+- Monthly fixed costs: $119,453
+- Gross margin (after variable costs): 80.6%
+- Break-even sales (monthly): $148,162
+- Break-even sales (per day, operating): $4,939
+- Break-even sales (per day, after debt): $5,324
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.
