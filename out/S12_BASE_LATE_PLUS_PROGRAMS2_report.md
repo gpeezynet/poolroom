@@ -1,4 +1,4 @@
-# ROI Report: S12 - 12-table opening model
+# ROI Report: S12_BASE_LATE_PLUS_PROGRAMS2 - 12-table base late-night + programs (drivers)
 
 ## Scenario Inputs
 - Tables: 12
@@ -6,43 +6,46 @@
 - Pricing style: hourly
 - Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
 - Lease band: mid
-- Estimated guests per month: 4209
+- Estimated guests per month: 6355
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
+- Late bar/food fractions: 1.00 / 1.00
 
 ## Legal Hours Constraint
 - Legal max open hours/day: 16.0
-- Modeled open hours/day (capped): 14.0
+- Modeled open hours/day (capped): 16.0
+- Capped late extra hours/day: 2.0
+- Capped late extra hours/week: 14.0
 - NOTE: All-night operation is not modeled for alcohol venues; this model enforces legal max hours.
 
 ## Revenue Drivers
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
 - Avg table hours sold per table (weekday/weekend): 3.00 / 5.00
 - Avg guests per table hour: 3.00
-- Bar attach + spend per guest: 70.0% @ $18
+- Bar attach + spend per guest: 70.0% @ $19
 - Food attach + spend per guest: 35.0% @ $10
-- Multipliers (utilization/spend): 1.00 / 1.00
+- Multipliers (utilization/spend): 1.05 / 1.03
 
 ## Monthly P&L
-- Table revenue: $22,655
-- Bar revenue (table-driven): $53,030
-- Food revenue (table-driven): $14,731
-- Bar-only bar revenue: $18,540
-- Bar-only food revenue: $2,575
-- Total monthly sales: $111,531
+- Table revenue: $35,605
+- Bar revenue (table-driven): $84,460
+- Food revenue (table-driven): $23,461
+- Bar-only bar revenue: $28,976
+- Bar-only food revenue: $4,024
+- Total monthly sales: $184,116
 
-- Bar COGS: $14,314
-- Food COGS: $5,192
-- Labor: $24,537
+- Bar COGS: $22,687
+- Food COGS: $8,246
+- Labor: $40,506
 - Rent: $13,875
 - CAM: $2,625
 - Property tax/insurance (NNN): $1,500
-- Utilities: $3,375
+- Utilities: $3,713
 - Total occupancy cost: $18,000
 - Insurance: $500
 - Security: $0
 - POS software: $180
-- Payment processing: $2,811
+- Payment processing: $4,640
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -51,32 +54,32 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $125,932
+- Total expenses: $163,914
 
-- Monthly net: $-14,401
-- Annual net: $-172,811
+- Monthly net: $20,202
+- Annual net: $242,428
 
 ## Programs (Non-table Revenue)
-- Membership revenue + contribution: $0 / $0
-- League revenue + contribution: $0 / $0
-- Event revenue + contribution: $0 / $0
-- Total programs contribution: $0
-- Membership discount leakage (not applied): $0
+- Membership revenue + contribution: $3,750 / $3,188
+- League revenue + contribution: $240 / $192
+- Event revenue + contribution: $3,600 / $2,601
+- Total programs contribution: $5,980
+- Membership discount leakage (not applied): $1,500
 
 ## Programs Impact
-- Program-driven table hours (monthly): 0.0
-- Program-driven bar-only guests (monthly): 0
-- Membership utilization uplift: 0.0%
-- Membership spend uplift: 0.0%
-- Program incremental labor cost (monthly): $0
-- Program incremental security cost (monthly): $0
-- Program net contribution (monthly): $0
+- Program-driven table hours (monthly): 136.1
+- Program-driven bar-only guests (monthly): 580
+- Membership utilization uplift: 5.0%
+- Membership spend uplift: 3.0%
+- Program incremental labor cost (monthly): $1,505
+- Program incremental security cost (monthly): $1,189
+- Program net contribution (monthly): $3,287
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $18,000
-- Utilities total: $3,375
+- Utilities total: $3,713
 - Insurance: $500
-- Baseline labor (schedule): $53,698
+- Baseline labor (schedule): $59,424
 - Variable labor: percent of sales (not in fixed costs)
 - Marketing: $750
 - Music licensing: $204
@@ -88,7 +91,7 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Fixed costs total: $79,078
+- Fixed costs total: $87,836
 
 ## CAPEX & Financing
 - CAPEX total (incl. working capital): $620,000
@@ -98,46 +101,56 @@
 - Loan amount (modeled): $496,000
 - Lease deposit (months / amount): 1.0 / $18,000
 - Total cash required to open: $142,000
-- Working capital / runway months: $100,000 / 4.6
+- Working capital / runway months: $100,000 / 100000.0
 
 ## Underwriting Summary
 - Total project cost: $620,000
 - Equity required: $124,000
 - Total cash required to open: $142,000
-- Runway months: 4.6
+- Runway months: 100000.0
 
 ## Debt & Coverage
 - Monthly debt service: $7,116
-- NOI (monthly): $-14,401
-- Cash flow after debt: $-21,517
-- DSCR: 0.00x (0.0%)
+- NOI (monthly): $18,593
+- Cash flow after debt: $11,477
+- DSCR: 2.61x (261.3%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-21,517 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.33x
-- Required additional sales (per day): $1,237
-- Notes: Required utilization > 1.25 (aggressive)
+- Cash gap (monthly): $11,477 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 0.89x
+- Required additional sales (per day): $0
+- Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $-15,049 |
-| Utilization -10% | $-27,985 |
-| Spend +10% | $-17,588 |
-| Spend -10% | $-25,447 |
-| Fixed costs +10% | $-29,425 |
-| Fixed costs -10% | $-13,609 |
+| Utilization +10% | $22,120 |
+| Utilization -10% | $834 |
+| Spend +10% | $17,715 |
+| Spend -10% | $5,238 |
+| Fixed costs +10% | $2,693 |
+| Fixed costs -10% | $20,260 |
+
+## Late-Night Incremental (Bridge)
+- Incremental sales (monthly): $38,050
+- Incremental variable costs (monthly): $15,509
+- Incremental gross profit (monthly): $22,541
+- Incremental fixed costs (monthly): $5,726
+- Incremental NOI (monthly): $16,815
+- Incremental cash flow after debt (monthly): $16,815
+- Break-even incremental sales (per day): $322
+- Late-night worth it?: True
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: n/a
+- Payback period: 2.56 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $79,078
-- Gross margin (after variable costs): 58.0%
-- Break-even sales (monthly): $136,364
-- Break-even sales (per day, operating): $4,545
-- Break-even sales (per day, after debt): $4,954
+- Monthly fixed costs: $87,836
+- Gross margin (after variable costs): 57.8%
+- Break-even sales (monthly): $151,952
+- Break-even sales (per day, operating): $5,065
+- Break-even sales (per day, after debt): $5,475
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

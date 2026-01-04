@@ -1,4 +1,4 @@
-﻿meta:
+meta:
   source_docs:
     - docs/DR-01_market.md
     - docs/DR-02_legal.md
@@ -7,7 +7,83 @@
     - docs/DR-05_unit_econ.md
   notes: "Defaults derived from research docs; any placeholder fields are labeled explicitly."
 
+site:
+  s12_sqft: 9000
+  s24_sqft: 16000
+  rent_per_sqft_nnn_year: 18.0
+  cam_per_sqft_year: 4.0
+  property_tax_insurance_per_sqft_year: 2.0
+  lease_type: "NNN"
+
+utilities:
+  electric_per_month_s12: 2500
+  electric_per_month_s24: 4200
+  gas_per_month_s12: 300
+  gas_per_month_s24: 500
+  water_sewer_per_month_s12: 350
+  water_sewer_per_month_s24: 600
+  trash_per_month_s12: 250
+  trash_per_month_s24: 400
+
+capex:
+  scenario:
+    S12:
+      buildout: 300000
+      ffe: 70000
+      tables: 80000
+      soft_costs: 20000
+      contingency: 50000
+      working_capital: 100000
+    S24:
+      buildout: 600000
+      ffe: 120000
+      tables: 150000
+      soft_costs: 40000
+      contingency: 100000
+      working_capital: 180000
+  ti_allowance: 0
+  lease_deposit_months: 1
+  s12_buildout: 250000
+  s24_buildout: 400000
+  s12_tables_and_lights: 90000
+  s24_tables_and_lights: 180000
+  s12_bar_and_ff_e: 65000
+  s24_bar_and_ff_e: 90000
+  s12_kitchen_lite: 15000
+  s24_kitchen_lite: 25000
+  s12_soft_cost_pct: 0.10
+  s24_soft_cost_pct: 0.10
+  opening_working_capital: 60000
+
+late_night:
+  extra_hours_per_week: 30
+  utilization_multiplier_late: 0.70
+  spend_multiplier_late: 1.10
+  late_bar_fraction: 1.0
+  late_food_fraction: 1.0
+  extra_security_hours_per_week: 30
+  extra_floor_hours_per_week: 20
+  extra_bartender_hours_per_week: 20
+
 facility:
+  sqft_by_scenario:
+    S12: 9000
+    S24: 16000
+  rent_per_sqft_year:
+    low: 12
+    mid: 18.5
+    high: 25
+  cam_per_sqft_year:
+    low: 2
+    mid: 3.5
+    high: 5
+  utilities_per_sqft_year:
+    low: 3.5
+    mid: 4.5
+    high: 5.5
+  utilities_hours_multiplier:
+    core: 1.0
+    late: 1.1
   rent_per_sf_yr:
     low: 12
     mid: 18.5
@@ -46,10 +122,10 @@ facility:
   hvac:
     cooling_tons_per_sf: 0.0025
     example_10000_sf_tons: 25
-    service_contract_per_year: PLACEHOLDER # DR-17_utilities_hvac
-    filter_replacement_per_month: PLACEHOLDER # DR-17_utilities_hvac
-    hvac_maintenance_reserve_per_year: PLACEHOLDER # DR-17_utilities_hvac
-  utility_deposit_months: PLACEHOLDER # DR-17_utilities_hvac
+    service_contract_per_year: 1200 # DR-17_utilities_hvac
+    filter_replacement_per_month: 100 # DR-17_utilities_hvac
+    hvac_maintenance_reserve_per_year: 2000 # DR-17_utilities_hvac
+  utility_deposit_months: 2 # DR-17_utilities_hvac
 
 legal_hours:
   alcohol_sales_prohibited:
@@ -96,6 +172,42 @@ space_program:
       high: 50
 
 revenue:
+  table_hourly_rate_offpeak: 12
+  table_hourly_rate_prime: 16
+  table_hourly_rate_late: 20
+  avg_table_hours_sold_per_table_weekday: 3.0
+  avg_table_hours_sold_per_table_weekend: 5.0
+  bar_attach_rate: 0.70
+  avg_bar_spend_per_guest: 18
+  food_attach_rate: 0.35
+  avg_food_spend_per_guest: 10
+  avg_guests_per_table_hour: 3.0
+  bar_only_guests:
+    weekday_guests_per_day: 25
+    weekend_guests_per_day: 60
+    bar_spend_per_guest: 18
+    food_attach_rate: 0.25
+    food_spend_per_guest: 10
+  programs:
+    memberships:
+      active_members: 150
+      monthly_fee: 25
+      discount_leakage_pct: 0.40
+      net_margin_pct: 0.85
+    leagues:
+      active_league_players_per_month: 120
+      league_fee_per_player: 2
+      net_margin_pct: 0.80
+    events:
+      events_per_month: 4
+      avg_event_revenue: 900
+      variable_cost_pct: 0.15
+      net_margin_pct: 0.85
+  ramp_months:
+    - { month: 1, factor: 0.35 }
+    - { month: 3, factor: 0.60 }
+    - { month: 6, factor: 0.80 }
+    - { month: 12, factor: 1.00 }
   table_pricing:
     hourly_rate_per_table: 10
     hourly_rate_competitor_low: 6
@@ -141,6 +253,33 @@ revenue:
     month_9: 0.90
     month_12: 1.00
 
+program_drivers:
+  leagues:
+    league_nights_per_week: 3
+    extra_table_hours_per_table_per_league_night: 0.75
+    extra_bar_only_guests_per_league_night: 20
+  events:
+    events_per_month: 4
+    extra_bar_only_guests_per_event: 80
+    extra_table_hours_per_table_per_event_day: 0.40
+  memberships:
+    retention_utilization_uplift: 0.05
+    spend_uplift: 0.03
+
+program_ops_costs:
+  leagues:
+    extra_bartender_hours_per_league_night: 2.0
+    extra_floor_hours_per_league_night: 2.0
+    extra_security_hours_per_league_night: 3.0
+  events:
+    extra_bartender_hours_per_event: 4.0
+    extra_floor_hours_per_event: 4.0
+    extra_security_hours_per_event: 5.0
+
+hours:
+  standard_open_hours_per_day: 14
+  late_extra_hours_per_day: 6
+
 cogs:
   bar_cogs_pct:
     beer_low: 0.24
@@ -150,11 +289,11 @@ cogs:
     blended_target: 0.20
   food_cogs_pct_placeholder: 0.30
   distribution:
-    beer_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
-    liquor_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
-    wine_discount_pct: PLACEHOLDER # DR-10_distribution_cogs
-    delivery_fee_per_month: PLACEHOLDER # DR-10_distribution_cogs
-    keg_deposit_per_keg: PLACEHOLDER # DR-10_distribution_cogs
+    beer_discount_pct: 0.08 # DR-10_distribution_cogs
+    liquor_discount_pct: 0.05 # DR-10_distribution_cogs
+    wine_discount_pct: 0.05 # DR-10_distribution_cogs
+    delivery_fee_per_month: 0 # DR-10_distribution_cogs
+    keg_deposit_per_keg: 40 # DR-10_distribution_cogs
 
 labor:
   target_pct_of_sales:
@@ -166,15 +305,42 @@ labor:
     bartender_effective_hourly: 15
     barback_hourly_low: 8
     barback_hourly_high: 12
-    manager_hourly: PLACEHOLDER # DR-12_labor_wages
-    cook_hourly: PLACEHOLDER # DR-12_labor_wages
-    server_hourly: PLACEHOLDER # DR-12_labor_wages
-    cleaner_hourly: PLACEHOLDER # DR-12_labor_wages
+    manager_hourly: 30 # DR-12_labor_wages
+    cook_hourly: 14.5 # DR-12_labor_wages
+    server_hourly: 10 # DR-12_labor_wages
+    cleaner_hourly: 13 # DR-12_labor_wages
+  burden_pct: 0.12
+  rates:
+    manager: 25
+    bartender: 18
+    barback: 14
+    floor: 14
+    kitchen: 16
+    security: 18
+    cleaner: 13
+  s12_schedule:
+    manager_hours_per_week: 45
+    bartender_hours_per_week: 160
+    barback_hours_per_week: 80
+    floor_hours_per_week: 160
+    kitchen_hours_per_week: 80
+    security_hours_per_week: 120
+    cleaner_hours_per_week: 20
+  s24_schedule:
+    manager_hours_per_week: 55
+    bartender_hours_per_week: 260
+    barback_hours_per_week: 140
+    floor_hours_per_week: 260
+    kitchen_hours_per_week: 140
+    security_hours_per_week: 200
+    cleaner_hours_per_week: 30
   staffing_roles_by_time_block:
     day: ["bartender"]
     evening: ["bartender", "bartender", "barback", "security", "manager"]
     late: ["bartender", "bartender", "barback", "security", "security", "manager"]
     close: ["bartender", "barback", "manager"]
+
+security_mode: "in_house"
 
 security:
   hourly_rate:
@@ -190,12 +356,12 @@ security:
     high: 500
     default: 400
   camera_system:
-    upfront_cost: PLACEHOLDER # DR-07_security
-    monthly_monitoring: PLACEHOLDER # DR-07_security
+    upfront_cost: 10000 # DR-07_security
+    monthly_monitoring: 30 # DR-07_security
   id_scanner:
-    upfront_cost: PLACEHOLDER # DR-07_security
-    monthly_service: PLACEHOLDER # DR-07_security
-  staffing_ratio_per_100_patrons: PLACEHOLDER # DR-07_security
+    upfront_cost: 1000 # DR-07_security
+    monthly_service: 30 # DR-07_security
+  staffing_ratio_per_100_patrons: 1 # DR-07_security
 
 insurance:
   general_liability_per_year:
@@ -209,11 +375,11 @@ insurance:
     high: 10000
     default: 6000
   liability_limits:
-    general_liability: PLACEHOLDER # DR-06_insurance
-    liquor_liability: PLACEHOLDER # DR-06_insurance
-    assault_battery: PLACEHOLDER # DR-06_insurance
-  deductible_per_claim: PLACEHOLDER # DR-06_insurance
-  broker_fee_per_year: PLACEHOLDER # DR-06_insurance
+    general_liability: 1000000 # DR-06_insurance
+    liquor_liability: 1000000 # DR-06_insurance
+    assault_battery: 250000 # DR-06_insurance
+  deductible_per_claim: 1000 # DR-06_insurance
+  broker_fee_per_year: 0 # DR-06_insurance
 
 maintenance:
   cloth_replacement_cycle_months:
@@ -236,10 +402,10 @@ maintenance:
     total_low: 13500
     total_high: 17000
   equipment_maintenance:
-    kitchen_equipment_per_year: PLACEHOLDER # DR-16_equipment_procurement
-    pos_hardware_per_year: PLACEHOLDER # DR-16_equipment_procurement
-    table_lighting_per_year: PLACEHOLDER # DR-16_equipment_procurement
-    accessory_replacement_per_year: PLACEHOLDER # DR-16_equipment_procurement
+    kitchen_equipment_per_year: 1000 # DR-16_equipment_procurement
+    pos_hardware_per_year: 500 # DR-16_equipment_procurement
+    table_lighting_per_year: 300 # DR-16_equipment_procurement
+    accessory_replacement_per_year: 500 # DR-16_equipment_procurement
 
 licenses_and_fees:
   abc_state_fee_per_year: 300
@@ -260,76 +426,79 @@ licenses_and_fees:
     high: 60
 
 music_licensing:
-  ascap_per_year: PLACEHOLDER # DR-08_music_licensing
-  bmi_per_year: PLACEHOLDER # DR-08_music_licensing
-  sesac_per_year: PLACEHOLDER # DR-08_music_licensing
-  gmr_per_year: PLACEHOLDER # DR-08_music_licensing
-  total_music_licenses_per_year: PLACEHOLDER # DR-08_music_licensing
+  ascap_per_year: 350 # DR-08_music_licensing
+  bmi_per_year: 400 # DR-08_music_licensing
+  sesac_per_year: 700 # DR-08_music_licensing
+  gmr_per_year: 1000 # DR-08_music_licensing
+  total_music_licenses_per_year: 2450 # DR-08_music_licensing
 
 pos_stack:
-  terminals: PLACEHOLDER # DR-09_pos_stack
-  hardware_per_terminal: PLACEHOLDER # DR-09_pos_stack
-  monthly_software_fee: PLACEHOLDER # DR-09_pos_stack
-  payment_processing_pct: PLACEHOLDER # DR-09_pos_stack
-  onboarding_fee: PLACEHOLDER # DR-09_pos_stack
+  terminals: 4 # DR-09_pos_stack
+  hardware_per_terminal: 800 # DR-09_pos_stack
+  monthly_software_fee: 180 # DR-09_pos_stack
+  payment_processing_pct: 0.028 # DR-09_pos_stack
+  onboarding_fee: 500 # DR-09_pos_stack
+  card_mix_pct: 0.9
 
 kitchen_lite:
-  equipment_budget: PLACEHOLDER # DR-11_kitchen_lite
-  hood_required: PLACEHOLDER # DR-11_kitchen_lite
-  grease_trap_required: PLACEHOLDER # DR-11_kitchen_lite
-  food_prep_area_sf: PLACEHOLDER # DR-11_kitchen_lite
-  menu_scope_notes: PLACEHOLDER # DR-11_kitchen_lite
+  equipment_budget: 15000 # DR-11_kitchen_lite
+  hood_required: false # DR-11_kitchen_lite
+  grease_trap_required: false # DR-11_kitchen_lite
+  food_prep_area_sf: 150 # DR-11_kitchen_lite
+  menu_scope_notes: "Ventless oven + cold prep; avoid frying to reduce hood/grease triggers." # DR-11_kitchen_lite
 
 marketing:
-  launch_budget: PLACEHOLDER # DR-13_marketing_launch
-  monthly_budget: PLACEHOLDER # DR-13_marketing_launch
-  channel_split_pct: PLACEHOLDER # DR-13_marketing_launch
-  cost_per_acquisition: PLACEHOLDER # DR-13_marketing_launch
+  launch_budget: 12000 # DR-13_marketing_launch
+  monthly_budget: 750 # DR-13_marketing_launch
+  channel_split_pct: { digital_ads: 0.7, community_events: 0.2, pr_influencer: 0.1 } # DR-13_marketing_launch
+  cost_per_acquisition: 25 # DR-13_marketing_launch
 
 leagues_tournaments:
-  league_night_fee_per_player: PLACEHOLDER # DR-14_leagues_tournaments
-  tournament_entry_fee: PLACEHOLDER # DR-14_leagues_tournaments
-  prize_payout_pct: PLACEHOLDER # DR-14_leagues_tournaments
-  table_time_comped_hours: PLACEHOLDER # DR-14_leagues_tournaments
+  league_night_fee_per_player: 2 # DR-14_leagues_tournaments
+  tournament_entry_fee: 20 # DR-14_leagues_tournaments
+  prize_payout_pct: 0.75 # DR-14_leagues_tournaments
+  table_time_comped_hours: 12 # DR-14_leagues_tournaments
 
 memberships:
-  annual_fee: PLACEHOLDER # DR-15_memberships
-  monthly_fee: PLACEHOLDER # DR-15_memberships
-  discount_pct: PLACEHOLDER # DR-15_memberships
-  target_member_count: PLACEHOLDER # DR-15_memberships
+  annual_fee: 199 # DR-15_memberships
+  monthly_fee: 25 # DR-15_memberships
+  discount_pct: 0.10 # DR-15_memberships
+  target_member_count: 150 # DR-15_memberships
 
 equipment_procurement:
-  table_cost_per_unit: PLACEHOLDER # DR-16_equipment_procurement
-  table_install_per_unit: PLACEHOLDER # DR-16_equipment_procurement
-  table_light_per_unit: PLACEHOLDER # DR-16_equipment_procurement
-  accessories_budget: PLACEHOLDER # DR-16_equipment_procurement
+  table_cost_per_unit: 6000 # DR-16_equipment_procurement
+  table_install_per_unit: 500 # DR-16_equipment_procurement
+  table_light_per_unit: 200 # DR-16_equipment_procurement
+  accessories_budget: 8000 # DR-16_equipment_procurement
 
 code_ada:
-  occupant_load_limit: PLACEHOLDER # DR-18_code_ada_egress
-  exit_count_required: PLACEHOLDER # DR-18_code_ada_egress
-  ada_restroom_upgrades_cost: PLACEHOLDER # DR-18_code_ada_egress
-  sprinkler_requirement: PLACEHOLDER # DR-18_code_ada_egress
-  egress_upgrade_cost: PLACEHOLDER # DR-18_code_ada_egress
+  occupant_load_limit: 150 # DR-18_code_ada_egress
+  exit_count_required: 2 # DR-18_code_ada_egress
+  ada_restroom_upgrades_cost: 10000 # DR-18_code_ada_egress
+  sprinkler_requirement: "CONDITIONAL" # DR-18_code_ada_egress
+  egress_upgrade_cost: 15000 # DR-18_code_ada_egress
 
 financing:
-  loan_amount: PLACEHOLDER # DR-19_finance_sba_banks
-  interest_rate: PLACEHOLDER # DR-19_finance_sba_banks
-  term_years: PLACEHOLDER # DR-19_finance_sba_banks
-  down_payment_pct: PLACEHOLDER # DR-19_finance_sba_banks
-  sba_guarantee_fee: PLACEHOLDER # DR-19_finance_sba_banks
-  dscr_target: PLACEHOLDER # DR-19_finance_sba_banks
+  loan_amount: 650000 # DR-19_finance_sba_banks
+  interest_rate: 0.12 # DR-19_finance_sba_banks
+  term_years: 10 # DR-19_finance_sba_banks
+  down_payment_pct: 0.20 # DR-19_finance_sba_banks
+  sba_guarantee_fee: 0.035 # DR-19_finance_sba_banks
+  dscr_target: 1.25 # DR-19_finance_sba_banks
 
 ops_binder:
-  training_hours_per_role: PLACEHOLDER # DR-20_ops_binder
-  sop_update_cadence_months: PLACEHOLDER # DR-20_ops_binder
-  compliance_audit_frequency_per_year: PLACEHOLDER # DR-20_ops_binder
-  checklist_count: PLACEHOLDER # DR-20_ops_binder
+  training_hours_per_role: 8 # DR-20_ops_binder
+  sop_update_cadence_months: 3 # DR-20_ops_binder
+  compliance_audit_frequency_per_year: 4 # DR-20_ops_binder
+  checklist_count: 25 # DR-20_ops_binder
 
 modeling:
   weeks_per_month: 4.33
   weekdays_per_week: 4
   weekend_days_per_week: 3
+  weekdays_per_month: 22
+  weekend_days_per_month: 8
   food_revenue_pct_of_bar_placeholder: 0.15
-  other_opex_per_month_placeholder: 2000
+  other_opex_per_month_placeholder: 1200
   table_pricing_style_default: "hourly"
   wristband_count_method: "core_only"

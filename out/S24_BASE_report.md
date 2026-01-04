@@ -1,12 +1,12 @@
-# ROI Report: S12 - 12-table opening model
+# ROI Report: S24_BASE - 24-table base
 
 ## Scenario Inputs
-- Tables: 12
-- Size: 8000 sf
+- Tables: 24
+- Size: 15000 sf
 - Pricing style: hourly
 - Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
 - Lease band: mid
-- Estimated guests per month: 4209
+- Estimated guests per month: 8418
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 
@@ -24,37 +24,37 @@
 - Multipliers (utilization/spend): 1.00 / 1.00
 
 ## Monthly P&L
-- Table revenue: $22,655
-- Bar revenue (table-driven): $53,030
-- Food revenue (table-driven): $14,731
+- Table revenue: $45,309
+- Bar revenue (table-driven): $106,061
+- Food revenue (table-driven): $29,461
 - Bar-only bar revenue: $18,540
 - Bar-only food revenue: $2,575
-- Total monthly sales: $111,531
+- Total monthly sales: $201,946
 
-- Bar COGS: $14,314
-- Food COGS: $5,192
-- Labor: $24,537
-- Rent: $13,875
-- CAM: $2,625
-- Property tax/insurance (NNN): $1,500
-- Utilities: $3,375
-- Total occupancy cost: $18,000
+- Bar COGS: $24,920
+- Food COGS: $9,611
+- Labor: $44,428
+- Rent: $24,667
+- CAM: $4,667
+- Property tax/insurance (NNN): $2,667
+- Utilities: $6,000
+- Total occupancy cost: $32,000
 - Insurance: $500
 - Security: $0
 - POS software: $180
-- Payment processing: $2,811
+- Payment processing: $5,089
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
 - HVAC filters: $100
 - HVAC reserve: $167
-- Maintenance reserve: $708
-- Licenses & fees: $96
+- Maintenance reserve: $1,417
+- Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $125,932
+- Total expenses: $213,596
 
-- Monthly net: $-14,401
-- Annual net: $-172,811
+- Monthly net: $-11,650
+- Annual net: $-139,794
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $0 / $0
@@ -73,10 +73,10 @@
 - Program net contribution (monthly): $0
 
 ## Fixed Cost Breakdown
-- Occupancy (rent/CAM/NNN): $18,000
-- Utilities total: $3,375
+- Occupancy (rent/CAM/NNN): $32,000
+- Utilities total: $6,000
 - Insurance: $500
-- Baseline labor (schedule): $53,698
+- Baseline labor (schedule): $86,795
 - Variable labor: percent of sales (not in fixed costs)
 - Marketing: $750
 - Music licensing: $204
@@ -85,59 +85,59 @@
 - HVAC service: $100
 - HVAC filters: $100
 - HVAC reserve: $167
-- Maintenance reserve: $708
-- Licenses & fees: $96
+- Maintenance reserve: $1,417
+- Licenses & fees: $135
 - Other opex (misc): $1,200
-- Fixed costs total: $79,078
+- Fixed costs total: $129,547
 
 ## CAPEX & Financing
-- CAPEX total (incl. working capital): $620,000
+- CAPEX total (incl. working capital): $1,190,000
 - Tenant improvement allowance: $0
-- Total project cost (net TI): $620,000
-- Equity required at close: $124,000
-- Loan amount (modeled): $496,000
-- Lease deposit (months / amount): 1.0 / $18,000
-- Total cash required to open: $142,000
-- Working capital / runway months: $100,000 / 4.6
+- Total project cost (net TI): $1,190,000
+- Equity required at close: $540,000
+- Loan amount (modeled): $650,000
+- Lease deposit (months / amount): 1.0 / $32,000
+- Total cash required to open: $572,000
+- Working capital / runway months: $180,000 / 8.6
 
 ## Underwriting Summary
-- Total project cost: $620,000
-- Equity required: $124,000
-- Total cash required to open: $142,000
-- Runway months: 4.6
+- Total project cost: $1,190,000
+- Equity required: $540,000
+- Total cash required to open: $572,000
+- Runway months: 8.6
 
 ## Debt & Coverage
-- Monthly debt service: $7,116
-- NOI (monthly): $-14,401
-- Cash flow after debt: $-21,517
+- Monthly debt service: $9,326
+- NOI (monthly): $-11,650
+- Cash flow after debt: $-20,975
 - DSCR: 0.00x (0.0%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-21,517 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.33x
-- Required additional sales (per day): $1,237
-- Notes: Required utilization > 1.25 (aggressive)
+- Cash gap (monthly): $-20,975 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.18x
+- Required additional sales (per day): $1,198
+- Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $-15,049 |
-| Utilization -10% | $-27,985 |
-| Spend +10% | $-17,588 |
-| Spend -10% | $-25,447 |
-| Fixed costs +10% | $-29,425 |
-| Fixed costs -10% | $-13,609 |
+| Utilization +10% | $-9,185 |
+| Utilization -10% | $-32,765 |
+| Spend +10% | $-13,063 |
+| Spend -10% | $-28,887 |
+| Fixed costs +10% | $-33,930 |
+| Fixed costs -10% | $-8,020 |
 
 ## ROI Metrics
-- Startup cost (likely): $620,000
+- Startup cost (likely): $1,190,000
 - Payback period: n/a
 
 ## Break-even Snapshots
-- Monthly fixed costs: $79,078
-- Gross margin (after variable costs): 58.0%
-- Break-even sales (monthly): $136,364
-- Break-even sales (per day, operating): $4,545
-- Break-even sales (per day, after debt): $4,954
+- Monthly fixed costs: $129,547
+- Gross margin (after variable costs): 58.4%
+- Break-even sales (monthly): $221,901
+- Break-even sales (per day, operating): $7,397
+- Break-even sales (per day, after debt): $7,929
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

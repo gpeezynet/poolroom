@@ -1,6 +1,8 @@
-﻿# Poolroom ROI Model
+# Poolroom ROI Model
 
 This project turns the Deep Research notes into a deterministic ROI calculator and report generator for the Huntsville poolroom concept.
+
+- Project guardrails: `docs/PROJECT_GUARDRAILS.md`
 
 ## Setup
 
