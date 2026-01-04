@@ -66,6 +66,24 @@ late_night:
   extra_bartender_hours_per_week: 20
 
 facility:
+  sqft_by_scenario:
+    S12: 9000
+    S24: 16000
+  rent_per_sqft_year:
+    low: 12
+    mid: 18.5
+    high: 25
+  cam_per_sqft_year:
+    low: 2
+    mid: 3.5
+    high: 5
+  utilities_per_sqft_year:
+    low: 3.5
+    mid: 4.5
+    high: 5.5
+  utilities_hours_multiplier:
+    core: 1.0
+    late: 1.1
   rent_per_sf_yr:
     low: 12
     mid: 18.5

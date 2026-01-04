@@ -34,6 +34,7 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(
         f"- Rent/CAM: ${result['rent_per_sf']:.2f}/sf/yr, ${result['cam_per_sf']:.2f}/sf/yr"
     )
+    lines.append(f"- Lease band: {drivers.get('lease_band', 'mid')}")
     lines.append(f"- Estimated guests per month: {result['total_guests']:.0f}")
     lines.append(
         "- Bar-only guests per day (weekday/weekend): "
@@ -129,6 +130,9 @@ def render_report(result: Dict[str, Any]) -> str:
     lines.append(f"- CAM: {_money(totals['cam'])}")
     lines.append(f"- Property tax/insurance (NNN): {_money(totals.get('property_tax_insurance'))}")
     lines.append(f"- Utilities: {_money(totals['utilities'])}")
+    lines.append(
+        f"- Total occupancy cost: {_money(totals.get('total_occupancy_cost_monthly'))}"
+    )
     lines.append(f"- Insurance: {_money(totals['insurance'])}")
     lines.append(f"- Security: {_money(totals['security'])}")
     lines.append(f"- POS software: {_money(totals.get('pos_software'))}")

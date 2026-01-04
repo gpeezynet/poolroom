@@ -151,6 +151,72 @@ scenarios:
     programs_enabled: true
     programs_driver_mode: true
 
+  S12_BASE_PLUS_PROGRAMS2_GOOD_LEASE:
+    name: "12-table base + programs (drivers) good lease"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+    programs_driver_mode: true
+    lease_band: "low"
+
+  S12_BASE_PLUS_PROGRAMS2_BASE_LEASE:
+    name: "12-table base + programs (drivers) base lease"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+    programs_driver_mode: true
+    lease_band: "mid"
+
+  S12_BASE_PLUS_PROGRAMS2_BAD_LEASE:
+    name: "12-table base + programs (drivers) bad lease"
+    tables: 12
+    size_sf:
+      low: 7000
+      high: 10000
+      default: 8000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 340000
+      likely: 620000
+      high: 1030000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+    programs_driver_mode: true
+    lease_band: "high"
+
   S24_CONSERVATIVE:
     name: "24-table conservative"
     tables: 24
@@ -228,6 +294,72 @@ scenarios:
     spend_multiplier: 1.00
     programs_enabled: true
     programs_driver_mode: true
+
+  S24_BASE_PLUS_PROGRAMS2_GOOD_LEASE:
+    name: "24-table base + programs (drivers) good lease"
+    tables: 24
+    size_sf:
+      low: 12000
+      high: 20000
+      default: 15000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 670000
+      likely: 1190000
+      high: 1920000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+    programs_driver_mode: true
+    lease_band: "low"
+
+  S24_BASE_PLUS_PROGRAMS2_BASE_LEASE:
+    name: "24-table base + programs (drivers) base lease"
+    tables: 24
+    size_sf:
+      low: 12000
+      high: 20000
+      default: 15000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 670000
+      likely: 1190000
+      high: 1920000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+    programs_driver_mode: true
+    lease_band: "mid"
+
+  S24_BASE_PLUS_PROGRAMS2_BAD_LEASE:
+    name: "24-table base + programs (drivers) bad lease"
+    tables: 24
+    size_sf:
+      low: 12000
+      high: 20000
+      default: 15000
+    pricing_style: "hourly"
+    late_night_mode: true
+    no_alcohol_after_2am_but_stay_open: true
+    startup_costs:
+      low: 670000
+      likely: 1190000
+      high: 1920000
+    rent_tier: "mid"
+    cam_tier: "mid"
+    utilization_multiplier: 1.00
+    spend_multiplier: 1.00
+    programs_enabled: true
+    programs_driver_mode: true
+    lease_band: "high"
 
   S12_CONSERVATIVE_LATE:
     name: "12-table conservative late-night"

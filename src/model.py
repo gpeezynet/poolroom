@@ -642,22 +642,41 @@ def compute_scenario(
     )
 
     site = assumptions.get("site", {})
-    s12_sqft = _num(site.get("s12_sqft", size_sf), "site.s12_sqft")
-    s24_sqft = _num(site.get("s24_sqft", size_sf), "site.s24_sqft")
-    occupancy_sqft = _select_by_tables(tables, s12_sqft, s24_sqft)
+    facility = assumptions.get("facility", {})
+    scenario_key = "S12" if tables <= 12 else "S24"
+    facility_sqft = facility.get("sqft_by_scenario", {})
+    if isinstance(facility_sqft, dict) and scenario_key in facility_sqft:
+        occupancy_sqft = _num(
+            facility_sqft.get(scenario_key, size_sf),
+            f"facility.sqft_by_scenario.{scenario_key}",
+        )
+    else:
+        s12_sqft = _num(site.get("s12_sqft", size_sf), "site.s12_sqft")
+        s24_sqft = _num(site.get("s24_sqft", size_sf), "site.s24_sqft")
+        occupancy_sqft = _select_by_tables(tables, s12_sqft, s24_sqft)
 
-    rent_tier = scenario.get("rent_tier")
-    cam_tier = scenario.get("cam_tier")
-    fallback_rent_per_sf = pick_tier(assumptions["facility"]["rent_per_sf_yr"], rent_tier)
-    fallback_cam_per_sf = pick_tier(assumptions["facility"]["cam_per_sf_yr"], cam_tier)
-    rent_per_sf = _num(
-        site.get("rent_per_sqft_nnn_year", fallback_rent_per_sf),
-        "site.rent_per_sqft_nnn_year",
-    )
-    cam_per_sf = _num(
-        site.get("cam_per_sqft_year", fallback_cam_per_sf),
-        "site.cam_per_sqft_year",
-    )
+    lease_band = scenario.get("lease_band", scenario.get("rent_tier", "mid"))
+    if not isinstance(lease_band, str):
+        lease_band = "mid"
+    rent_band = lease_band
+    rent_mapping = facility.get("rent_per_sqft_year") or facility.get("rent_per_sf_yr") or {}
+    cam_mapping = facility.get("cam_per_sqft_year") or facility.get("cam_per_sf_yr") or {}
+    utilities_mapping = facility.get("utilities_per_sqft_year") or {}
+
+    if rent_mapping:
+        rent_per_sf = pick_tier(rent_mapping, rent_band)
+    else:
+        rent_per_sf = _num(
+            site.get("rent_per_sqft_nnn_year", 0),
+            "site.rent_per_sqft_nnn_year",
+        )
+    if cam_mapping:
+        cam_per_sf = pick_tier(cam_mapping, rent_band)
+    else:
+        cam_per_sf = _num(
+            site.get("cam_per_sqft_year", 0),
+            "site.cam_per_sqft_year",
+        )
     tax_insurance_per_sf = _num(
         site.get("property_tax_insurance_per_sqft_year", 0),
         "site.property_tax_insurance_per_sqft_year",
@@ -668,28 +687,43 @@ def compute_scenario(
     property_tax_insurance = occupancy_sqft * tax_insurance_per_sf / 12
     occupancy_cost_monthly = rent + cam + property_tax_insurance
 
-    utilities = assumptions.get("utilities", {})
-    electric = _select_by_tables(
-        tables,
-        _num(utilities.get("electric_per_month_s12", 0), "utilities.electric_per_month_s12"),
-        _num(utilities.get("electric_per_month_s24", 0), "utilities.electric_per_month_s24"),
+    utilities_hours = facility.get("utilities_hours_multiplier", {})
+    hours_key = "late" if late_night else "core"
+    utilities_hours_multiplier = _num(
+        utilities_hours.get(hours_key, 1.0),
+        f"facility.utilities_hours_multiplier.{hours_key}",
     )
-    gas = _select_by_tables(
-        tables,
-        _num(utilities.get("gas_per_month_s12", 0), "utilities.gas_per_month_s12"),
-        _num(utilities.get("gas_per_month_s24", 0), "utilities.gas_per_month_s24"),
-    )
-    water_sewer = _select_by_tables(
-        tables,
-        _num(utilities.get("water_sewer_per_month_s12", 0), "utilities.water_sewer_per_month_s12"),
-        _num(utilities.get("water_sewer_per_month_s24", 0), "utilities.water_sewer_per_month_s24"),
-    )
-    trash = _select_by_tables(
-        tables,
-        _num(utilities.get("trash_per_month_s12", 0), "utilities.trash_per_month_s12"),
-        _num(utilities.get("trash_per_month_s24", 0), "utilities.trash_per_month_s24"),
-    )
-    utilities_cost_monthly = electric + gas + water_sewer + trash
+    if utilities_mapping:
+        utilities_per_sqft_year = pick_tier(utilities_mapping, rent_band)
+        utilities_cost_monthly = (
+            utilities_per_sqft_year * occupancy_sqft / 12 * utilities_hours_multiplier
+        )
+    else:
+        utilities = assumptions.get("utilities", {})
+        electric = _select_by_tables(
+            tables,
+            _num(utilities.get("electric_per_month_s12", 0), "utilities.electric_per_month_s12"),
+            _num(utilities.get("electric_per_month_s24", 0), "utilities.electric_per_month_s24"),
+        )
+        gas = _select_by_tables(
+            tables,
+            _num(utilities.get("gas_per_month_s12", 0), "utilities.gas_per_month_s12"),
+            _num(utilities.get("gas_per_month_s24", 0), "utilities.gas_per_month_s24"),
+        )
+        water_sewer = _select_by_tables(
+            tables,
+            _num(utilities.get("water_sewer_per_month_s12", 0), "utilities.water_sewer_per_month_s12"),
+            _num(utilities.get("water_sewer_per_month_s24", 0), "utilities.water_sewer_per_month_s24"),
+        )
+        trash = _select_by_tables(
+            tables,
+            _num(utilities.get("trash_per_month_s12", 0), "utilities.trash_per_month_s12"),
+            _num(utilities.get("trash_per_month_s24", 0), "utilities.trash_per_month_s24"),
+        )
+        utilities_cost_monthly = (electric + gas + water_sewer + trash) * utilities_hours_multiplier
+        utilities_per_sqft_year = (
+            utilities_cost_monthly * 12 / occupancy_sqft if occupancy_sqft else 0.0
+        )
 
     insurance_per_year = float(
         assumptions["insurance"]["combined_policy_per_year"]["default"]
@@ -787,7 +821,6 @@ def compute_scenario(
 
     capex = assumptions.get("capex", {})
     capex_scenarios = capex.get("scenario", {})
-    scenario_key = "S12" if tables <= 12 else "S24"
     capex_line = capex_scenarios.get(scenario_key, {}) if isinstance(capex_scenarios, dict) else {}
 
     if capex_line:
@@ -1051,10 +1084,14 @@ def compute_scenario(
             "labor": labor,
             "semi_fixed_labor_monthly": semi_fixed_labor_monthly,
             "rent": rent,
+            "rent_monthly": rent,
             "cam": cam,
+            "cam_monthly": cam,
             "property_tax_insurance": property_tax_insurance,
             "occupancy_cost_monthly": occupancy_cost_monthly,
+            "total_occupancy_cost_monthly": occupancy_cost_monthly,
             "utilities": utilities_cost_monthly,
+            "utilities_monthly": utilities_cost_monthly,
             "utilities_cost_monthly": utilities_cost_monthly,
             "insurance": insurance,
             "security": security,
@@ -1159,6 +1196,11 @@ def compute_scenario(
             "late_extra_hours_per_day_capped": late_extra_hours_per_day_capped,
             "late_extra_hours_per_week_capped": extra_hours_per_week_capped,
             "legal_hours_enforced": legal_hours_enforced,
+            "lease_band": lease_band,
+            "rent_per_sqft_year": rent_per_sf,
+            "cam_per_sqft_year": cam_per_sf,
+            "utilities_per_sqft_year": utilities_per_sqft_year,
+            "utilities_hours_multiplier": utilities_hours_multiplier,
             "programs_enabled": programs_enabled,
             "programs_driver_mode": programs_driver_mode,
             "program_membership_active_members": programs.get("memberships", {}).get("active_members", 0),

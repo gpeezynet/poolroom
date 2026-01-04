@@ -1,12 +1,12 @@
-# ROI Report: S12_UPSIDE_PLUS_PROGRAMS - 12-table upside + programs
+# ROI Report: S12_BASE_PLUS_PROGRAMS2_BAD_LEASE - 12-table base + programs (drivers) bad lease
 
 ## Scenario Inputs
 - Tables: 12
 - Size: 8000 sf
 - Pricing style: hourly
-- Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
-- Lease band: mid
-- Estimated guests per month: 4840
+- Rent/CAM: $25.00/sf/yr, $5.00/sf/yr
+- Lease band: high
+- Estimated guests per month: 4828
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
 
@@ -19,30 +19,30 @@
 - Table rates (offpeak/prime/late): $12/hr, $16/hr, $20/hr
 - Avg table hours sold per table (weekday/weekend): 3.00 / 5.00
 - Avg guests per table hour: 3.00
-- Bar attach + spend per guest: 70.0% @ $20
-- Food attach + spend per guest: 35.0% @ $11
-- Multipliers (utilization/spend): 1.15 / 1.10
+- Bar attach + spend per guest: 70.0% @ $19
+- Food attach + spend per guest: 35.0% @ $10
+- Multipliers (utilization/spend): 1.05 / 1.03
 
 ## Monthly P&L
-- Table revenue: $26,053
-- Bar revenue (table-driven): $67,083
-- Food revenue (table-driven): $18,634
-- Bar-only bar revenue: $18,540
-- Bar-only food revenue: $2,575
-- Total monthly sales: $140,475
+- Table revenue: $25,421
+- Bar revenue (table-driven): $62,652
+- Food revenue (table-driven): $17,403
+- Bar-only bar revenue: $28,976
+- Bar-only food revenue: $4,024
+- Total monthly sales: $146,066
 
-- Bar COGS: $17,125
-- Food COGS: $6,363
-- Labor: $30,905
-- Rent: $13,875
-- CAM: $2,625
+- Bar COGS: $18,326
+- Food COGS: $6,428
+- Labor: $32,135
+- Rent: $18,750
+- CAM: $3,750
 - Property tax/insurance (NNN): $1,500
-- Utilities: $3,375
-- Total occupancy cost: $18,000
+- Utilities: $4,125
+- Total occupancy cost: $24,000
 - Insurance: $500
 - Security: $0
 - POS software: $180
-- Payment processing: $3,540
+- Payment processing: $3,681
 - Music licensing: $204
 - Marketing: $750
 - HVAC service: $100
@@ -51,10 +51,10 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Total expenses: $137,010
+- Total expenses: $149,091
 
-- Monthly net: $3,465
-- Annual net: $41,580
+- Monthly net: $-3,025
+- Annual net: $-36,298
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $3,750 / $3,188
@@ -64,17 +64,17 @@
 - Membership discount leakage (not applied): $1,500
 
 ## Programs Impact
-- Program-driven table hours (monthly): 0.0
-- Program-driven bar-only guests (monthly): 0
-- Membership utilization uplift: 0.0%
-- Membership spend uplift: 0.0%
-- Program incremental labor cost (monthly): $0
-- Program incremental security cost (monthly): $0
-- Program net contribution (monthly): $5,980
+- Program-driven table hours (monthly): 136.1
+- Program-driven bar-only guests (monthly): 580
+- Membership utilization uplift: 5.0%
+- Membership spend uplift: 3.0%
+- Program incremental labor cost (monthly): $1,505
+- Program incremental security cost (monthly): $1,189
+- Program net contribution (monthly): $3,287
 
 ## Fixed Cost Breakdown
-- Occupancy (rent/CAM/NNN): $18,000
-- Utilities total: $3,375
+- Occupancy (rent/CAM/NNN): $24,000
+- Utilities total: $4,125
 - Insurance: $500
 - Baseline labor (schedule): $53,698
 - Variable labor: percent of sales (not in fixed costs)
@@ -88,7 +88,7 @@
 - Maintenance reserve: $708
 - Licenses & fees: $96
 - Other opex (misc): $1,200
-- Fixed costs total: $79,078
+- Fixed costs total: $88,522
 
 ## CAPEX & Financing
 - CAPEX total (incl. working capital): $620,000
@@ -96,48 +96,48 @@
 - Total project cost (net TI): $620,000
 - Equity required at close: $124,000
 - Loan amount (modeled): $496,000
-- Lease deposit (months / amount): 1.0 / $18,000
-- Total cash required to open: $142,000
-- Working capital / runway months: $100,000 / 19.0
+- Lease deposit (months / amount): 1.0 / $24,000
+- Total cash required to open: $148,000
+- Working capital / runway months: $100,000 / 8.5
 
 ## Underwriting Summary
 - Total project cost: $620,000
 - Equity required: $124,000
-- Total cash required to open: $142,000
-- Runway months: 19.0
+- Total cash required to open: $148,000
+- Runway months: 8.5
 
 ## Debt & Coverage
 - Monthly debt service: $7,116
-- NOI (monthly): $1,855
-- Cash flow after debt: $-5,261
-- DSCR: 0.26x (26.1%)
+- NOI (monthly): $-4,634
+- Cash flow after debt: $-11,751
+- DSCR: 0.00x (0.0%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $-5,261 (negative means shortfall)
-- Required utilization multiplier (cash break-even): 1.06x
-- Required additional sales (per day): $304
+- Cash gap (monthly): $-11,751 (negative means shortfall)
+- Required utilization multiplier (cash break-even): 1.14x
+- Required additional sales (per day): $682
 - Notes: n/a
 
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $2,833 |
-| Utilization -10% | $-13,354 |
-| Spend +10% | $-322 |
-| Spend -10% | $-10,199 |
-| Fixed costs +10% | $-13,169 |
-| Fixed costs -10% | $2,647 |
+| Utilization +10% | $-3,362 |
+| Utilization -10% | $-20,139 |
+| Spend +10% | $-7,153 |
+| Spend -10% | $-16,348 |
+| Fixed costs +10% | $-20,603 |
+| Fixed costs -10% | $-2,898 |
 
 ## ROI Metrics
 - Startup cost (likely): $620,000
-- Payback period: 14.91 years
+- Payback period: n/a
 
 ## Break-even Snapshots
-- Monthly fixed costs: $79,078
-- Gross margin (after variable costs): 57.6%
-- Break-even sales (monthly): $137,255
-- Break-even sales (per day, operating): $4,575
-- Break-even sales (per day, after debt): $4,987
+- Monthly fixed costs: $88,522
+- Gross margin (after variable costs): 57.4%
+- Break-even sales (monthly): $154,136
+- Break-even sales (per day, operating): $5,138
+- Break-even sales (per day, after debt): $5,551
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.

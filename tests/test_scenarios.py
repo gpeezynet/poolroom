@@ -86,6 +86,10 @@ class ScenarioSmokeTests(unittest.TestCase):
                 "loan_amount",
                 "total_cash_required_to_open",
                 "runway_months",
+                "rent_monthly",
+                "cam_monthly",
+                "utilities_monthly",
+                "total_occupancy_cost_monthly",
             ):
                 self.assertIn(key, totals, f"Missing totals.{key} in summary for {scenario_id}")
             self.assertIn("total_capex", data, f"Missing total_capex in summary for {scenario_id}")
@@ -93,6 +97,17 @@ class ScenarioSmokeTests(unittest.TestCase):
             self.assertIsInstance(dscr, (int, float), f"DSCR is not numeric for {scenario_id}")
             self.assertGreaterEqual(dscr, 0, f"DSCR is negative for {scenario_id}")
             self.assertLessEqual(dscr, 20, f"DSCR is unusually high for {scenario_id}")
+            self.assertGreater(
+                totals.get("rent_monthly", 0), 0, f"Rent is not positive for {scenario_id}"
+            )
+            self.assertGreater(
+                totals.get("cam_monthly", 0), 0, f"CAM is not positive for {scenario_id}"
+            )
+            self.assertGreater(
+                totals.get("utilities_monthly", 0),
+                0,
+                f"Utilities are not positive for {scenario_id}",
+            )
             drivers = data.get("revenue_drivers", {})
             open_hours = drivers.get("open_hours_per_day_modeled")
             periods = data.get("periods", [])
@@ -198,6 +213,18 @@ class ScenarioSmokeTests(unittest.TestCase):
                 equity_required,
                 f"Total cash required should cover equity for {scenario_id}",
             )
+
+            matrix_path = out_dir / "SCENARIO_MATRIX.csv"
+            self.assertTrue(matrix_path.exists(), "Missing SCENARIO_MATRIX.csv")
+            header = matrix_path.read_text(encoding="utf-8").splitlines()[0]
+            for col in (
+                "lease_band",
+                "rent_monthly",
+                "cam_monthly",
+                "utilities_monthly",
+                "total_occupancy_cost_monthly",
+            ):
+                self.assertIn(col, header, f"Missing matrix column {col} for {scenario_id}")
             if late_incremental and late_incremental.get("sales_monthly", 0) > 0:
                 sales = late_incremental["sales_monthly"]
                 variable_costs = late_incremental.get("variable_costs_monthly", 0)
@@ -252,6 +279,19 @@ class ScenarioSmokeTests(unittest.TestCase):
             "capex.scenario.S24.working_capital",
             "capex.ti_allowance",
             "capex.lease_deposit_months",
+            "facility.sqft_by_scenario.S12",
+            "facility.sqft_by_scenario.S24",
+            "facility.rent_per_sqft_year.low",
+            "facility.rent_per_sqft_year.mid",
+            "facility.rent_per_sqft_year.high",
+            "facility.cam_per_sqft_year.low",
+            "facility.cam_per_sqft_year.mid",
+            "facility.cam_per_sqft_year.high",
+            "facility.utilities_per_sqft_year.low",
+            "facility.utilities_per_sqft_year.mid",
+            "facility.utilities_per_sqft_year.high",
+            "facility.utilities_hours_multiplier.core",
+            "facility.utilities_hours_multiplier.late",
             "financing.interest_rate",
             "financing.term_years",
             "financing.down_payment_pct",
@@ -272,6 +312,13 @@ class ScenarioSmokeTests(unittest.TestCase):
             "S12_UPSIDE_LATE_LOCKUP_PLUS_PROGRAMS2",
             "S24_BASE_LATE_LOCKUP_PLUS_PROGRAMS2",
             "S24_UPSIDE_LATE_LOCKUP_PLUS_PROGRAMS2",
+        ):
+            self._assert_outputs(scenario_id)
+
+    def test_lease_band_outputs(self):
+        for scenario_id in (
+            "S12_BASE_PLUS_PROGRAMS2_GOOD_LEASE",
+            "S24_BASE_PLUS_PROGRAMS2_BAD_LEASE",
         ):
             self._assert_outputs(scenario_id)
 

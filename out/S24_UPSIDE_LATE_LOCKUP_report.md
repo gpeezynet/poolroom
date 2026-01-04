@@ -4,7 +4,8 @@
 - Tables: 24
 - Size: 15000 sf
 - Pricing style: hourly
-- Rent/CAM: $18.00/sf/yr, $4.00/sf/yr
+- Rent/CAM: $18.50/sf/yr, $3.50/sf/yr
+- Lease band: mid
 - Estimated guests per month: 12735
 - Bar-only guests per day (weekday/weekend): 25 / 60
 - Bar-only spend + food attach: $18 bar, 25.0% @ $10 food
@@ -36,10 +37,11 @@
 - Bar COGS: $30,541
 - Food COGS: $11,953
 - Labor: $58,305
-- Rent: $24,000
-- CAM: $5,333
+- Rent: $24,667
+- CAM: $4,667
 - Property tax/insurance (NNN): $2,667
-- Utilities: $5,700
+- Utilities: $6,600
+- Total occupancy cost: $32,000
 - Insurance: $500
 - Security: $0
 - POS software: $180
@@ -52,10 +54,10 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Total expenses: $242,452
+- Total expenses: $243,352
 
-- Monthly net: $22,572
-- Annual net: $270,863
+- Monthly net: $21,672
+- Annual net: $260,063
 
 ## Programs (Non-table Revenue)
 - Membership revenue + contribution: $0 / $0
@@ -75,7 +77,7 @@
 
 ## Fixed Cost Breakdown
 - Occupancy (rent/CAM/NNN): $32,000
-- Utilities total: $5,700
+- Utilities total: $6,600
 - Insurance: $500
 - Baseline labor (schedule): $92,522
 - Variable labor: percent of sales (not in fixed costs)
@@ -89,7 +91,7 @@
 - Maintenance reserve: $1,417
 - Licenses & fees: $135
 - Other opex (misc): $1,200
-- Fixed costs total: $134,974
+- Fixed costs total: $135,874
 
 ## CAPEX & Financing
 - CAPEX total (incl. working capital): $1,190,000
@@ -109,12 +111,12 @@
 
 ## Debt & Coverage
 - Monthly debt service: $9,326
-- NOI (monthly): $22,572
-- Cash flow after debt: $13,246
-- DSCR: 2.42x (242.0%)
+- NOI (monthly): $21,672
+- Cash flow after debt: $12,346
+- DSCR: 2.32x (232.4%)
 
 ## What Must Be True (Targets)
-- Cash gap (monthly): $13,246 (negative means shortfall)
+- Cash gap (monthly): $12,346 (negative means shortfall)
 - Required utilization multiplier (cash break-even): 0.92x
 - Required additional sales (per day): $0
 - Notes: n/a
@@ -122,12 +124,12 @@
 ## Sensitivity (Cash After Debt)
 | Lever | Cash after debt (monthly) |
 | --- | --- |
-| Utilization +10% | $29,001 |
-| Utilization -10% | $-2,508 |
-| Spend +10% | $23,437 |
-| Spend -10% | $3,055 |
-| Fixed costs +10% | $-251 |
-| Fixed costs -10% | $26,744 |
+| Utilization +10% | $28,101 |
+| Utilization -10% | $-3,408 |
+| Spend +10% | $22,537 |
+| Spend -10% | $2,155 |
+| Fixed costs +10% | $-1,241 |
+| Fixed costs -10% | $25,934 |
 
 ## Late-Night Incremental (Bridge)
 - Incremental sales (monthly): $20,368
@@ -142,14 +144,14 @@
 
 ## ROI Metrics
 - Startup cost (likely): $1,190,000
-- Payback period: 4.39 years
+- Payback period: 4.58 years
 
 ## Break-even Snapshots
-- Monthly fixed costs: $134,974
+- Monthly fixed costs: $135,874
 - Gross margin (after variable costs): 59.4%
-- Break-even sales (monthly): $227,054
-- Break-even sales (per day, operating): $7,568
-- Break-even sales (per day, after debt): $8,091
+- Break-even sales (monthly): $228,568
+- Break-even sales (per day, operating): $7,619
+- Break-even sales (per day, after debt): $8,142
 
 ## Compliance Warnings
 - Alcohol sales are prohibited from 02:00-10:00 and before Sunday noon.
